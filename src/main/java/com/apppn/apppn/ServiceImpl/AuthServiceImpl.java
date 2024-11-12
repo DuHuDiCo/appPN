@@ -32,14 +32,11 @@ public class AuthServiceImpl implements AuthenticationService {
 
 
 
-    @SuppressWarnings("null")
+    
     @Override
     public ResponseEntity<?> authenticateUser(OAuth2AuthenticationToken authentication) {
         OAuth2User user = (OAuth2User) authentication.getPrincipal();
 
-        if(user == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("User not found"));
-        }
         
         ResponseEntity<?> userValidate = userService.getUserByEmail(user.getAttribute("email"));
         if(userValidate.getStatusCode().equals(HttpStatus.BAD_REQUEST)){
