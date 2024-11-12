@@ -48,7 +48,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 e.printStackTrace();
             }
         } else {
-            System.out.println("Token Inválido, No empieza Con Bearer string");
+            // System.out.println("Token Inválido, No empieza Con Bearer string");
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
@@ -66,7 +66,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 request.setAttribute("token", jwtToken);
             }
         } else {
-            System.out.println("El Token no es Valido");
+            // System.out.println("El Token no es Valido");
         }
 
         
