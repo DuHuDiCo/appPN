@@ -20,9 +20,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientId;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -59,7 +65,13 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(this.userDetailsServiceImple).passwordEncoder(passwordEncoder());
     }
 
-
+    @SuppressWarnings("unchecked")
+    @Bean
+    public OAuth2AuthorizedClientService authorizedClientService(
+            ClientRegistrationRepository clients, 
+            OAuth2AuthorizedClientRepository authorizedClients) {
+        return new InMemoryOAuth2AuthorizedClientService(clients, (Map<OAuth2AuthorizedClientId, OAuth2AuthorizedClient>) authorizedClients);
+    }
     
   
 
@@ -90,6 +102,11 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
     
                     if (userAttributes == null) {
                         throw new OAuth2AuthenticationException("No se pudieron recuperar los atributos del usuario.");
+                    }@Bean
+                    public OAuth2AuthorizedClientService authorizedClientService(
+                            ClientRegistrationRepository clients, 
+                            OAuth2AuthorizedClientRepository authorizedClients) {
+                        return new InMemoryOAuth2AuthorizedClientService(clients, authorizedClients);
                     }
     
                     // Crea y devuelve un nuevo objeto OAuth2User con los atributos recuperados
