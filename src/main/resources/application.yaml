@@ -46,7 +46,7 @@ spring:
                         client-id: ${client_id_web}
                         client-secret: ${client_secret_web}
                         scope: profile, email
-                        redirect-uri: "http://localhost:8080/oauth2/callback"
+                        redirect-uri: "http://apppn.duckdns.org:9090/oauth2/callback"
                         client-name: Google
                 provider:
                     google:
