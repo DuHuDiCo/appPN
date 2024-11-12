@@ -2,6 +2,7 @@ package com.apppn.apppn.Controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,9 +37,15 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    @RequestMapping("/callback")
+    @GetMapping("/callback")
     public ResponseEntity<?> authenticateUser(OAuth2AuthenticationToken authentication) {
         return authenticationService.authenticateUser(authentication);
     }
+
+    @GetMapping("/login")
+    public String login(){
+        return "Login";
+    }
+
 
 }
