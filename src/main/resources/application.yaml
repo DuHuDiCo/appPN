@@ -1,6 +1,10 @@
 server:
     port: 9090
     forward-headers-strategy: native
+    servlet:
+        session: 
+            cookie:
+                secure: true
 spring:
     task:
         executor:
