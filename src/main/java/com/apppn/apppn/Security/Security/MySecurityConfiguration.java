@@ -102,11 +102,6 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
     
                     if (userAttributes == null) {
                         throw new OAuth2AuthenticationException("No se pudieron recuperar los atributos del usuario.");
-                    }@Bean
-                    public OAuth2AuthorizedClientService authorizedClientService(
-                            ClientRegistrationRepository clients, 
-                            OAuth2AuthorizedClientRepository authorizedClients) {
-                        return new InMemoryOAuth2AuthorizedClientService(clients, authorizedClients);
                     }
     
                     // Crea y devuelve un nuevo objeto OAuth2User con los atributos recuperados
