@@ -57,8 +57,8 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated()
-                .and().exceptionHandling()
-                .authenticationEntryPoint(unauthorizeHandler)
+                // .and().exceptionHandling()
+                // .authenticationEntryPoint(unauthorizeHandler)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().oauth2Login(Customizer.withDefaults());
