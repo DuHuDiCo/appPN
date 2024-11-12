@@ -5,20 +5,39 @@ import java.util.List;
 public class RoleDTO {
 
 
-    private String role;
-    private List<String> permissions;
+    private Object role;
+    private List<Object> permissions;
+
+
     public RoleDTO() {
     }
-    public String getRole() {
+
+    
+    
+
+    public Object getRole() {
         return role;
     }
-    public void setRole(String role) {
+
+
+
+
+
+    public void setRole(Object role) {
         this.role = role;
     }
-    public List<String> getPermissions() {
+
+
+
+
+    public List<Object> getPermissions() {
         return permissions;
     }
-    public void setPermissions(List<String> permissions) {
+
+
+
+
+    public void setPermissions(List<Object> permissions) {
         this.permissions = permissions;
     }
 

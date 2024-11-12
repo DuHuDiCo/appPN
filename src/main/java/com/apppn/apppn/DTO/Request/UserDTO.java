@@ -10,8 +10,8 @@ public class UserDTO {
     private String lastname;
     private String email;
     private String password;
-    private List<Long> roles = new ArrayList<>();
-    private List<Long> permissions = new ArrayList<>();
+    private List<RoleDTO> roles = new ArrayList<>();
+    
     public UserDTO() {
     }
     public Long getIdUser() {
@@ -44,18 +44,14 @@ public class UserDTO {
     public void setPassword(String password) {
         this.password = password;
     }
-    public List<Long> getRoles() {
+    public List<RoleDTO> getRoles() {
         return roles;
     }
-    public void setRoles(List<Long> roles) {
+    public void setRoles(List<RoleDTO> roles) {
         this.roles = roles;
     }
-    public List<Long> getPermissions() {
-        return permissions;
-    }
-    public void setPermissions(List<Long> permissions) {
-        this.permissions = permissions;
-    }
+    
+   
 
 
     

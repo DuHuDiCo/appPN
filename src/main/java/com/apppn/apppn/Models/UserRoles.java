@@ -38,6 +38,9 @@ public class UserRoles {
     public UserRoles() {
     }
 
+
+
+
     public Long getIdUserRol() {
         return idUserRol;
     }

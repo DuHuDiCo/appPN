@@ -3,7 +3,10 @@ package com.apppn.apppn.Models;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,11 +17,16 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.apppn.apppn.Security.Security.Authority;
+
 
 
 @Entity
 @Table(name = "USER")
-public class User {
+public class User implements UserDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,6 +54,12 @@ public class User {
 
 
     public User() {
+    }
+
+
+    public void agregarRole(UserRoles userRoles) {
+        this.userRoles.add(userRoles);
+        userRoles.setUser(this);
     }
 
 
@@ -116,6 +130,46 @@ public class User {
 
     public void setUserRoles(List<UserRoles> userRoles) {
         this.userRoles = userRoles;
+    }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+         Set<Authority> autoridades = new HashSet<>();
+        this.userRoles.forEach(rol -> {
+            autoridades.add(new Authority(rol.getRole().getRole()));
+        });
+        return autoridades;
+    }
+
+
+    @Override
+    public String getUsername() {
+       return this.email;
+    }
+
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 
 

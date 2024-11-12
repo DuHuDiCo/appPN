@@ -8,4 +8,6 @@ import com.apppn.apppn.Models.Role;
 @Repository
 public interface RolesRepository extends JpaRepository<Role, Long> {
 
+    Role findByRole(String name);
+
 }

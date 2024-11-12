@@ -36,6 +36,12 @@ public class Permission {
     }
 
 
+    public void agregarUserRoles(UserRoles userRoles) {
+        this.userRoles.add(userRoles);
+        userRoles.setPermission(this);
+    }
+    
+
     public Long getIdPermission() {
         return idPermission;
     }

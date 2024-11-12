@@ -37,6 +37,11 @@ public class Role {
     public Role() {
     }
 
+    public void agregarUserRoles(UserRoles userRoles) {
+        this.userRoles.add(userRoles);
+        userRoles.setRole(this);
+    }   
+
 
     public Long getIdRole() {
         return idRole;

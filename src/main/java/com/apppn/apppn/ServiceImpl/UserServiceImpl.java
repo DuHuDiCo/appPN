@@ -7,11 +7,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import com.apppn.apppn.DTO.Request.RoleDTO;
 import com.apppn.apppn.DTO.Request.UserDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
+import com.apppn.apppn.Models.Permission;
 import com.apppn.apppn.Models.Role;
 import com.apppn.apppn.Models.User;
+import com.apppn.apppn.Models.UserRoles;
+
 import com.apppn.apppn.Repository.UserRepository;
+import com.apppn.apppn.Service.RoleService;
 import com.apppn.apppn.Service.UserService;
 
 
@@ -19,12 +24,17 @@ import com.apppn.apppn.Service.UserService;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository usuarioRepository;
+    private final RoleService roleService;
     
 
-    public UserServiceImpl(UserRepository usuarioRepository) {
+    public UserServiceImpl(UserRepository usuarioRepository, RoleService roleService) {
         this.usuarioRepository = usuarioRepository;
+        this.roleService = roleService;
+        
     }
 
+
+    @SuppressWarnings("null")
     @Override
     public ResponseEntity<?> saveUser(UserDTO userDTO) {
         User newUser = usuarioRepository.findByEmail(userDTO.getEmail());
@@ -37,16 +47,74 @@ public class UserServiceImpl implements UserService {
 
 
 
-            if(CollectionUtils.isEmpty(userDTO.getRoles()) || CollectionUtils.isEmpty(userDTO.getPermissions())){
+            if(CollectionUtils.isEmpty(userDTO.getRoles()) ){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Array of type:<Roles> is Empty"));
             }
 
-            for (Long roleLong : userDTO.getRoles()) {
+            for (RoleDTO roleDTO : userDTO.getRoles()) {
+
+                UserRoles userRoles = new UserRoles();
+                userRoles.setUser(newUser);
+
+                if(roleDTO.getRole() instanceof String){
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Rol is a instace of Long, must be Long"));
+                }
+
+
+
+                if(roleDTO.getRole() instanceof Long){
+                    ResponseEntity<?>  role =    roleService.getRoleById(((Long)roleDTO.getRole()));
+                    if (role.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+                        return role;
+                    }
+    
+                    Role roleFound = (Role) role.getBody();
+                    if (Objects.isNull(roleFound)) {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Role not found"));
+                    }
+                    
+                    roleFound.agregarUserRoles(userRoles);
+
+                    if(!CollectionUtils.isEmpty(roleDTO.getPermissions())){
+                        for (Object permission : roleDTO.getPermissions()) {
+
+
+                            if(permission instanceof String){
+                                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Rol is a instace of Long, must be Long"));
+                            }
+
+                            if(permission instanceof Long){
+                                ResponseEntity<?> permissionResponse = roleService.getPermissionById((Long) permission);
+                                if (permissionResponse.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+                                    return permissionResponse;
+                                }
+
+                                Permission permissionfound = (Permission) permissionResponse.getBody();
+                                if (Objects.isNull(permissionfound)) {
+                                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Permission not found"));
+                                }
+
+                                permissionfound.agregarUserRoles(userRoles);
+                            }
+
+                           
+                            
+                        }
+                    }
+
+                   
+
+                }
                 
+                newUser.agregarRole(userRoles);
+                
+
             }
-            
+        
+            newUser = usuarioRepository.save(newUser);
+            return ResponseEntity.status(HttpStatus.OK).body(newUser);
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("User already exists"));
     }
 
 }

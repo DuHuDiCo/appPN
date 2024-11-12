@@ -1,5 +1,6 @@
 package com.apppn.apppn.ServiceImpl;
 
+
 import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Service;
 
 import com.apppn.apppn.DTO.Request.RoleDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
+import com.apppn.apppn.Models.Permission;
 import com.apppn.apppn.Models.Role;
+import com.apppn.apppn.Repository.PermissionRepository;
 import com.apppn.apppn.Repository.RolesRepository;
 import com.apppn.apppn.Service.RoleService;
 
@@ -17,15 +20,27 @@ public class RoleServiceImpl implements RoleService {
 
 
     private final RolesRepository roleRepository;
+    private final PermissionRepository permissionRepository;
 
-    public RoleServiceImpl(RolesRepository roleRepository) {
+
+    
+
+    public RoleServiceImpl(RolesRepository roleRepository, PermissionRepository permissionRepository) {
         this.roleRepository = roleRepository;
+        this.permissionRepository = permissionRepository;
     }
 
     @Override
     public ResponseEntity<?> saveRole(RoleDTO roleDTO) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'saveRole'");
+        Role role = roleRepository.findByRole((String)roleDTO.getRole());
+        if (Objects.nonNull(role)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("Role already exists"));
+        }
+
+        role = new Role();
+        role.setRole((String)roleDTO.getRole());
+        roleRepository.save(role);
+        return ResponseEntity.status(HttpStatus.CREATED).body(role);
     }
 
     @Override
@@ -35,6 +50,15 @@ public class RoleServiceImpl implements RoleService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Role not found"));
         }
         return ResponseEntity.status(HttpStatus.OK).body(role);
+    }
+
+    @Override
+    public ResponseEntity<?> getPermissionById(Long idPermission) {
+        Permission permission = permissionRepository.findById(idPermission).orElse(null);
+        if (Objects.isNull(permission)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Permission not found"));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(permission);
     }
 
 }
