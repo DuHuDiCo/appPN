@@ -49,7 +49,7 @@ spring:
                     google:
                         client-id: ${client_id_web}
                         client-secret: ${client_secret_web}
-                        scope: profile, email
+                        scope: profile, email, openid
                         redirect-uri: "https://apppn.duckdns.org/oauth2/callback"
                         client-name: Google
                 provider:
