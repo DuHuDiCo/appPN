@@ -12,4 +12,6 @@ public interface UserService {
 
     public ResponseEntity<?> saveUser(UserDTO usuario);
 
+    public ResponseEntity<?> getUserByEmail(String username);
+
 }

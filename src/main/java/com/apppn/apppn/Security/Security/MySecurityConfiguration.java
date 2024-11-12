@@ -59,7 +59,8 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and().exceptionHandling()
                 .authenticationEntryPoint(unauthorizeHandler)
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().oauth2Login().loginPage("/login").defaultSuccessUrl("/home", true);
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 

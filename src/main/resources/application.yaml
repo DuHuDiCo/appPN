@@ -38,7 +38,21 @@ spring:
         hibernate.ddl-auto: update
         generate-ddl: false
         show-sql: false
-
+    security:
+        oauth2:
+            client:
+                registration:
+                    google:
+                        client-id: ${client_id_web}
+                        client-secret: ${client_secret_web}
+                        scope: profile, email
+                        redirect-uri: "http://localhost:8080/oauth2/callback"
+                        client-name: Google
+                provider:
+                    google:
+                        authorization-uri: https://accounts.google.com/o/oauth2/auth
+                        token-uri: https://oauth2.googleapis.com/token
+                        user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
 
 
     

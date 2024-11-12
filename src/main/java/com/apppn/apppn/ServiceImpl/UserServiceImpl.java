@@ -117,4 +117,15 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("User already exists"));
     }
 
+
+    @Override
+    public ResponseEntity<?> getUserByEmail(String username) {
+        User user = usuarioRepository.findByEmail(username);
+        if(Objects.isNull(user)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User not found"));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
 }
