@@ -69,6 +69,7 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 // Si los atributos están vacíos, intenta recuperarlos manualmente
                 if (oAuth2User.getAttributes().isEmpty()) {
+                    System.out.println("true");
                     RestTemplate restTemplate = new RestTemplate();
                     String userInfoEndpointUri = userRequest.getClientRegistration()
                         .getProviderDetails().getUserInfoEndpoint().getUri();

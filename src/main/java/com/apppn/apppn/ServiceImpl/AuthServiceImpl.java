@@ -37,7 +37,8 @@ public class AuthServiceImpl implements AuthenticationService {
     public ResponseEntity<?> authenticateUser(OAuth2AuthenticationToken authentication) {
         OAuth2User user = (OAuth2User) authentication.getPrincipal();
 
-        System.out.println(user.getAttributes());
+        System.out.println(authentication);
+        System.out.println(authentication.getPrincipal());
 
         ResponseEntity<?> userValidate = userService.getUserByEmail(user.getAttribute("email"));
         if(userValidate.getStatusCode().equals(HttpStatus.BAD_REQUEST)){
@@ -51,7 +52,9 @@ public class AuthServiceImpl implements AuthenticationService {
 
         String token = jwtUtils.generateToken(userDB);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new AuthenticationResponse(token, userDB.getUsername(), new Date(), userDB.getUserRoles()));
+        return ResponseEntity.status(HttpStatus.OK)
+        .body(new AuthenticationResponse(token, userDB.getUsername(), new Date(), userDB.getUserRoles()));
+
 
 
     }
