@@ -60,31 +60,43 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 
-     @Bean
+    @Bean
     public OAuth2UserService<OAuth2UserRequest, OAuth2User> customOAuth2UserService() {
         return new DefaultOAuth2UserService() {
+            @SuppressWarnings("unchecked")
             @Override
             public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-                OAuth2User oAuth2User = super.loadUser(userRequest);
-
+                OAuth2User oAuth2User = super.loadUser(userRequest); // Intenta cargar el usuario desde el proveedor
+    
                 // Si los atributos están vacíos, intenta recuperarlos manualmente
                 if (oAuth2User.getAttributes().isEmpty()) {
-                    System.out.println("true");
+                    System.out.println("Recuperando atributos manualmente...");
+    
                     RestTemplate restTemplate = new RestTemplate();
                     String userInfoEndpointUri = userRequest.getClientRegistration()
-                        .getProviderDetails().getUserInfoEndpoint().getUri();
-
-                    @SuppressWarnings("unchecked")
-                    Map<String, Object> userAttributes = restTemplate
-                        .getForObject(userInfoEndpointUri, Map.class);
-
+                            .getProviderDetails().getUserInfoEndpoint().getUri();
+    
+                    // Recupera los atributos del usuario del endpoint de información
+                    Map<String, Object> userAttributes = null;
+                    try {
+                        userAttributes = restTemplate.getForObject(userInfoEndpointUri, Map.class);
+                    } catch (Exception e) {
+                        throw new OAuth2AuthenticationException(e.getMessage());
+                    }
+    
+                    if (userAttributes == null) {
+                        throw new OAuth2AuthenticationException("No se pudieron recuperar los atributos del usuario.");
+                    }
+    
+                    // Crea y devuelve un nuevo objeto OAuth2User con los atributos recuperados
                     return new DefaultOAuth2User(
-                        Collections.singleton(new SimpleGrantedAuthority("USER")),
+                        Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),
                         userAttributes,
-                        "sub"); // Cambia "sub" si el atributo principal es diferente
+                        "sub" // "sub" es el atributo principal que puede contener el identificador del usuario
+                    );
                 }
-
-                return oAuth2User;
+    
+                return oAuth2User; // Si los atributos ya están presentes, devuelve el usuario original
             }
         };
     }
