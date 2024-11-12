@@ -35,27 +35,28 @@ public class AuthServiceImpl implements AuthenticationService {
     @SuppressWarnings("null")
     @Override
     public ResponseEntity<?> authenticateUser(OAuth2AuthenticationToken authentication) {
-        // OAuth2User user = (OAuth2User) authentication.getPrincipal();
+        OAuth2User user = (OAuth2User) authentication.getPrincipal();
 
-        System.out.println("---------"+authentication);
-        System.out.println("---------"+authentication.getPrincipal());
+        if(user == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("User not found"));
+        }
+        
+        ResponseEntity<?> userValidate = userService.getUserByEmail(user.getAttribute("email"));
+        if(userValidate.getStatusCode().equals(HttpStatus.BAD_REQUEST)){
+            return userValidate;
+        }
 
-        // ResponseEntity<?> userValidate = userService.getUserByEmail(user.getAttribute("email"));
-        // if(userValidate.getStatusCode().equals(HttpStatus.BAD_REQUEST)){
-        //     return userValidate;
-        // }
+        User userDB = ( User) userValidate.getBody();
+        if(Objects.isNull(userDB)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User not found, must register first"));
+        }
 
-        // User userDB = ( User) userValidate.getBody();
-        // if(Objects.isNull(userDB)){
-        //     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("User not found, must register first"));
-        // }
+        String token = jwtUtils.generateToken(userDB);
 
-        // String token = jwtUtils.generateToken(userDB);
+        return ResponseEntity.status(HttpStatus.OK)
+        .body(new AuthenticationResponse(token, userDB.getUsername(), new Date(), userDB.getUserRoles()));
 
-        // return ResponseEntity.status(HttpStatus.OK)
-        // .body(new AuthenticationResponse(token, userDB.getUsername(), new Date(), userDB.getUserRoles()));
-
-        return null;
+        
 
 
     }

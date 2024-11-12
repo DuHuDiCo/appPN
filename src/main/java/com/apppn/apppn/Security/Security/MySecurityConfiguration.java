@@ -49,8 +49,7 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtAuthenticationFilter authenticationFilter;
 
-    @Autowired
-    private ClientRegistrationRepository clientRegistrationRepository;
+   
 
    
 
@@ -129,15 +128,10 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
                 // .authenticationEntryPoint(unauthorizeHandler)
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().oauth2Login().userInfoEndpoint().userService(customOAuth2UserService());
+                .and().oauth2Login(Customizer.withDefaults());
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
 
-    @Bean
-    public OAuth2AuthorizedClientService authorizedClientService() {
-        // Utiliza solo clientRegistrationRepository como parámetro
-        return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);
-    }
 
 }
