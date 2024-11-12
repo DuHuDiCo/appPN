@@ -49,6 +49,11 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private JwtAuthenticationFilter authenticationFilter;
 
+    @Autowired
+    private ClientRegistrationRepository clientRegistrationRepository;
+
+   
+
     @Override
     @Bean
     public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -65,13 +70,7 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(this.userDetailsServiceImple).passwordEncoder(passwordEncoder());
     }
 
-    @SuppressWarnings("unchecked")
-    @Bean
-    public OAuth2AuthorizedClientService authorizedClientService(
-            ClientRegistrationRepository clients, 
-            OAuth2AuthorizedClientRepository authorizedClients) {
-        return new InMemoryOAuth2AuthorizedClientService(clients, (Map<OAuth2AuthorizedClientId, OAuth2AuthorizedClient>) authorizedClients);
-    }
+    
     
   
 
@@ -132,6 +131,13 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().oauth2Login().userInfoEndpoint().userService(customOAuth2UserService());
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
+    }
+
+
+    @Bean
+    public OAuth2AuthorizedClientService authorizedClientService() {
+        // Utiliza solo clientRegistrationRepository como parámetro
+        return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);
     }
 
 }
