@@ -37,6 +37,8 @@ public class AuthServiceImpl implements AuthenticationService {
     public ResponseEntity<?> authenticateUser(OAuth2AuthenticationToken authentication) {
         OAuth2User user = (OAuth2User) authentication.getPrincipal();
 
+        System.out.println(user.getAttribute("email").toString());
+
         ResponseEntity<?> userValidate = userService.getUserByEmail(user.getAttribute("email"));
         if(userValidate.getStatusCode().equals(HttpStatus.BAD_REQUEST)){
             return userValidate;
