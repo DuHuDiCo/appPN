@@ -103,27 +103,16 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
                     .setRedirectUri(urlBackend.concat("/api/v1/google/callback"))
                     .execute();
 
-            // Obtener la información del perfil
-            String accessToken = tokenResponse.getAccessToken();
-            String refreshToken = tokenResponse.getRefreshToken();
+           
 
-            System.out.println("Token access Inicial: " + accessToken);
-            System.out.println("Token refresh inicial: " + refreshToken);
+            System.out.println("Token access Inicial: " + tokenResponse.getAccessToken());
+            System.out.println("Token refresh inicial: " + tokenResponse.getRefreshToken());
             System.out.println("Expiration: " + tokenResponse.getExpiresInSeconds());
-            if (functions.isTokenExpired(Instant.now().plusSeconds(tokenResponse.getExpiresInSeconds()))) {
-                tokenResponse = refreshAccessToken(refreshToken);
-                accessToken = tokenResponse.getAccessToken();
-                refreshToken = tokenResponse.getRefreshToken();
-            }
+            
 
-            tokenResponse = refreshAccessToken(refreshToken);
-            accessToken = tokenResponse.getAccessToken();
-            refreshToken = tokenResponse.getRefreshToken();
-
-            System.out.println("Token access: " + accessToken);
-            System.out.println("Token refresh: " + refreshToken);
-
-            UserProfileGoogle profileInfo = getUserProfileInfo(accessToken);
+            TokenResponse newTokenResponse = refreshAccessToken(tokenResponse.getRefreshToken());
+           
+            UserProfileGoogle profileInfo = getUserProfileInfo(newTokenResponse.getAccessToken());
 
             System.out.println("Email Profile: " + profileInfo.getEmail());
 
