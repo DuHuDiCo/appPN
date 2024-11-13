@@ -1,13 +1,28 @@
 package com.apppn.apppn.DTO.Request;
 
+import com.google.api.client.util.Key;
+
 public class UserProfileGoogle {
 
+    @Key("sub")
     private String sub;
+
+    @Key("name")
     private String name;
+
+    @Key("given_name")
     private String given_name;
+
+    @Key("family_name")
     private String family_name;
+
+    @Key("picture")
     private String picture;
+
+    @Key("email")
     private String email;
+
+    @Key("email_verified")
     private Boolean email_verified;
 
     public UserProfileGoogle() {
