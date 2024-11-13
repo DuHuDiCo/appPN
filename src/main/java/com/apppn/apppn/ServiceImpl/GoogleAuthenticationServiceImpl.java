@@ -1,6 +1,8 @@
 package com.apppn.apppn.ServiceImpl;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.time.Instant;
 import java.util.Arrays;
@@ -35,6 +37,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 @Service
 public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationService {
@@ -142,14 +145,21 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
 
         HttpResponse response = requestFactory.buildGetRequest(url).execute();
 
-        System.out.println("Response status code: " + response.getStatusCode());
-        System.out.println("Response content: " + response.parseAsString());
+        String responseBody;
+        try (InputStream content = response.getContent()) {
+            responseBody = new String(content.readAllBytes(), StandardCharsets.UTF_8);
+        }
 
+        // Imprime el contenido de la respuesta para verificar el JSON
+        System.out.println("Response Body: " + responseBody);
+
+        // Usa Gson para analizar la respuesta JSON en un objeto UserProfileGoogle
         Gson gson = new Gson();
         try {
-            UserProfileGoogle profileInfo = gson.fromJson(response.parseAsString(), UserProfileGoogle.class);
+            UserProfileGoogle profileInfo = gson.fromJson(responseBody, UserProfileGoogle.class);
+            System.out.println("Parsed User Profile: " + profileInfo.getEmail()); // Verifica un campo
             return profileInfo;
-        } catch (Exception e) {
+        } catch (JsonSyntaxException e) {
             e.printStackTrace();
             System.out.println("Error parsing JSON to UserProfileGoogle: " + e.getMessage());
             return null;
