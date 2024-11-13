@@ -17,6 +17,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
 
 @Service
 public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationService {
@@ -34,9 +35,9 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
     private final JsonFactory JSON_FACTORY;
     private final List<String> SCOPE;
 
-    public GoogleAuthenticationServiceImpl( JsonFactory jSON_FACTORY) {
+    public GoogleAuthenticationServiceImpl( ) {
         APPLICATION_NAME = "APPPN";
-        JSON_FACTORY = jSON_FACTORY;
+        JSON_FACTORY = JacksonFactory.getDefaultInstance();
         SCOPE = Arrays.asList("https://www.googleapis.com/auth/userinfo.profile",
                 "https://www.googleapis.com/auth/userinfo.email",
                 "openid");
