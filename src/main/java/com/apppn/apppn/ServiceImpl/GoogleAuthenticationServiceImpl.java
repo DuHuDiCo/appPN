@@ -4,14 +4,18 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Value;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.apppn.apppn.DTO.Request.UserProfileGoogle;
+import com.apppn.apppn.Models.User;
 import com.apppn.apppn.Service.GoogleAuthenticationService;
-
+import com.apppn.apppn.Service.UserService;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
@@ -39,8 +43,10 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
     private final String APPLICATION_NAME;
     private final JsonFactory JSON_FACTORY;
     private final List<String> SCOPE;
+    private final UserService userService;
 
-    public GoogleAuthenticationServiceImpl( ) {
+    public GoogleAuthenticationServiceImpl(UserService userService) {
+        this.userService = userService;
         APPLICATION_NAME = "APPPN";
         JSON_FACTORY = JacksonFactory.getDefaultInstance();
         SCOPE = Arrays.asList("https://www.googleapis.com/auth/userinfo.profile",
@@ -77,42 +83,46 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
     @Override
     public RedirectView googleCallBack(String code, List<String> scope) throws IOException, GeneralSecurityException {
 
-
         try {
             GoogleClientSecrets clientSecrets = createGoogleClientSecrets(clientId, clientSecret);
-            GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, clientSecrets, scope).setAccessType("offline").build();
+            GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
+                    GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, clientSecrets, scope)
+                    .setAccessType("offline").build();
 
             TokenResponse tokenResponse = flow.newTokenRequest(code)
                     .setRedirectUri(urlBackend.concat("/api/v1/google/callback"))
                     .execute();
 
-            System.out.println(tokenResponse.getAccessToken());
-            System.out.println(tokenResponse.getRefreshToken());
-
-
             // Obtener la información del perfil
             String accessToken = tokenResponse.getAccessToken();
-            String profileInfo = getUserProfileInfo(accessToken);
-            System.out.println("User Profile Info: " + profileInfo);
+            UserProfileGoogle profileInfo = getUserProfileInfo(accessToken);
+
+            ResponseEntity<?> user = userService.getUserByEmail(profileInfo.getEmail());
+            if (user.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+                return null;
+            }
+            User userFound = (User) user.getBody();
+            if (Objects.isNull(userFound)) {
+                return null;
+            }
+        
+            return new RedirectView("https://rentaraiz.duckdns.org/");
 
 
         } catch (Exception e) {
             return null;
         }
-        return new RedirectView("www.google.com");
 
     }
 
-
-    private String getUserProfileInfo(String accessToken) throws IOException {
+    private UserProfileGoogle getUserProfileInfo(String accessToken) throws IOException {
         HttpTransport httpTransport = new NetHttpTransport();
         HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
-        
+
         GenericUrl url = new GenericUrl("https://www.googleapis.com/oauth2/v3/userinfo");
         url.put("access_token", accessToken);
-        
-        HttpResponse response = requestFactory.buildGetRequest(url).execute();
-        return response.parseAsString();
-    }
 
+        HttpResponse response = requestFactory.buildGetRequest(url).execute();
+        return response.parseAs(UserProfileGoogle.class);
+    }
 }
