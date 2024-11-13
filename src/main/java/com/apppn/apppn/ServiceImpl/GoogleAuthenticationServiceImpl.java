@@ -113,7 +113,8 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
             return ResponseEntity.status(HttpStatus.OK).body(new RedirectView("https://rentaraiz.duckdns.org/"));
 
         } catch (Exception e) {
-            return null;
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(new RedirectView("https://www.gov.uk/404"));
         }
 
     }
