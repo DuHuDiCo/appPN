@@ -99,6 +99,9 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
 
             // Obtener la información del perfil
             String accessToken = tokenResponse.getAccessToken();
+
+            System.out.println("Token: "+accessToken);
+
             UserProfileGoogle profileInfo = getUserProfileInfo(accessToken);
 
             System.out.println("Email Profile: "+profileInfo.getEmail());
