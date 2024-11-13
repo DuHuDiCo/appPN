@@ -25,6 +25,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.googleapis.auth.oauth2.GoogleRefreshTokenRequest;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequestFactory;
@@ -107,16 +108,20 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
             String refreshToken = tokenResponse.getRefreshToken();
 
             System.out.println("Token access Inicial: " + accessToken);
-            System.out.println("Token refresh inicial: " + refreshToken); 
-            System.out.println("Expiration: " + tokenResponse.getExpiresInSeconds()); 
+            System.out.println("Token refresh inicial: " + refreshToken);
+            System.out.println("Expiration: " + tokenResponse.getExpiresInSeconds());
             if (functions.isTokenExpired(Instant.now().plusSeconds(tokenResponse.getExpiresInSeconds()))) {
-                accessToken = refreshAccessToken(refreshToken);
+                tokenResponse = refreshAccessToken(refreshToken);
+                accessToken = tokenResponse.getAccessToken();
+                refreshToken = tokenResponse.getRefreshToken();
             }
 
-            accessToken = refreshAccessToken(refreshToken);
+            tokenResponse = refreshAccessToken(refreshToken);
+            accessToken = tokenResponse.getAccessToken();
+            refreshToken = tokenResponse.getRefreshToken();
 
             System.out.println("Token access: " + accessToken);
-            System.out.println("Token refresh: " + refreshToken); 
+            System.out.println("Token refresh: " + refreshToken);
 
             UserProfileGoogle profileInfo = getUserProfileInfo(accessToken);
 
@@ -177,29 +182,15 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
         }
     }
 
-    private String refreshAccessToken(String refreshToken) throws IOException, GeneralSecurityException {
-        // Crea los detalles de las credenciales de Google
-        GoogleClientSecrets clientSecrets = new GoogleClientSecrets();
-        GoogleClientSecrets.Details details = new GoogleClientSecrets.Details();
-        details.setClientId(clientId);
-        details.setClientSecret(clientSecret);
-        clientSecrets.setWeb(details);
-
-        // Crea el flujo de autorización de Google
-        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, clientSecrets,
-                Arrays.asList("https://www.googleapis.com/auth/userinfo.profile",
-                        "https://www.googleapis.com/auth/userinfo.email", "openid"))
-                .setAccessType("offline")
-                .build();
-
-        // Usamos el refresh token para renovar el access token
-        TokenResponse tokenResponse = flow.newTokenRequest(refreshToken)
-                .setGrantType("refresh_token")
+    private TokenResponse refreshAccessToken(String refreshToken) throws IOException, GeneralSecurityException {
+        TokenResponse tokenResponse = new GoogleRefreshTokenRequest(
+                new NetHttpTransport(),
+                new JacksonFactory(),
+                refreshToken,
+                clientId,
+                clientSecret)
                 .execute();
 
-        // El nuevo access token
-        String newAccessToken = tokenResponse.getAccessToken();
-        return newAccessToken;
+        return tokenResponse;
     }
 }
