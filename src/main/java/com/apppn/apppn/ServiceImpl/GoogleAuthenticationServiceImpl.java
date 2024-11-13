@@ -2,6 +2,7 @@ package com.apppn.apppn.ServiceImpl;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +19,7 @@ import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Models.User;
 import com.apppn.apppn.Service.GoogleAuthenticationService;
 import com.apppn.apppn.Service.UserService;
+import com.apppn.apppn.Utils.Functions;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
@@ -48,14 +50,16 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
     private final JsonFactory JSON_FACTORY;
     private final List<String> SCOPE;
     private final UserService userService;
+    private final Functions functions;
 
-    public GoogleAuthenticationServiceImpl(UserService userService) {
+    public GoogleAuthenticationServiceImpl(UserService userService, Functions functions) {
         this.userService = userService;
         APPLICATION_NAME = "APPPN";
         JSON_FACTORY = JacksonFactory.getDefaultInstance();
         SCOPE = Arrays.asList("https://www.googleapis.com/auth/userinfo.profile",
                 "https://www.googleapis.com/auth/userinfo.email",
                 "openid");
+        this.functions = functions;
     }
 
     @Override
@@ -85,7 +89,8 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
     }
 
     @Override
-    public ResponseEntity<RedirectView> googleCallBack(String code, List<String> scope) throws IOException, GeneralSecurityException {
+    public ResponseEntity<RedirectView> googleCallBack(String code, List<String> scope)
+            throws IOException, GeneralSecurityException {
 
         try {
             GoogleClientSecrets clientSecrets = createGoogleClientSecrets(clientId, clientSecret);
@@ -101,16 +106,15 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
             String accessToken = tokenResponse.getAccessToken();
             String refreshToken = tokenResponse.getRefreshToken();
 
-            if(Objects.isNull(accessToken)){
+            if (functions.isTokenExpired(Instant.now().plusSeconds(tokenResponse.getExpiresInSeconds()))) {
                 accessToken = refreshAccessToken(refreshToken);
             }
 
-            System.out.println("Token: "+accessToken);
+            System.out.println("Token: " + accessToken);
 
             UserProfileGoogle profileInfo = getUserProfileInfo(accessToken);
 
-            System.out.println("Email Profile: "+profileInfo.getEmail());
-
+            System.out.println("Email Profile: " + profileInfo.getEmail());
 
             ResponseEntity<?> user = userService.getUserByEmail(profileInfo.getEmail());
             if (user.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
@@ -123,13 +127,11 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
 
             return ResponseEntity.status(HttpStatus.OK).body(new RedirectView("https://rentaraiz.duckdns.org/"));
 
-        } catch (Exception e) { 
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(new RedirectView("https://www.gov.uk/404"));
         }
-
-       
 
     }
 
@@ -145,7 +147,8 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
     }
 
     @Override
-    public ResponseEntity<?> verifyTokenAndGetUserProfile(String accessToken) throws GeneralSecurityException, IOException {
+    public ResponseEntity<?> verifyTokenAndGetUserProfile(String accessToken)
+            throws GeneralSecurityException, IOException {
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(GoogleNetHttpTransport.newTrustedTransport(),
                 JSON_FACTORY)
                 .setAudience(Collections.singletonList(clientId))
@@ -168,7 +171,6 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
         }
     }
 
-
     private String refreshAccessToken(String refreshToken) throws IOException, GeneralSecurityException {
         // Crea los detalles de las credenciales de Google
         GoogleClientSecrets clientSecrets = new GoogleClientSecrets();
@@ -179,7 +181,9 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
 
         // Crea el flujo de autorización de Google
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
-                GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, clientSecrets, Arrays.asList("https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"))
+                GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, clientSecrets,
+                Arrays.asList("https://www.googleapis.com/auth/userinfo.profile",
+                        "https://www.googleapis.com/auth/userinfo.email", "openid"))
                 .setAccessType("offline")
                 .build();
 
