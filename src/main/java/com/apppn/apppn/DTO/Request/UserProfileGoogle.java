@@ -61,12 +61,14 @@ public class UserProfileGoogle {
         this.email = email;
     }
 
-    public String getEmail_verified() {
+    public Boolean getEmail_verified() {
         return email_verified;
     }
 
-    public void setEmail_verified(String email_verified) {
+    public void setEmail_verified(Boolean email_verified) {
         this.email_verified = email_verified;
     }
+
+    
 
 }
