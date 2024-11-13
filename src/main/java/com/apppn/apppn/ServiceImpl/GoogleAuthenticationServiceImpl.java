@@ -106,7 +106,8 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
             String accessToken = tokenResponse.getAccessToken();
             String refreshToken = tokenResponse.getRefreshToken();
 
-            System.out.println("Token refresh: " + refreshToken); 
+            System.out.println("Token access Inicial: " + accessToken);
+            System.out.println("Token refresh inicial: " + refreshToken); 
             System.out.println("Expiration: " + tokenResponse.getExpiresInSeconds()); 
             if (functions.isTokenExpired(Instant.now().plusSeconds(tokenResponse.getExpiresInSeconds()))) {
                 accessToken = refreshAccessToken(refreshToken);
