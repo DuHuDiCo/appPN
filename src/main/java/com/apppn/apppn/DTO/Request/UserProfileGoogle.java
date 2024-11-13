@@ -8,7 +8,7 @@ public class UserProfileGoogle {
     private String family_name;
     private String picture;
     private String email;
-    private String email_verified;
+    private Boolean email_verified;
 
     public UserProfileGoogle() {
     }
