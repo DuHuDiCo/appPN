@@ -85,7 +85,7 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
     }
 
     @Override
-    public RedirectView googleCallBack(String code, List<String> scope) throws IOException, GeneralSecurityException {
+    public ResponseEntity<RedirectView> googleCallBack(String code, List<String> scope) throws IOException, GeneralSecurityException {
 
         try {
             GoogleClientSecrets clientSecrets = createGoogleClientSecrets(clientId, clientSecret);
@@ -103,14 +103,14 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
 
             ResponseEntity<?> user = userService.getUserByEmail(profileInfo.getEmail());
             if (user.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
-                return null;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
             User userFound = (User) user.getBody();
             if (Objects.isNull(userFound)) {
-                return null;
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
             }
 
-            return new RedirectView("https://rentaraiz.duckdns.org/");
+            return ResponseEntity.status(HttpStatus.OK).body(new RedirectView("https://rentaraiz.duckdns.org/"));
 
         } catch (Exception e) {
             return null;
