@@ -2,6 +2,7 @@ package com.apppn.apppn.Controllers;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -40,7 +41,9 @@ public class AuthenticationController {
     public RedirectView googleCallBack( @RequestParam("code") String code,
             @RequestParam("scope") String scope)
             throws IOException, GeneralSecurityException {
-        return googleAuthenticationService.googleCallBack(code, scope);
+        return googleAuthenticationService.googleCallBack(code, Arrays.asList("https://www.googleapis.com/auth/userinfo.profile",
+                                        "https://www.googleapis.com/auth/userinfo.email",
+                                        "openid"));
     }
 
     @ApiResponses(value = {

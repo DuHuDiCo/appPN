@@ -82,8 +82,5 @@ management:
         web:
             exposure:
                 include: '*'
-logging:
-  level:
-    org.springframework.security: DEBUG
-    org.springframework.web: DEBUG
+
 url-back: https://apppn.duckdns.org

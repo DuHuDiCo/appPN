@@ -70,11 +70,8 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
     }
 
     @Override
-    public RedirectView googleCallBack(String code, String state) throws IOException, GeneralSecurityException {
+    public RedirectView googleCallBack(String code, List<String> scope) throws IOException, GeneralSecurityException {
 
-        List<String> scope = Arrays.asList("https://www.googleapis.com/auth/userinfo.profile",
-                "https://www.googleapis.com/auth/userinfo.email",
-                "openid");
 
         try {
             GoogleClientSecrets clientSecrets = createGoogleClientSecrets(clientId, clientSecret);
@@ -89,7 +86,7 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
         } catch (Exception e) {
             return null;
         }
-        return new RedirectView("https://apppn.duckdns.org");
+        return new RedirectView("www.google.com");
 
     }
 
