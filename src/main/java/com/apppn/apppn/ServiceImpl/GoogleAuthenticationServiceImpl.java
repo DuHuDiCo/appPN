@@ -16,6 +16,11 @@ import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
@@ -83,11 +88,31 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
 
             System.out.println(tokenResponse.getAccessToken());
             System.out.println(tokenResponse.getRefreshToken());
+
+
+            // Obtener la información del perfil
+            String accessToken = tokenResponse.getAccessToken();
+            String profileInfo = getUserProfileInfo(accessToken);
+            System.out.println("User Profile Info: " + profileInfo);
+
+
         } catch (Exception e) {
             return null;
         }
         return new RedirectView("www.google.com");
 
+    }
+
+
+    private String getUserProfileInfo(String accessToken) throws IOException {
+        HttpTransport httpTransport = new NetHttpTransport();
+        HttpRequestFactory requestFactory = httpTransport.createRequestFactory();
+        
+        GenericUrl url = new GenericUrl("https://www.googleapis.com/oauth2/v3/userinfo");
+        url.put("access_token", accessToken);
+        
+        HttpResponse response = requestFactory.buildGetRequest(url).execute();
+        return response.parseAsString();
     }
 
 }
