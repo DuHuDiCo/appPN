@@ -34,8 +34,8 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
     private final JsonFactory JSON_FACTORY;
     private final List<String> SCOPE;
 
-    public GoogleAuthenticationServiceImpl(String aPPLICATION_NAME, JsonFactory jSON_FACTORY) {
-        APPLICATION_NAME = aPPLICATION_NAME;
+    public GoogleAuthenticationServiceImpl( JsonFactory jSON_FACTORY) {
+        APPLICATION_NAME = "APPPN";
         JSON_FACTORY = jSON_FACTORY;
         SCOPE = Arrays.asList("https://www.googleapis.com/auth/userinfo.profile",
                 "https://www.googleapis.com/auth/userinfo.email",
