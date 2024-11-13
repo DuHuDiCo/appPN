@@ -103,15 +103,12 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
                     .setRedirectUri(urlBackend.concat("/api/v1/google/callback"))
                     .execute();
 
-           
-
             System.out.println("Token access Inicial: " + tokenResponse.getAccessToken());
             System.out.println("Token refresh inicial: " + tokenResponse.getRefreshToken());
             System.out.println("Expiration: " + tokenResponse.getExpiresInSeconds());
-            
 
             TokenResponse newTokenResponse = refreshAccessToken(tokenResponse.getRefreshToken());
-           
+
             UserProfileGoogle profileInfo = getUserProfileInfo(newTokenResponse.getAccessToken());
 
             System.out.println("Email Profile: " + profileInfo.getEmail());
@@ -143,6 +140,10 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
         url.put("access_token", accessToken);
 
         HttpResponse response = requestFactory.buildGetRequest(url).execute();
+
+        System.out.println("Response status code: " + response.getStatusCode());
+        System.out.println("Response content: " + response.parseAsString());
+
         return response.parseAs(UserProfileGoogle.class);
     }
 
