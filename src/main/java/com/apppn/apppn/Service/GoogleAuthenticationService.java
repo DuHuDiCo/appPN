@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.servlet.view.RedirectView;
 
 public interface GoogleAuthenticationService {
@@ -15,5 +16,8 @@ public interface GoogleAuthenticationService {
 
 
     public RedirectView googleCallBack(String code, List<String> scope) throws IOException, GeneralSecurityException ;
+
+
+    public ResponseEntity<?> verifyTokenAndGetUserProfile(String accessToken) throws GeneralSecurityException, IOException;
 
 }

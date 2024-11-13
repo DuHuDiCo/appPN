@@ -3,6 +3,7 @@ package com.apppn.apppn.ServiceImpl;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -13,12 +14,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.apppn.apppn.DTO.Request.UserProfileGoogle;
+import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Models.User;
 import com.apppn.apppn.Service.GoogleAuthenticationService;
 import com.apppn.apppn.Service.UserService;
 import com.google.api.client.auth.oauth2.TokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeFlow;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequestFactory;
@@ -105,9 +109,8 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
             if (Objects.isNull(userFound)) {
                 return null;
             }
-        
-            return new RedirectView("https://rentaraiz.duckdns.org/");
 
+            return new RedirectView("https://rentaraiz.duckdns.org/");
 
         } catch (Exception e) {
             return null;
@@ -124,5 +127,29 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
 
         HttpResponse response = requestFactory.buildGetRequest(url).execute();
         return response.parseAs(UserProfileGoogle.class);
+    }
+
+    @Override
+    public ResponseEntity<?> verifyTokenAndGetUserProfile(String accessToken) throws GeneralSecurityException, IOException {
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(GoogleNetHttpTransport.newTrustedTransport(),
+                JSON_FACTORY)
+                .setAudience(Collections.singletonList(clientId))
+                .build();
+
+        GoogleIdToken googleIdToken = verifier.verify(accessToken);
+        if (googleIdToken != null) {
+
+            GoogleIdToken.Payload payload = googleIdToken.getPayload();
+
+            UserProfileGoogle userProfile = new UserProfileGoogle();
+
+            userProfile.setEmail(payload.getEmail());
+            userProfile.setName((String) payload.get("name"));
+            userProfile.setPicture((String) payload.get("picture"));
+
+            return ResponseEntity.status(HttpStatus.OK).body(userProfile);
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Invalid token"));
+        }
     }
 }
