@@ -37,10 +37,10 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @GetMapping("/callback")
-    public RedirectView googleCallBack(@RequestParam("state") String state, @RequestParam("code") String code,
+    public RedirectView googleCallBack( @RequestParam("code") String code,
             @RequestParam("scope") String scope)
             throws IOException, GeneralSecurityException {
-        return googleAuthenticationService.googleCallBack(code, state);
+        return googleAuthenticationService.googleCallBack(code, scope);
     }
 
     @ApiResponses(value = {
