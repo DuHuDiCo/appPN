@@ -101,6 +101,9 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
             String accessToken = tokenResponse.getAccessToken();
             UserProfileGoogle profileInfo = getUserProfileInfo(accessToken);
 
+            System.out.println("Email Profile: "+profileInfo.getEmail());
+
+
             ResponseEntity<?> user = userService.getUserByEmail(profileInfo.getEmail());
             if (user.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RedirectView("https://www.gov.uk/404"));
@@ -112,10 +115,13 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
 
             return ResponseEntity.status(HttpStatus.OK).body(new RedirectView("https://rentaraiz.duckdns.org/"));
 
-        } catch (Exception e) {
+        } catch (Exception e) { 
+            e.printStackTrace();
             System.out.println(e.getMessage());
             return ResponseEntity.status(HttpStatus.OK).body(new RedirectView("https://www.gov.uk/404"));
         }
+
+       
 
     }
 
