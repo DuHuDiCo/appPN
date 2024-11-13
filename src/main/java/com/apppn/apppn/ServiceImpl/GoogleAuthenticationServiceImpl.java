@@ -113,6 +113,8 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
                 accessToken = refreshAccessToken(refreshToken);
             }
 
+            accessToken = refreshAccessToken(refreshToken);
+
             System.out.println("Token access: " + accessToken);
             System.out.println("Token refresh: " + refreshToken); 
 
