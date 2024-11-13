@@ -34,6 +34,7 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.gson.Gson;
 
 @Service
 public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationService {
@@ -144,7 +145,15 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
         System.out.println("Response status code: " + response.getStatusCode());
         System.out.println("Response content: " + response.parseAsString());
 
-        return response.parseAs(UserProfileGoogle.class);
+        Gson gson = new Gson();
+        try {
+            UserProfileGoogle profileInfo = gson.fromJson(response.parseAsString(), UserProfileGoogle.class);
+            return profileInfo;
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error parsing JSON to UserProfileGoogle: " + e.getMessage());
+            return null;
+        }
     }
 
     @Override
