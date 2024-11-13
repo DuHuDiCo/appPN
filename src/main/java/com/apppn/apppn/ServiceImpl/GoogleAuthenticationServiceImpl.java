@@ -78,7 +78,7 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
             GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, clientSecrets, scope).setAccessType("offline").build();
 
             TokenResponse tokenResponse = flow.newTokenRequest(code)
-                    .setRedirectUri(urlBackend.concat("api/v1/google/callback"))
+                    .setRedirectUri(urlBackend.concat("/api/v1/google/callback"))
                     .execute();
 
             System.out.println(tokenResponse.getAccessToken());
