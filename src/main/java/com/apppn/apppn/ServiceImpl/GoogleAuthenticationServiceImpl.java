@@ -99,6 +99,11 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
 
             // Obtener la información del perfil
             String accessToken = tokenResponse.getAccessToken();
+            String refreshToken = tokenResponse.getRefreshToken();
+
+            if(Objects.isNull(accessToken)){
+                accessToken = refreshAccessToken(refreshToken);
+            }
 
             System.out.println("Token: "+accessToken);
 
@@ -161,5 +166,30 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
         } else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Invalid token"));
         }
+    }
+
+
+    private String refreshAccessToken(String refreshToken) throws IOException, GeneralSecurityException {
+        // Crea los detalles de las credenciales de Google
+        GoogleClientSecrets clientSecrets = new GoogleClientSecrets();
+        GoogleClientSecrets.Details details = new GoogleClientSecrets.Details();
+        details.setClientId(clientId);
+        details.setClientSecret(clientSecret);
+        clientSecrets.setWeb(details);
+
+        // Crea el flujo de autorización de Google
+        GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
+                GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, clientSecrets, Arrays.asList("https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"))
+                .setAccessType("offline")
+                .build();
+
+        // Usamos el refresh token para renovar el access token
+        TokenResponse tokenResponse = flow.newTokenRequest(refreshToken)
+                .setGrantType("refresh_token")
+                .execute();
+
+        // El nuevo access token
+        String newAccessToken = tokenResponse.getAccessToken();
+        return newAccessToken;
     }
 }
