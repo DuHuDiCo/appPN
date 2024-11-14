@@ -63,6 +63,7 @@ spring:
     #                     user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
 google:
     clientId:  ${client_id_web}
+    clientIdMovil: ${client_id_movil}
     client-secret: ${client_secret_web}
 
     

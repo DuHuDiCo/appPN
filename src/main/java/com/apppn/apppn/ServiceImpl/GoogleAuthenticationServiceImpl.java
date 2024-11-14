@@ -45,6 +45,9 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
     @Value("${google.clientId}")
     private String clientId;
 
+    @Value("${google.clientIdMovil}")
+    private String clientIdMovil;
+
     @Value("${google.client-secret}")
     private String clientSecret;
 
@@ -171,7 +174,7 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
             throws GeneralSecurityException, IOException {
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(GoogleNetHttpTransport.newTrustedTransport(),
                 JSON_FACTORY)
-                .setAudience(Collections.singletonList(clientId))
+                .setAudience(Arrays.asList(clientId, clientIdMovil))
                 .build();
 
         GoogleIdToken googleIdToken = verifier.verify(accessToken);
