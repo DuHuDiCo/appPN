@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.apppn.apppn.DTO.Request.AuthenticationRequest;
 import com.apppn.apppn.DTO.Response.AuthenticationResponse;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Service.AuthenticationService;
@@ -30,9 +31,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 public class AuthenticationController {
 
     private final GoogleAuthenticationService googleAuthenticationService;
+    private final AuthenticationService  authenticationService;
 
-    public AuthenticationController(GoogleAuthenticationService googleAuthenticationService) {
+   
+    public AuthenticationController(GoogleAuthenticationService googleAuthenticationService,
+            AuthenticationService authenticationService) {
         this.googleAuthenticationService = googleAuthenticationService;
+        this.authenticationService = authenticationService;
     }
 
     @ApiResponses(value = {
@@ -60,6 +65,13 @@ public class AuthenticationController {
     @PostMapping("/movil")
     public ResponseEntity<?> verifyTokenAndGetUserProfile(@RequestBody Map<String, String> request) throws GeneralSecurityException, IOException {
         return googleAuthenticationService.verifyTokenAndGetUserProfile(request.get("access_token"));
+    }
+
+
+    
+    @PostMapping("/")
+    public ResponseEntity<?> login(@RequestBody AuthenticationRequest authenticationRequest ){
+        return authenticationService.login(authenticationRequest);
     }
 
 }
