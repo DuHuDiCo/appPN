@@ -30,12 +30,12 @@ public class ProductoCompra {
     private Double costo;
 
     @ManyToOne
-    @JoinColumn(name = "ID_COMPRA")
+    @JoinColumn(name = "COMPRA_ID")
     @JsonIgnore
     private Compra compra;
 
     @ManyToOne
-    @JoinColumn(name = "ID_COMPRA")
+    @JoinColumn(name = "PRODUCTO_ID")
     private Producto producto;
 
 
