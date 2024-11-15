@@ -6,6 +6,7 @@ import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -27,12 +28,16 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository usuarioRepository;
     private final RoleService roleService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
     
 
-    public UserServiceImpl(UserRepository usuarioRepository, RoleService roleService) {
+
+
+    public UserServiceImpl(UserRepository usuarioRepository, RoleService roleService,
+            BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.roleService = roleService;
-        
+        this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
 
@@ -45,7 +50,7 @@ public class UserServiceImpl implements UserService {
             newUser.setEmail(userDTO.getEmail());
             newUser.setName(userDTO.getName());
             newUser.setLastname(userDTO.getLastname());
-            newUser.setPassword(userDTO.getPassword());
+            newUser.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
 
 
 
