@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
             newUser.setEmail(userDTO.getEmail());
             newUser.setName(userDTO.getName());
             newUser.setLastname(userDTO.getLastname());
-            newUser.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+            // newUser.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
 
 
 
@@ -143,6 +143,26 @@ public class UserServiceImpl implements UserService {
             users = new ArrayList<>();
         }
         return ResponseEntity.status(HttpStatus.OK).body(users);
+    }
+
+
+    @Override
+    public ResponseEntity<?> editUser(Long id, UserDTO user) {
+        User userEdit = usuarioRepository.findById(id).orElse(null);
+        if (Objects.isNull(userEdit)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("User not found"));
+        }
+        userEdit.setEmail(user.getEmail());
+        userEdit.setLastname(user.getLastname());
+        userEdit.setName(user.getName());
+
+        if(!CollectionUtils.isEmpty(user.getRoles()) ){
+            
+        }
+
+        userEdit = usuarioRepository.save(userEdit);
+        return ResponseEntity.status(HttpStatus.OK).body(userEdit);
+
     }
 
 

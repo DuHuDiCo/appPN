@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.RedirectView;
 
+import com.apppn.apppn.DTO.Request.UserDTO;
 import com.apppn.apppn.DTO.Request.UserProfileGoogle;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Models.User;
@@ -97,7 +98,7 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
     }
 
     @Override
-    public ResponseEntity<RedirectView> googleCallBack(String code, List<String> scope)
+    public ResponseEntity<?> googleCallBack(String code, List<String> scope)
             throws IOException, GeneralSecurityException {
 
         try {
@@ -127,6 +128,18 @@ public class GoogleAuthenticationServiceImpl implements GoogleAuthenticationServ
             User userFound = (User) user.getBody();
             if (Objects.isNull(userFound)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new RedirectView("https://www.gov.uk/404"));
+            }
+
+            UserDTO userDTO = new UserDTO();
+            userDTO.setEmail(profileInfo.getEmail());
+            userDTO.setLastname(profileInfo.getGiven_name());
+            userDTO.setName(profileInfo.getFamily_name());
+
+
+            ResponseEntity<?> userEditResponse = userService.editUser(userFound.getIdUser(), userDTO);
+
+            if (userEditResponse.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+                return null;
             }
 
             return ResponseEntity.status(HttpStatus.OK).body(new RedirectView("https://rentaraiz.duckdns.org/"));

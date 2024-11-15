@@ -16,4 +16,6 @@ public interface UserService {
 
     public ResponseEntity<?> getUsers();
 
+    public ResponseEntity<?> editUser(Long id, UserDTO user);
+
 }

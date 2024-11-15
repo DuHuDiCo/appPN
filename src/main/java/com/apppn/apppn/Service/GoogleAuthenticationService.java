@@ -15,7 +15,7 @@ public interface GoogleAuthenticationService {
     public GoogleClientSecrets createGoogleClientSecrets(String clientId, String clientSecret);
 
 
-    public ResponseEntity<RedirectView> googleCallBack(String code, List<String> scope) throws IOException, GeneralSecurityException ;
+    public ResponseEntity<?> googleCallBack(String code, List<String> scope) throws IOException, GeneralSecurityException ;
 
 
     public ResponseEntity<?> verifyTokenAndGetUserProfile(String accessToken) throws GeneralSecurityException, IOException;
