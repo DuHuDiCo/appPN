@@ -36,6 +36,48 @@ public class Producto {
     public Producto() {
     }
 
+    public Long getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Long idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public String getProducto() {
+        return producto;
+    }
+
+    public void setProducto(String producto) {
+        this.producto = producto;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public ClasificacionProducto getClasificacionProducto() {
+        return clasificacionProducto;
+    }
+
+    public void setClasificacionProducto(ClasificacionProducto clasificacionProducto) {
+        this.clasificacionProducto = clasificacionProducto;
+    }
+
+
+    
   
 
 }
