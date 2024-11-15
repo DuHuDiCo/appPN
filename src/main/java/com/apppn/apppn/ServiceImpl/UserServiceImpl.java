@@ -1,5 +1,7 @@
 package com.apppn.apppn.ServiceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
@@ -127,5 +129,18 @@ public class UserServiceImpl implements UserService {
 
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
+
+
+    @Override
+    public ResponseEntity<?> getUsers() {
+        List<User> users = usuarioRepository.findAll();
+        if (CollectionUtils.isEmpty(users)) {
+            users = new ArrayList<>();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(users);
+    }
+
+
+    
 
 }

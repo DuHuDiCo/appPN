@@ -14,4 +14,6 @@ public interface UserService {
 
     public ResponseEntity<?> getUserByEmail(String username);
 
+    public ResponseEntity<?> getUsers();
+
 }
