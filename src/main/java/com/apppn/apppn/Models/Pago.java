@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -24,13 +25,13 @@ public class Pago {
 
 
     @ManyToOne
-    @Column(name = "ARCHIVO_ID")
+    @JoinColumn(name = "ARCHIVO_ID")
     private Archivos archivos;
 
 
 
     @ManyToOne
-    @Column(name = "USER_ID")
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     @Column(name = "TOTAL_PAGO")
