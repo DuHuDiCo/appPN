@@ -7,12 +7,14 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -38,10 +40,26 @@ public class Compra {
     @JoinColumn(name = "PROVEEDOR_ID")
     private Proveedor proveedor;
 
+    @Column(name = "IS_PAGO")
+    private Boolean isPago;
+
+    @Column(name = "FLETE")
+    private Double flete;
+
+
+    @Column(name = "TOTAL_COMPRA")
+    private Double totalCompra;
+
+    @Column(name = "TOTAL_PAGAR")
+    private Double totalPagar;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "PAGO_ID", referencedColumnName = "ID_PAGO")
+    private Pago pago;
+    
 
     @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductoCompra> productoCompras = new ArrayList<>();
-
 
     public Compra() {
     }
@@ -102,11 +120,54 @@ public class Compra {
     }
 
 
+    public Boolean getIsPago() {
+        return isPago;
+    }
 
-    
+
+    public void setIsPago(Boolean isPago) {
+        this.isPago = isPago;
+    }
 
 
+    public Double getFlete() {
+        return flete;
+    }
 
+
+    public void setFlete(Double flete) {
+        this.flete = flete;
+    }
+
+
+    public Double getTotalCompra() {
+        return totalCompra;
+    }
+
+
+    public void setTotalCompra(Double totalCompra) {
+        this.totalCompra = totalCompra;
+    }
+
+
+    public Double getTotalPagar() {
+        return totalPagar;
+    }
+
+
+    public void setTotalPagar(Double totalPagar) {
+        this.totalPagar = totalPagar;
+    }
+
+
+    public Pago getPago() {
+        return pago;
+    }
+
+
+    public void setPago(Pago pago) {
+        this.pago = pago;
+    }
 
 
 

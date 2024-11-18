@@ -58,6 +58,10 @@ public class CompraServiceImpl implements CompraService{
         Compra compra = new Compra();
         compra.setMonto(compraDTO.getMonto());
         compra.setProveedor(proveedor);
+        compra.setIsPago(false);
+        compra.setFlete(Objects.isNull(compraDTO.getFlete())?0:compraDTO.getFlete());
+        compra.setTotalCompra(Objects.isNull(compraDTO.getTotalCompra())?0:compraDTO.getTotalCompra());
+        compra.setTotalPagar(Objects.isNull(compraDTO.getTotalPagar())?0:compraDTO.getTotalPagar());
         try {
             compra.setFecha(functions.obtenerFechaYhora());
         } catch (ParseException e) {
