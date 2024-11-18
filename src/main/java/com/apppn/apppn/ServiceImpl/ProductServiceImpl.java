@@ -1,24 +1,33 @@
 package com.apppn.apppn.ServiceImpl;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.apppn.apppn.DTO.Request.ProductDTO;
+import com.apppn.apppn.Exceptions.ErrorResponse;
+import com.apppn.apppn.Exceptions.SuccessException;
+import com.apppn.apppn.Models.Archivos;
 import com.apppn.apppn.Models.Producto;
 import com.apppn.apppn.Repository.ProductoRepository;
+import com.apppn.apppn.Service.ArchivoService;
 import com.apppn.apppn.Service.ProductService;
 
 @Service
 public class ProductServiceImpl implements ProductService {
 
     private final ProductoRepository productRepository;
+    private final ArchivoService archivoService;
+    
 
-    public ProductServiceImpl(ProductoRepository productRepository) {
+    
+    public ProductServiceImpl(ProductoRepository productRepository, ArchivoService archivoService) {
         this.productRepository = productRepository;
+        this.archivoService = archivoService;
     }
 
     @Override
@@ -28,31 +37,67 @@ public class ProductServiceImpl implements ProductService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Producto ya existe");
         }
 
-        Producto product = new Producto();
-        product.setProducto(productDTO.getProducto());
-        product.setDescripcion(productDTO.getDescripcion());
+        producto = new Producto();
+        producto.setProducto(productDTO.getProducto());
+        producto.setDescripcion(productDTO.getDescripcion());
         // IMAGEN PRODUCTO
 
-        return null;
+        ResponseEntity<?> archivos = archivoService.saveFile(productDTO.getImagen(), "/data/uploads/");
+        if(!archivos.getStatusCode().equals(HttpStatus.OK)){
+            return archivos;
+        }
+
+        Archivos file = (Archivos) archivos.getBody();
+        if(Objects.isNull(file)){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Error al subir imagen"));
+        }
+        producto = productRepository.save(producto);
+        producto.agregarImagen(file);
+
+        
+
+        return ResponseEntity.status(HttpStatus.OK).body(producto);
 
     }
 
     @Override
     public ResponseEntity<?> getProducts() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getProducts'");
+        List<Producto> productos = productRepository.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(productos);
     }
 
     @Override
     public ResponseEntity<?> editProduct(Long idProducto, ProductDTO productDTO) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'editProduct'");
+        Producto product = productRepository.findById(idProducto).orElse(null);
+        if (Objects.isNull(product)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Producto no encontrado");
+        }
+        product.setProducto(productDTO.getProducto());
+        product.setDescripcion(productDTO.getDescripcion());
+        // IMAGEN PRODUCTO
+
+        ResponseEntity<?> archivos = archivoService.saveFile(productDTO.getImagen(), "/data/uploads/");
+        if(!archivos.getStatusCode().equals(HttpStatus.OK)){
+            return archivos;
+        }
+
+        Archivos file = (Archivos) archivos.getBody();
+        if(Objects.isNull(file)){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Error al subir imagen"));
+        }
+        product = productRepository.save(product);
+        product.agregarImagen(file);
+        return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
     @Override
     public ResponseEntity<?> deleteProduct(Long idProducto) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteProduct'");
+        Producto product = productRepository.findById(idProducto).orElse(null);
+        if (Objects.isNull(product)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Producto no encontrado"));
+        }
+        productRepository.delete(product);
+        return ResponseEntity.status(HttpStatus.OK).body(new SuccessException("Producto eliminado"));
     }
 
 }

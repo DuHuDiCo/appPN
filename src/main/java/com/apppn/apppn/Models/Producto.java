@@ -44,6 +44,10 @@ public class Producto {
     public Producto() {
     }
 
+    public void agregarImagen(Archivos archivos) {
+        imagenes.add(archivos);
+    }   
+
     public Long getIdProducto() {
         return idProducto;
     }
