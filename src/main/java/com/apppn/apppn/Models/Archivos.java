@@ -1,7 +1,9 @@
 package com.apppn.apppn.Models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -11,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -53,6 +56,10 @@ public class Archivos {
     @ManyToMany(mappedBy = "imagenes")
     @JsonIgnore
     private Set<Producto> productos = new HashSet<>();
+
+    @OneToMany(mappedBy = "archivos", cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Pago> pagos = new ArrayList<>();
 
 
     public Archivos() {
@@ -136,6 +143,16 @@ public class Archivos {
 
     public void setProductos(Set<Producto> productos) {
         this.productos = productos;
+    }
+
+
+    public List<Pago> getPagos() {
+        return pagos;
+    }
+
+
+    public void setPagos(List<Pago> pagos) {
+        this.pagos = pagos;
     }
 
 
