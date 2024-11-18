@@ -63,7 +63,7 @@ public class ProductoController {
             
     })
     @PutMapping("/{idProducto}")
-    public ResponseEntity<?> editProduct(@PathVariable("idProducto") Long idProducto,@RequestBody ProductDTO producto) {
+    public ResponseEntity<?> editProduct(@PathVariable("idProducto") Long idProducto,@ModelAttribute ProductDTO producto) {
         return productoService.editProduct(idProducto,producto);
     }
 
