@@ -44,6 +44,13 @@ public class ProductoCompra {
     private TipoVenta tipoVenta;
 
 
+    @ManyToOne
+    @JoinColumn(name = "USER_ID")
+    private User user;
+
+    
+
+
     public ProductoCompra() {
     }
 
@@ -105,6 +112,16 @@ public class ProductoCompra {
 
     public void setTipoVenta(TipoVenta tipoVenta) {
         this.tipoVenta = tipoVenta;
+    }
+
+
+    public User getUser() {
+        return user;
+    }
+
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
 

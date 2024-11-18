@@ -61,7 +61,7 @@ public class MySecurityConfiguration extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
         .cors().and()
         .authorizeRequests()
-                .antMatchers("/api/v1/auth/**", "/api/v1/google/callback", "/api/v1/google/authorize", "/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/actuator/**")
+                .antMatchers("/api/v1/auth/**", "/api/v1/google/callback", "/api/v1/google/authorize", "/api/v1/google/login","/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/actuator/**")
                 .permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .anyRequest().authenticated()

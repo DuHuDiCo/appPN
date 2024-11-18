@@ -8,4 +8,6 @@ import com.apppn.apppn.Models.Producto;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long>{
 
+    Producto findByProducto(String producto);
+
 }

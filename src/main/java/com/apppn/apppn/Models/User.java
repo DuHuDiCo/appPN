@@ -52,6 +52,9 @@ public class User implements UserDetails{
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserRoles> userRoles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProductoCompra> productoCompras = new ArrayList<>();
+
 
     public User() {
     }
@@ -170,6 +173,16 @@ public class User implements UserDetails{
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+
+    public List<ProductoCompra> getProductoCompras() {
+        return productoCompras;
+    }
+
+
+    public void setProductoCompras(List<ProductoCompra> productoCompras) {
+        this.productoCompras = productoCompras;
     }
 
 

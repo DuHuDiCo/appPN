@@ -1,11 +1,18 @@
 package com.apppn.apppn.Models;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -25,8 +32,9 @@ public class Producto {
     @Column(name = "DESCRIPCION", length = 1000)
     private String descripcion;
 
-    @Column(name = "IMAGEN", length = 1000)
-    private String imagen;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "PRODUCT_IMAGE", joinColumns = @JoinColumn(name = "PRODUCT_ID"), inverseJoinColumns = @JoinColumn(name = "IMAGE_ID"))
+    private Set<Archivos> imagenes = new HashSet<>();
 
 
     @ManyToOne
@@ -60,13 +68,7 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
-    public String getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(String imagen) {
-        this.imagen = imagen;
-    }
+    
 
     public ClasificacionProducto getClasificacionProducto() {
         return clasificacionProducto;
@@ -74,6 +76,14 @@ public class Producto {
 
     public void setClasificacionProducto(ClasificacionProducto clasificacionProducto) {
         this.clasificacionProducto = clasificacionProducto;
+    }
+
+    public Set<Archivos> getImagenes() {
+        return imagenes;
+    }
+
+    public void setImagenes(Set<Archivos> imagenes) {
+        this.imagenes = imagenes;
     }
 
 
