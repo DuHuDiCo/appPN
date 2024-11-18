@@ -8,4 +8,5 @@ import com.apppn.apppn.Models.Proveedor;
 @Repository
 public interface ProveedorRepository extends JpaRepository<Proveedor, Long> {
 
+    Proveedor findByProveedor(String proveedor);
 }

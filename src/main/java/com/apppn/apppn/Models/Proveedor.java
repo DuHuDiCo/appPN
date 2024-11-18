@@ -33,13 +33,23 @@ public class Proveedor {
     @Column(name = "DIRECCION", length = 100)
     private String direccion;
 
+    @Column(name = "EMAIL", length = 100)
+    private String email;
+
     @Column(name = "CIUDAD", length = 100)
     private String ciudad;
 
+    @Column(name = "BANCO", length = 100)
+    private String banco;
+
+    @Column(name = "CUENTA", length = 100)
+    private String cuenta;
 
     @OneToMany(mappedBy = "proveedor")
     @JsonIgnore
     private List<Compra> compras = new ArrayList<>();
+
+    
 
     public Proveedor() {
     }
@@ -90,6 +100,30 @@ public class Proveedor {
 
     public void setCompras(List<Compra> compras) {
         this.compras = compras;
+    }
+
+    public String getBanco() {
+        return banco;
+    }
+
+    public void setBanco(String banco) {
+        this.banco = banco;
+    }
+
+    public String getCuenta() {
+        return cuenta;
+    }
+
+    public void setCuenta(String cuenta) {
+        this.cuenta = cuenta;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     
