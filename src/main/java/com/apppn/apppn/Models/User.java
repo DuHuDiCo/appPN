@@ -21,6 +21,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.apppn.apppn.Security.Security.Authority;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 
@@ -55,6 +56,10 @@ public class User implements UserDetails{
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductoCompra> productoCompras = new ArrayList<>();
 
+     @OneToMany(mappedBy = "archivos", cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Pago> pagos = new ArrayList<>();
+    
 
     public User() {
     }
@@ -183,6 +188,16 @@ public class User implements UserDetails{
 
     public void setProductoCompras(List<ProductoCompra> productoCompras) {
         this.productoCompras = productoCompras;
+    }
+
+
+    public List<Pago> getPagos() {
+        return pagos;
+    }
+
+
+    public void setPagos(List<Pago> pagos) {
+        this.pagos = pagos;
     }
 
 
