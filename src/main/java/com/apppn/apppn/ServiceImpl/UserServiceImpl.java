@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
             newUser.setEmail(userDTO.getEmail());
             newUser.setName(userDTO.getName());
             newUser.setLastname(userDTO.getLastname());
-            if(Objects.isNull(userDTO.getPassword())){
+            if(Objects.nonNull(userDTO.getPassword())){
                 newUser.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
             }
             try {
@@ -152,8 +152,8 @@ public class UserServiceImpl implements UserService {
         userEdit.setEmail(user.getEmail());
         userEdit.setLastname(user.getLastname());
         userEdit.setName(user.getName());
-        if(Objects.isNull(user.getPassword())){
-            userEdit.setPassword(user.getPassword());
+        if(Objects.nonNull(user.getPassword())){
+            userEdit.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         }
 
 
