@@ -69,8 +69,8 @@ public class UserController {
             @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @GetMapping("/nameOrLastName")
-    public ResponseEntity<?> getUserByNameOrLastName(@RequestParam("name") String name, @RequestParam("lastName") String lastName) {
-        return userService.getUserByNameOrLastName(name, lastName);
+    public ResponseEntity<?> getUserByNameOrLastName(@RequestParam("dato") String dato) {
+        return userService.getUserByNameOrLastName(dato);
     }
 
 }
