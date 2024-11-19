@@ -52,6 +52,80 @@ public class Inventory {
     private Set<ProductoCompra> productoCompras = new HashSet<>();
 
 
+    public Inventory() {
+    }
+
+
+    public Long getIdInventory() {
+        return idInventory;
+    }
+
+
+    public void setIdInventory(Long idInventory) {
+        this.idInventory = idInventory;
+    }
+
+
+    public Date getDateInventory() {
+        return dateInventory;
+    }
+
+
+    public void setDateInventory(Date dateInventory) {
+        this.dateInventory = dateInventory;
+    }
+
+
+    public Double getTotalInventoryValue() {
+        return totalInventoryValue;
+    }
+
+
+    public void setTotalInventoryValue(Double totalInventoryValue) {
+        this.totalInventoryValue = totalInventoryValue;
+    }
+
+
+    public Double getTotalCostValue() {
+        return totalCostValue;
+    }
+
+
+    public void setTotalCostValue(Double totalCostValue) {
+        this.totalCostValue = totalCostValue;
+    }
+
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+
+    public User getUser() {
+        return user;
+    }
+
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+
+    public Set<ProductoCompra> getProductoCompras() {
+        return productoCompras;
+    }
+
+
+    public void setProductoCompras(Set<ProductoCompra> productoCompras) {
+        this.productoCompras = productoCompras;
+    }
+
+
     
 
 

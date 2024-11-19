@@ -150,8 +150,71 @@ public class UserServiceImpl implements UserService {
         userEdit.setEmail(user.getEmail());
         userEdit.setLastname(user.getLastname());
         userEdit.setName(user.getName());
+        if(Objects.isNull(user.getPassword())){
+            userEdit.setPassword(user.getPassword());
+        }
+
 
         if (!CollectionUtils.isEmpty(user.getRoles())) {
+            userEdit.getUserRoles().clear();
+
+
+            for (RoleDTO roleDTO : user.getRoles()) {
+
+                UserRoles userRoles = new UserRoles();
+                userRoles.setUser(userEdit);
+
+                if (roleDTO.getRole() instanceof String) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(new ErrorResponse("Rol is a instace of Long, must be Long"));
+                }
+
+                if (roleDTO.getRole() instanceof Long) {
+                    ResponseEntity<?> role = roleService.getRoleById(((Long) roleDTO.getRole()));
+                    if (role.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+                        return role;
+                    }
+
+                    Role roleFound = (Role) role.getBody();
+                    if (Objects.isNull(roleFound)) {
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Role not found"));
+                    }
+
+                    roleFound.agregarUserRoles(userRoles);
+
+                    if (!CollectionUtils.isEmpty(roleDTO.getPermissions())) {
+                        for (Object permission : roleDTO.getPermissions()) {
+
+                            if (permission instanceof String) {
+                                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                        .body(new ErrorResponse("Rol is a instace of Long, must be Long"));
+                            }
+
+                            if (permission instanceof Long) {
+                                ResponseEntity<?> permissionResponse = roleService.getPermissionById((Long) permission);
+                                if (permissionResponse.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+                                    return permissionResponse;
+                                }
+
+                                Permission permissionfound = (Permission) permissionResponse.getBody();
+                                if (Objects.isNull(permissionfound)) {
+                                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                            .body(new ErrorResponse("Permission not found"));
+                                }
+
+                                permissionfound.agregarUserRoles(userRoles);
+                            }
+
+                        }
+                    }
+
+                }
+
+                userEdit.agregarRole(userRoles);
+
+            }
+
+
 
         }
 
