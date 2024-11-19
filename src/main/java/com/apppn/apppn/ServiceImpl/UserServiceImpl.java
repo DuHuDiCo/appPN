@@ -1,5 +1,6 @@
 package com.apppn.apppn.ServiceImpl;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,7 +22,7 @@ import com.apppn.apppn.Models.UserRoles;
 import com.apppn.apppn.Repository.UserRepository;
 import com.apppn.apppn.Service.RoleService;
 import com.apppn.apppn.Service.UserService;
-
+import com.apppn.apppn.Utils.Functions;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -29,17 +30,15 @@ public class UserServiceImpl implements UserService {
     private final UserRepository usuarioRepository;
     private final RoleService roleService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
-    
-
-
+    private final Functions functions;
 
     public UserServiceImpl(UserRepository usuarioRepository, RoleService roleService,
-            BCryptPasswordEncoder bCryptPasswordEncoder) {
+            BCryptPasswordEncoder bCryptPasswordEncoder, Functions functions) {
         this.usuarioRepository = usuarioRepository;
         this.roleService = roleService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        this.functions = functions;
     }
-
 
     @SuppressWarnings("null")
     @Override
@@ -50,12 +49,16 @@ public class UserServiceImpl implements UserService {
             newUser.setEmail(userDTO.getEmail());
             newUser.setName(userDTO.getName());
             newUser.setLastname(userDTO.getLastname());
-            // newUser.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
-
-
+            newUser.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+            try {
+                newUser.setDateCreated(functions.obtenerFechaYhora());
+            } catch (ParseException e) {
+               return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Error al obtener la fecha y hora"));
+            }
 
             // if(CollectionUtils.isEmpty(userDTO.getRoles()) ){
-            //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Array of type:<Roles> is Empty"));
+            // return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new
+            // ErrorResponse("Array of type:<Roles> is Empty"));
             // }
 
             for (RoleDTO roleDTO : userDTO.getRoles()) {
@@ -63,34 +66,33 @@ public class UserServiceImpl implements UserService {
                 UserRoles userRoles = new UserRoles();
                 userRoles.setUser(newUser);
 
-                if(roleDTO.getRole() instanceof String){
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Rol is a instace of Long, must be Long"));
+                if (roleDTO.getRole() instanceof String) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                            .body(new ErrorResponse("Rol is a instace of Long, must be Long"));
                 }
 
-
-
-                if(roleDTO.getRole() instanceof Long){
-                    ResponseEntity<?>  role =    roleService.getRoleById(((Long)roleDTO.getRole()));
+                if (roleDTO.getRole() instanceof Long) {
+                    ResponseEntity<?> role = roleService.getRoleById(((Long) roleDTO.getRole()));
                     if (role.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
                         return role;
                     }
-    
+
                     Role roleFound = (Role) role.getBody();
                     if (Objects.isNull(roleFound)) {
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Role not found"));
                     }
-                    
+
                     roleFound.agregarUserRoles(userRoles);
 
-                    if(!CollectionUtils.isEmpty(roleDTO.getPermissions())){
+                    if (!CollectionUtils.isEmpty(roleDTO.getPermissions())) {
                         for (Object permission : roleDTO.getPermissions()) {
 
-
-                            if(permission instanceof String){
-                                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Rol is a instace of Long, must be Long"));
+                            if (permission instanceof String) {
+                                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                        .body(new ErrorResponse("Rol is a instace of Long, must be Long"));
                             }
 
-                            if(permission instanceof Long){
+                            if (permission instanceof Long) {
                                 ResponseEntity<?> permissionResponse = roleService.getPermissionById((Long) permission);
                                 if (permissionResponse.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
                                     return permissionResponse;
@@ -98,43 +100,37 @@ public class UserServiceImpl implements UserService {
 
                                 Permission permissionfound = (Permission) permissionResponse.getBody();
                                 if (Objects.isNull(permissionfound)) {
-                                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Permission not found"));
+                                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                            .body(new ErrorResponse("Permission not found"));
                                 }
 
                                 permissionfound.agregarUserRoles(userRoles);
                             }
 
-                           
-                            
                         }
                     }
 
-                   
-
                 }
-                
+
                 newUser.agregarRole(userRoles);
-                
 
             }
-        
+
             newUser = usuarioRepository.save(newUser);
             return ResponseEntity.status(HttpStatus.OK).body(newUser);
         }
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("User already exists"));
     }
 
-
     @Override
     public ResponseEntity<?> getUserByEmail(String username) {
         User user = usuarioRepository.findByEmail(username);
-        if(Objects.isNull(user)){
+        if (Objects.isNull(user)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("User not found"));
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
-
 
     @Override
     public ResponseEntity<?> getUsers() {
@@ -144,7 +140,6 @@ public class UserServiceImpl implements UserService {
         }
         return ResponseEntity.status(HttpStatus.OK).body(users);
     }
-
 
     @Override
     public ResponseEntity<?> editUser(Long id, UserDTO user) {
@@ -156,8 +151,8 @@ public class UserServiceImpl implements UserService {
         userEdit.setLastname(user.getLastname());
         userEdit.setName(user.getName());
 
-        if(!CollectionUtils.isEmpty(user.getRoles()) ){
-            
+        if (!CollectionUtils.isEmpty(user.getRoles())) {
+
         }
 
         userEdit = usuarioRepository.save(userEdit);
@@ -165,17 +160,13 @@ public class UserServiceImpl implements UserService {
 
     }
 
-
     @Override
     public ResponseEntity<?> getUserByNameOrLastName(String name, String lastName) {
         User user = usuarioRepository.findByNameOrLastname(name, lastName);
-        if(Objects.isNull(user)){
+        if (Objects.isNull(user)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found");
         }
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
-
-
-    
 
 }

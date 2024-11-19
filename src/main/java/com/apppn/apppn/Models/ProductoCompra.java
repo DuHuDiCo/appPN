@@ -1,11 +1,15 @@
 package com.apppn.apppn.Models;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -48,7 +52,15 @@ public class ProductoCompra {
     @JoinColumn(name = "USER_ID")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "CLIENT_ID")
+    private Client client;
+
     
+    
+    @ManyToMany(mappedBy = "productoCompras")
+    @JsonIgnore
+    private Set<Inventory> inventories = new HashSet<>();
 
 
     public ProductoCompra() {
@@ -122,6 +134,26 @@ public class ProductoCompra {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+
+    public Set<Inventory> getInventories() {
+        return inventories;
+    }
+
+
+    public void setInventories(Set<Inventory> inventories) {
+        this.inventories = inventories;
+    }
+
+
+    public Client getClient() {
+        return client;
+    }
+
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
 

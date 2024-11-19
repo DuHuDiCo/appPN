@@ -1,7 +1,7 @@
 
 package com.apppn.apppn.Models;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -58,9 +58,17 @@ public class User implements UserDetails{
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProductoCompra> productoCompras = new ArrayList<>();
 
-     @OneToMany(mappedBy = "archivos", cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Pago> pagos = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "user", cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Client> clients = new ArrayList<>();
+
+
+
     
 
     public User() {
@@ -200,6 +208,16 @@ public class User implements UserDetails{
 
     public void setPagos(List<Pago> pagos) {
         this.pagos = pagos;
+    }
+
+
+    public List<Client> getClients() {
+        return clients;
+    }
+
+
+    public void setClients(List<Client> clients) {
+        this.clients = clients;
     }
 
 
