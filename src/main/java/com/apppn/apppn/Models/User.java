@@ -77,6 +77,11 @@ public class User implements UserDetails{
     public User() {
     }
 
+    public void agregarCliente(Client client) {
+        this.clients.add(client);
+        client.setUser(this);
+    }
+
 
     public void agregarRole(UserRoles userRoles) {
         this.userRoles.add(userRoles);

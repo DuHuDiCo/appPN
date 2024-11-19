@@ -38,6 +38,9 @@ public class Client {
     @Column(name = "PHONE", length = 20)
     private String phone;
 
+    @Column(name = "IS_ENABLED")
+    private Boolean isEnabled;
+
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -120,6 +123,16 @@ public class Client {
 
     public void setProductoCompras(List<ProductoCompra> productoCompras) {
         this.productoCompras = productoCompras;
+    }
+
+
+    public Boolean getIsEnabled() {
+        return isEnabled;
+    }
+
+
+    public void setIsEnabled(Boolean isEnabled) {
+        this.isEnabled = isEnabled;
     }
 
 
