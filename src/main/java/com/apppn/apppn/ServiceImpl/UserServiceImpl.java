@@ -54,9 +54,9 @@ public class UserServiceImpl implements UserService {
 
 
 
-            if(CollectionUtils.isEmpty(userDTO.getRoles()) ){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Array of type:<Roles> is Empty"));
-            }
+            // if(CollectionUtils.isEmpty(userDTO.getRoles()) ){
+            //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Array of type:<Roles> is Empty"));
+            // }
 
             for (RoleDTO roleDTO : userDTO.getRoles()) {
 
