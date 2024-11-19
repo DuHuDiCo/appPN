@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -146,7 +147,7 @@ public class User implements UserDetails{
     public Collection<? extends GrantedAuthority> getAuthorities() {
          Set<Authority> autoridades = new HashSet<>();
         this.userRoles.forEach(rol -> {
-            autoridades.add(new Authority(rol.getRole().getRole()));
+            autoridades.add(new Authority(Objects.isNull(rol.getRole())?"N/A":rol.getRole().getRole()));
         });
         return autoridades;
     }
