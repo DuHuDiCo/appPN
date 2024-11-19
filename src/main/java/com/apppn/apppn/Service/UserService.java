@@ -18,4 +18,6 @@ public interface UserService {
 
     public ResponseEntity<?> editUser(Long id, UserDTO user);
 
+    public ResponseEntity<?> getUserByNameOrLastName(String name, String lastName);
+
 }
