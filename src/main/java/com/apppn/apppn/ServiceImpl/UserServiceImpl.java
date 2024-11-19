@@ -49,7 +49,9 @@ public class UserServiceImpl implements UserService {
             newUser.setEmail(userDTO.getEmail());
             newUser.setName(userDTO.getName());
             newUser.setLastname(userDTO.getLastname());
-            newUser.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+            if(Objects.isNull(userDTO.getPassword())){
+                newUser.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
+            }
             try {
                 newUser.setDateCreated(functions.obtenerFechaYhora());
             } catch (ParseException e) {
