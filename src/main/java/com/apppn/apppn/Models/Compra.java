@@ -43,13 +43,7 @@ public class Compra {
     @Column(name = "IS_PAGO")
     private Boolean isPago;
 
-    @Column(name = "FLETE")
-    private Double flete;
-
-
-    @Column(name = "TOTAL_COMPRA")
-    private Double totalCompra;
-
+  
     @Column(name = "TOTAL_PAGAR")
     private Double totalPagar;
 
@@ -130,24 +124,7 @@ public class Compra {
     }
 
 
-    public Double getFlete() {
-        return flete;
-    }
-
-
-    public void setFlete(Double flete) {
-        this.flete = flete;
-    }
-
-
-    public Double getTotalCompra() {
-        return totalCompra;
-    }
-
-
-    public void setTotalCompra(Double totalCompra) {
-        this.totalCompra = totalCompra;
-    }
+  
 
 
     public Double getTotalPagar() {

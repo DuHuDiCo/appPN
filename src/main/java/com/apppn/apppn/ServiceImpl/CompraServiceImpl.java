@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.apppn.apppn.DTO.Request.CompraDTO;
 import com.apppn.apppn.DTO.Request.CompraProductoDTO;
+import com.apppn.apppn.Enums.TipoVentaENUM;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Exceptions.SuccessException;
 import com.apppn.apppn.Models.Compra;
@@ -55,8 +56,7 @@ public class CompraServiceImpl implements CompraService {
         compra.setMonto(compraDTO.getMonto());
         compra.setProveedor(proveedor);
         compra.setIsPago(false);
-        compra.setFlete(Objects.isNull(compraDTO.getFlete()) ? 0 : compraDTO.getFlete());
-        compra.setTotalCompra(Objects.isNull(compraDTO.getTotalCompra()) ? 0 : compraDTO.getTotalCompra());
+        
         compra.setTotalPagar(Objects.isNull(compraDTO.getTotalPagar()) ? 0 : compraDTO.getTotalPagar());
         try {
             compra.setFecha(functions.obtenerFechaYhora());
@@ -79,10 +79,19 @@ public class CompraServiceImpl implements CompraService {
 
             ProductoCompra compraProducto = new ProductoCompra();
             compraProducto.setCantidad(productoDTO.getCantidad());
-            compraProducto.setCosto(productoDTO.getCosto());
+            
             compraProducto.setProducto(producto);
             compraProducto.setTipoVenta(tipoVenta);
 
+
+            if(compraProducto.getTipoVenta().getTipoVenta().toUpperCase().equals(TipoVentaENUM.CONTADO.getDato())){
+
+                Double totaCosto = productoDTO.getCosto();
+
+
+                
+                // compraProducto.setCosto();
+            }
             compra.agregarProducto(compraProducto);
 
         }
@@ -109,8 +118,7 @@ public class CompraServiceImpl implements CompraService {
             return ResponseEntity.badRequest().body(new ErrorResponse("El compra no existe"));
         }
         compraEdit.setMonto(compraDTO.getMonto());
-        compraEdit.setFlete(compraDTO.getFlete());
-        compraEdit.setTotalCompra(compraDTO.getTotalCompra());
+       
         compraEdit.setTotalPagar(compraDTO.getTotalPagar());
 
         compraEdit.getProductoCompras().clear();

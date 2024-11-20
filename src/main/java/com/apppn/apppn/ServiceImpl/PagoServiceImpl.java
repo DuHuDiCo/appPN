@@ -81,12 +81,12 @@ public class PagoServiceImpl implements PagoService {
                     .body(new ErrorResponse("ERROR AL PARSEAR LA FECHA Y HORA"));
         }
         
-        inventoryDTO.setTotalCostValue(compra.getTotalCompra());
+        
 
 
         for (ProductoCompra pro : compra.getProductoCompras()) {
             inventoryDTO.setQuantity(inventoryDTO.getQuantity() + pro.getCantidad());
-            inventoryDTO.setTotalInventoryValue(inventoryDTO.getTotalInventoryValue() + pro.getValorVenta());
+            inventoryDTO.setTotalInventoryValue(inventoryDTO.getTotalInventoryValue() );
         }
 
         inventoryDTO.setUserId(compra.getProveedor().getIdProveedor());

@@ -33,9 +33,6 @@ public class ProductoCompra {
     @Column(name = "COSTO")
     private Double costo;
 
-    @Column(name = "VALOR_VENTA")
-    private Double valorVenta;
-
     @ManyToOne
     @JoinColumn(name = "COMPRA_ID")
     @JsonIgnore
@@ -158,20 +155,6 @@ public class ProductoCompra {
     public void setClient(Client client) {
         this.client = client;
     }
-
-
-    public Double getValorVenta() {
-        return valorVenta;
-    }
-
-
-    public void setValorVenta(Double valorVenta) {
-        this.valorVenta = valorVenta;
-    }
-
-
-    
-
 
 
 

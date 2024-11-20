@@ -6,6 +6,12 @@ public class CompraProductoDTO {
     private Double costo;
     private Long idProducto;
     private Long idTipoVenta;
+
+    private Boolean isDescuentoInicial;
+    
+
+
+
     public CompraProductoDTO() {
     }
     public Integer getCantidad() {
@@ -32,6 +38,13 @@ public class CompraProductoDTO {
     public void setIdTipoVenta(Long idTipoVenta) {
         this.idTipoVenta = idTipoVenta;
     }
+    public Boolean getIsDescuentoInicial() {
+        return isDescuentoInicial;
+    }
+    public void setIsDescuentoInicial(Boolean isDescuentoInicial) {
+        this.isDescuentoInicial = isDescuentoInicial;
+    }
+   
 
     
 
