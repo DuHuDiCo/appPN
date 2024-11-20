@@ -15,6 +15,8 @@ public interface ProveedorService {
     public ResponseEntity<?> editProveedor(Long idProveedor, ProveedorDTO proveedor);
 
     public ResponseEntity<?> deleteProveedor(Long idProveedor);
+
+    public ResponseEntity<?> getProveedor(String dato);
     
 
 }

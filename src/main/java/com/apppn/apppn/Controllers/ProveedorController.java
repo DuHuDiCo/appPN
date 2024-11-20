@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apppn.apppn.DTO.Request.ProveedorDTO;
@@ -75,6 +76,17 @@ public class ProveedorController {
     @DeleteMapping("/{idProveedor}")
     public ResponseEntity<?> deleteProveedor(@PathVariable("idProveedor") Long idProveedor) {
         return proveedorService.deleteProveedor(idProveedor);
+    }
+
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Proveedor.class))),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            
+    })
+    @GetMapping("/")
+    public ResponseEntity<?> getProveedor(@RequestParam("dato") String dato) {
+        return proveedorService.getProveedor(dato);
     }
 
 }

@@ -14,6 +14,7 @@ import com.apppn.apppn.Models.Proveedor;
 import com.apppn.apppn.Repository.ProveedorRepository;
 import com.apppn.apppn.Service.ProveedorService;
 import com.apppn.apppn.Utils.Functions;
+import com.nimbusds.oauth2.sdk.util.CollectionUtils;
 
 @Service
 public class ProovedorServiceImpl implements ProveedorService {
@@ -78,6 +79,17 @@ public class ProovedorServiceImpl implements ProveedorService {
         }
         proveedorRepository.delete(proveedor);
         return ResponseEntity.status(HttpStatus.OK).body(new SuccessException("El proveedor ha sido eliminado"));
+
+    }
+
+    @Override
+    public ResponseEntity<?> getProveedor(String dato) {
+        List<Proveedor> proveedores = proveedorRepository.findByProveedorContainingIgnoreCase(dato);
+        if(CollectionUtils.isEmpty(proveedores)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El proveedor no existe"));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(proveedores);
 
     }
 
