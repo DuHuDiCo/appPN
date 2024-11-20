@@ -42,7 +42,7 @@ public class Archivos {
     @Column(name = "SIZE")
     private Long size;
 
-    @Column(name = "EXTENTION", length = 20)
+    @Column(name = "EXTENTION", length = 100)
     private String extention;
 
     @Column(name = "URL_PATH")
