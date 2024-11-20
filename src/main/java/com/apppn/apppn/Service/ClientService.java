@@ -15,6 +15,8 @@ public interface ClientService {
 
     public ResponseEntity<?> deleteClient(Long id);
 
+    public ResponseEntity<?> getClient(String dato);
+
     
 
 }

@@ -130,4 +130,15 @@ public class ClientServiceImpl implements ClientService {
         return ResponseEntity.status(HttpStatus.OK).body(new SuccessException("El cliente ha sido eliminado"));
     }
 
+    @Override
+    public ResponseEntity<?> getClient(String dato) {
+        String[] datos = dato.split(" ");
+        List<Client> client = clientRepository.findByNameOrLastname(datos[0], datos.length > 1 ? datos[1] : null);
+        if (CollectionUtils.isEmpty(client)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Client not found");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(client);
+    }
+
 }

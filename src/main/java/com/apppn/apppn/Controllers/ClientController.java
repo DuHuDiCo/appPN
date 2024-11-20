@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apppn.apppn.DTO.Request.ClientDTO;
@@ -73,6 +74,16 @@ public class ClientController {
     @DeleteMapping("/{idClient}")
     public ResponseEntity<?> deleteClient(@PathVariable("idClient") Long idClient) {
         return clientService.deleteClient(idClient);
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Client.class))),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            
+    })
+    @GetMapping("/byDato")
+    public ResponseEntity<?> getClient(@RequestParam("dato") String dato) {
+        return clientService.getClient(dato);
     }
 
 }

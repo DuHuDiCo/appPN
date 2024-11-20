@@ -11,7 +11,7 @@ import com.apppn.apppn.Models.User;
 @Repository
 public interface ClientRepository extends JpaRepository<Client, Long> {
 
-    Client findByNameOrLastname(String name, String lastName);
+    List<Client> findByNameOrLastname(String name, String lastName);
 
     Client findByEmail(String email);
 
