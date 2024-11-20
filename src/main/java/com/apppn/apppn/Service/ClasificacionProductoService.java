@@ -11,5 +11,6 @@ public interface ClasificacionProductoService {
     public ResponseEntity<?> saveClasificacionProducto(Map<String, String> clasificacionProductoDTO);
 
     public ResponseEntity<?> deleteClasificacionProducto(Long idClasificacionProducto);
+    public ResponseEntity<?> getClasificacionProducto(Long idClasificacionProducto);
 
 }

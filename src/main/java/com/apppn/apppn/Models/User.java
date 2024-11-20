@@ -52,7 +52,7 @@ public class User implements UserDetails{
     private Date dateCreated;
 
     @Column(name = "IS_ENABLED")
-    private Boolean isEnabled;
+    private Boolean enabled;
 
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
@@ -195,11 +195,11 @@ public class User implements UserDetails{
 
     @Override
     public boolean isEnabled() {
-        return isEnabled;
+        return enabled;
     }
 
     public void setIsEnabled(Boolean isEnabled) {
-        this.isEnabled = isEnabled;
+        this.enabled = isEnabled;
     }
 
 

@@ -53,4 +53,13 @@ public class ClasificacionProductoServiceImpl implements ClasificacionProductoSe
         return ResponseEntity.status(HttpStatus.OK).body(new SuccessException("Clasificacion Producto eliminado"));
     }
 
+    @Override
+    public ResponseEntity<?> getClasificacionProducto(Long idClasificacionProducto) {
+        ClasificacionProducto clasificacionProducto = clasificacionRepository.findById(idClasificacionProducto).orElse(null);
+        if(Objects.isNull(clasificacionProducto)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Clasificacion Producto no encontrado"));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(clasificacionProducto);
+    }
+
 }

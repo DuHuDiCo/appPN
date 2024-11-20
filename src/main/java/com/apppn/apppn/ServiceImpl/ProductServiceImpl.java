@@ -12,9 +12,11 @@ import com.apppn.apppn.DTO.Request.ProductDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Exceptions.SuccessException;
 import com.apppn.apppn.Models.Archivos;
+import com.apppn.apppn.Models.ClasificacionProducto;
 import com.apppn.apppn.Models.Producto;
 import com.apppn.apppn.Repository.ProductoRepository;
 import com.apppn.apppn.Service.ArchivoService;
+import com.apppn.apppn.Service.ClasificacionProductoService;
 import com.apppn.apppn.Service.ProductService;
 
 @Service
@@ -22,12 +24,16 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductoRepository productRepository;
     private final ArchivoService archivoService;
+    private final ClasificacionProductoService clasificacionProductoService;
     
 
     
-    public ProductServiceImpl(ProductoRepository productRepository, ArchivoService archivoService) {
+  
+    public ProductServiceImpl(ProductoRepository productRepository, ArchivoService archivoService,
+            ClasificacionProductoService clasificacionProductoService) {
         this.productRepository = productRepository;
         this.archivoService = archivoService;
+        this.clasificacionProductoService = clasificacionProductoService;
     }
 
     @Override
@@ -40,6 +46,13 @@ public class ProductServiceImpl implements ProductService {
         producto = new Producto();
         producto.setProducto(productDTO.getProducto());
         producto.setDescripcion(productDTO.getDescripcion());
+
+
+
+        // // ClasificacionProducto   clasificacionProducto = clasificacionProductoService.
+
+
+
         // IMAGEN PRODUCTO
 
         ResponseEntity<?> archivos = archivoService.saveFile(productDTO.getImagen(), "/data/uploads/");
@@ -53,6 +66,8 @@ public class ProductServiceImpl implements ProductService {
         }
         producto = productRepository.save(producto);
         producto.agregarImagen(file);
+
+        producto = productRepository.save(producto);
 
         
 
