@@ -157,7 +157,7 @@ public class UserServiceImpl implements UserService {
         if(Objects.nonNull(user.getPassword())){
             userEdit.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         }
-        userEdit.setEnabled(user.getEnable());
+        userEdit.setEnabled(user.getEnabled());
 
 
         if (!CollectionUtils.isEmpty(user.getRoles())) {
