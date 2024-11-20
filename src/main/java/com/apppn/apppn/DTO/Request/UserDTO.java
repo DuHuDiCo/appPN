@@ -10,7 +10,7 @@ public class UserDTO {
     private String lastname;
     private String email;
     private String password;
-    private Boolean isEnabled;
+    private Boolean enable;
     
     private List<RoleDTO> roles = new ArrayList<>();
     
@@ -52,12 +52,13 @@ public class UserDTO {
     public void setRoles(List<RoleDTO> roles) {
         this.roles = roles;
     }
-    public Boolean getIsEnabled() {
-        return isEnabled;
+    public Boolean getEnable() {
+        return enable;
     }
-    public void setIsEnabled(Boolean isEnabled) {
-        this.isEnabled = isEnabled;
+    public void setEnable(Boolean enable) {
+        this.enable = enable;
     }
+   
     
    
 
