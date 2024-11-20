@@ -1,6 +1,10 @@
 package com.apppn.apppn.DTO.Request;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import com.apppn.apppn.Models.ProductoCompra;
 
 public class InventoryDTO {
 
@@ -9,9 +13,26 @@ public class InventoryDTO {
     private Double totalCostValue;
     private Integer quantity;
     private Long userId;
+
+    private List<ProductoCompra> productos = new ArrayList<>();
+    
     
     public InventoryDTO() {
     }
+
+
+    
+    public InventoryDTO(Date dateInventory, Double totalInventoryValue, Double totalCostValue, Integer quantity,
+            Long userId) {
+        this.dateInventory = dateInventory;
+        this.totalInventoryValue = totalInventoryValue;
+        this.totalCostValue = totalCostValue;
+        this.quantity = quantity;
+        this.userId = userId;
+    }
+
+
+
     public Date getDateInventory() {
         return dateInventory;
     }
@@ -41,6 +62,18 @@ public class InventoryDTO {
     }
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+
+
+    public List<ProductoCompra> getProductos() {
+        return productos;
+    }
+
+
+
+    public void setProductos(List<ProductoCompra> productos) {
+        this.productos = productos;
     }
 
 

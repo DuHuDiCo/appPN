@@ -238,4 +238,13 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
+    @Override
+    public ResponseEntity<?> getUserById(Long id) {
+        User user = usuarioRepository.findById(id).orElse(null);
+        if (Objects.isNull(user)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("User not found"));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(user);
+    }
+
 }

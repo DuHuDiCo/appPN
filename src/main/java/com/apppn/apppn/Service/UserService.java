@@ -20,4 +20,6 @@ public interface UserService {
 
     public ResponseEntity<?> getUserByNameOrLastName(String dato);
 
+    public ResponseEntity<?> getUserById(Long id);
+
 }

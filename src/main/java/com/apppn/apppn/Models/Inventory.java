@@ -56,6 +56,11 @@ public class Inventory {
     }
 
 
+    public void agregarProducto(ProductoCompra productoCompra) {
+        this.productoCompras.add(productoCompra);
+        productoCompra.getInventories().add(this);
+    }
+
     public Long getIdInventory() {
         return idInventory;
     }
