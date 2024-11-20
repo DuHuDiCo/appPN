@@ -230,8 +230,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<?> getUserByNameOrLastName(String dato) {
         String[] datos = dato.split(" ");
-        User user = usuarioRepository.findByNameOrLastname(datos[0], datos.length > 1 ? datos[1] : null);
-        if (Objects.isNull(user)) {
+        List<User> user = usuarioRepository.findByNameOrLastname(datos[0], datos.length > 1 ? datos[1] : null);
+        if (CollectionUtils.isEmpty(user)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found");
         }
         return ResponseEntity.status(HttpStatus.OK).body(user);
