@@ -49,12 +49,13 @@ public class UserServiceImpl implements UserService {
             newUser.setEmail(userDTO.getEmail());
             newUser.setName(userDTO.getName());
             newUser.setLastname(userDTO.getLastname());
+            newUser.setEnabled(true);
             if(Objects.nonNull(userDTO.getPassword())){
                 newUser.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
             }
             try {
                 newUser.setDateCreated(functions.obtenerFechaYhora());
-                newUser.setIsEnabled(true);
+                
             } catch (ParseException e) {
                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Error al obtener la fecha y hora"));
             }
@@ -156,7 +157,7 @@ public class UserServiceImpl implements UserService {
         if(Objects.nonNull(user.getPassword())){
             userEdit.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         }
-        userEdit.setIsEnabled(user.getEnable());
+        userEdit.setEnabled(user.getEnable());
 
 
         if (!CollectionUtils.isEmpty(user.getRoles())) {

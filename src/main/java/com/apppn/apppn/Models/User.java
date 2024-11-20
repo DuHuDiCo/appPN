@@ -198,8 +198,8 @@ public class User implements UserDetails{
         return enabled;
     }
 
-    public void setIsEnabled(Boolean isEnabled) {
-        this.enabled = isEnabled;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
 
@@ -231,6 +231,8 @@ public class User implements UserDetails{
     public void setClients(List<Client> clients) {
         this.clients = clients;
     }
+
+    
 
 
     
