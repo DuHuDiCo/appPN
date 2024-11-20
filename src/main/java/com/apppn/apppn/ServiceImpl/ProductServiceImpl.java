@@ -49,8 +49,15 @@ public class ProductServiceImpl implements ProductService {
 
 
 
-        // // ClasificacionProducto   clasificacionProducto = clasificacionProductoService.
-
+        ResponseEntity<?> response = clasificacionProductoService.getClasificacionProducto(productDTO.getClasificacionProducto());
+        if(!response.getStatusCode().equals(HttpStatus.OK)){
+            return response;
+        }
+        ClasificacionProducto clasificacionProducto = (ClasificacionProducto) response.getBody();
+        if(Objects.isNull(clasificacionProducto)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Clasificacion Producto no encontrado"));
+        }
+        producto.setClasificacionProducto(clasificacionProducto);
 
 
         // IMAGEN PRODUCTO
