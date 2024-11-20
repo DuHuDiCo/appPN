@@ -41,6 +41,7 @@ public class ProovedorServiceImpl implements ProveedorService {
         proveedor.setCiudad(proveedorDto.getCiudad());
         proveedor.setBanco(proveedorDto.getBanco());
         proveedor.setEmail(proveedorDto.getEmail());
+        proveedor.setCuenta(proveedorDto.getCuenta());
 
         proveedor = proveedorRepository.save(proveedor);
         return ResponseEntity.status(HttpStatus.OK).body(proveedor);

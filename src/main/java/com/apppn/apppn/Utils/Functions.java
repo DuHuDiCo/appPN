@@ -5,10 +5,23 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Service;
+
+import com.apppn.apppn.Security.Security.JwtUtils;
 
 @Service
 public class Functions {
+
+
+    private final HttpServletRequest request;
+    private final JwtUtils jwtUtils;
+
+    public Functions(HttpServletRequest request, JwtUtils jwtUtils) {
+        this.request = request;
+        this.jwtUtils = jwtUtils;
+    }
 
     public boolean isTokenExpired(Instant tokenExpiryTime) {
         return Instant.now().isAfter(tokenExpiryTime);
@@ -34,6 +47,18 @@ public class Functions {
         // Devolver la fecha y hora formateada
         return fechaFormateada;
 
+    }
+
+
+    public String obtenerUsernameByToken(){
+        try {
+            String token = request.getAttribute("token").toString();
+        String username = jwtUtils.extractUsername(token);
+        return username;
+        } catch (Exception e) {
+            return null;
+        }
+        
     }
 
 }
