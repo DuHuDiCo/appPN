@@ -84,7 +84,7 @@ public class ProveedorController {
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             
     })
-    @GetMapping("/")
+    @GetMapping("/byDato")
     public ResponseEntity<?> getProveedor(@RequestParam("dato") String dato) {
         return proveedorService.getProveedor(dato);
     }
