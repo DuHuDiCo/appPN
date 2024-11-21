@@ -33,6 +33,10 @@ public class ProductoCompra {
     @Column(name = "COSTO")
     private Double costo;
 
+
+    @Column(name = "FLETE")
+    private Double flete;
+
     @ManyToOne
     @JoinColumn(name = "COMPRA_ID")
     @JsonIgnore
@@ -154,6 +158,16 @@ public class ProductoCompra {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+
+    public Double getFlete() {
+        return flete;
+    }
+
+
+    public void setFlete(Double flete) {
+        this.flete = flete;
     }
 
 

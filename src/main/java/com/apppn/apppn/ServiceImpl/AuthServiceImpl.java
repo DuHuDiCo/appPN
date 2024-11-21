@@ -89,23 +89,23 @@ public class AuthServiceImpl implements AuthenticationService {
         User user = (User) userResponse.getBody();
 
         if (Objects.isNull(user)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("USUARIO NO ENCONTRADO"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("USUARIO NO ENCONTRADO"));
         }
 
         try {
             autenticar(authenticationRequest.getUsername(), authenticationRequest.getPassword());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("CREDENCIALES INVALIDAS"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("CREDENCIALES INVALIDAS"));
         }
 
         UserDetails userDetails = userDetailsServiceImple.loadUserByUsername(authenticationRequest.getUsername());
         if (Objects.isNull(userDetails)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("USUARIO NO ENCONTRADO"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("USUARIO NO ENCONTRADO"));
         }
 
         String token = jwtUtils.generateToken(userDetails);
         if (Objects.isNull(token)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("ERROR AL GENERAR EL TOKEN"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("ERROR AL GENERAR EL TOKEN"));
         }
 
         Date fechaLastSession = null;

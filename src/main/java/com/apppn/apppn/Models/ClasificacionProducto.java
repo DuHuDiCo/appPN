@@ -27,6 +27,10 @@ public class ClasificacionProducto {
     @Column(name = "CLASIFICACION_PRODUCTO", length = 100)
     private String clasificacionProducto;
 
+
+    @Column(name = "IS_FLETE_OBLIGATORIO")
+    private Boolean isFleteObligatorio;
+
     @OneToMany(mappedBy = "clasificacionProducto", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     List<Producto> productos = new ArrayList<>();
@@ -56,6 +60,14 @@ public class ClasificacionProducto {
 
     public void setProductos(List<Producto> productos) {
         this.productos = productos;
+    }
+
+    public Boolean getIsFleteObligatorio() {
+        return isFleteObligatorio;
+    }
+
+    public void setIsFleteObligatorio(Boolean isFleteObligatorio) {
+        this.isFleteObligatorio = isFleteObligatorio;
     }
 
     

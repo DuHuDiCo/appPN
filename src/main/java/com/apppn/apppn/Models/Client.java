@@ -38,8 +38,8 @@ public class Client {
     @Column(name = "PHONE", length = 20)
     private String phone;
 
-    @Column(name = "IS_ENABLED")
-    private Boolean isEnabled;
+    @Column(name = "ENABLED")
+    private Boolean enabled;
 
 
     @ManyToOne
@@ -126,13 +126,13 @@ public class Client {
     }
 
 
-    public Boolean getIsEnabled() {
-        return isEnabled;
+    public Boolean getEnabled() {
+        return enabled;
     }
 
 
-    public void setIsEnabled(Boolean isEnabled) {
-        this.isEnabled = isEnabled;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
 
 
