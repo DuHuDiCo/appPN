@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.apppn.apppn.DTO.Request.ClasificacionDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Exceptions.SuccessException;
 import com.apppn.apppn.Models.ClasificacionProducto;
@@ -48,7 +49,7 @@ public class ClasificacionProductoController {
             @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @PostMapping("/")
-    public ResponseEntity<?> saveClasificacionProducto(@RequestBody Map<String, String> clasificacionProductoDTO) {
+    public ResponseEntity<?> saveClasificacionProducto(@RequestBody ClasificacionDTO clasificacionProductoDTO) {
         return clasificacionProductoService.saveClasificacionProducto(clasificacionProductoDTO);
     }
 

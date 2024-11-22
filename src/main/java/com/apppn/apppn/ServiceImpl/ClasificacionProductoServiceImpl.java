@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.apppn.apppn.DTO.Request.ClasificacionDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Exceptions.SuccessException;
 import com.apppn.apppn.Models.ClasificacionProducto;
@@ -31,14 +32,15 @@ public class ClasificacionProductoServiceImpl implements ClasificacionProductoSe
     }
 
     @Override
-    public ResponseEntity<?> saveClasificacionProducto(Map<String, String> clasificacionProductoDTO) {
-        ClasificacionProducto clasificacionProducto = clasificacionRepository.findByClasificacionProducto(clasificacionProductoDTO.get(clasificacionProductoDTO.keySet().iterator().next()));
+    public ResponseEntity<?> saveClasificacionProducto(ClasificacionDTO clasificacionProductoDTO) {
+        ClasificacionProducto clasificacionProducto = clasificacionRepository.findByClasificacionProducto(clasificacionProductoDTO.getClasificacionProducto());
         if(Objects.nonNull(clasificacionProducto)){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("Clasificacion Producto ya existe"));
         }
 
         clasificacionProducto = new ClasificacionProducto();
-        clasificacionProducto.setClasificacionProducto(clasificacionProductoDTO.get(clasificacionProductoDTO.keySet().iterator().next()));
+        clasificacionProducto.setClasificacionProducto(clasificacionProductoDTO.getClasificacionProducto());
+        clasificacionProducto.setIsFleteObligatorio(clasificacionProductoDTO.getIsFleteObligatorio());
         clasificacionProducto = clasificacionRepository.save(clasificacionProducto);
         return ResponseEntity.status(HttpStatus.OK).body(clasificacionProducto);
     }
