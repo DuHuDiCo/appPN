@@ -94,12 +94,7 @@ public class CompraServiceImpl implements CompraService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("USUARIO NO ENCONTRADO"));
             }
             compraProducto.setUser(user);
-
-
-            
-
-
-        
+ 
             compra.agregarProducto(compraProducto);
 
         }
