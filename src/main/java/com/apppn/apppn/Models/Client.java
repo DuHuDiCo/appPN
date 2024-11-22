@@ -20,7 +20,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name = "CLIENT")
 public class Client {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_CLIENT")
@@ -41,101 +40,79 @@ public class Client {
     @Column(name = "ENABLED")
     private Boolean enabled;
 
-
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
 
-
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private List<ProductoCompra> productoCompras = new ArrayList<>();
-
+    private List<ProductoCompraFacturacion> productoCompraFacturacion = new ArrayList<>();
 
     public Client() {
     }
-
 
     public Long getIdClient() {
         return idClient;
     }
 
-
     public void setIdClient(Long idClient) {
         this.idClient = idClient;
     }
-
 
     public String getName() {
         return name;
     }
 
-
     public void setName(String name) {
         this.name = name;
     }
-
 
     public String getLastname() {
         return lastname;
     }
 
-
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
-
 
     public String getEmail() {
         return email;
     }
 
-
     public void setEmail(String email) {
         this.email = email;
     }
-
 
     public String getPhone() {
         return phone;
     }
 
-
     public void setPhone(String phone) {
         this.phone = phone;
     }
-
 
     public User getUser() {
         return user;
     }
 
-
     public void setUser(User user) {
         this.user = user;
     }
-
-
-    public List<ProductoCompra> getProductoCompras() {
-        return productoCompras;
-    }
-
-
-    public void setProductoCompras(List<ProductoCompra> productoCompras) {
-        this.productoCompras = productoCompras;
-    }
-
 
     public Boolean getEnabled() {
         return enabled;
     }
 
-
     public void setEnabled(Boolean enabled) {
         this.enabled = enabled;
     }
 
+    public List<ProductoCompraFacturacion> getProductoCompraFacturacion() {
+        return productoCompraFacturacion;
+    }
 
-    
+    public void setProductoCompraFacturacion(List<ProductoCompraFacturacion> productoCompraFacturacion) {
+        this.productoCompraFacturacion = productoCompraFacturacion;
+    }
 
 }

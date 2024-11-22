@@ -46,6 +46,12 @@ public class Inventory {
     private User user;
 
 
+    @ManyToOne
+    @JoinColumn(name = "FACTURACION_ID")
+    private Facturacion facturacion;
+
+    
+
     @ManyToMany
     @JoinTable(name = "INVENTORY_PRODUCTO_COMPRA", joinColumns = @JoinColumn(name = "INVENTORY_ID"), inverseJoinColumns = @JoinColumn(name = "PRODUCTO_COMPRA_ID"))
     private Set<ProductoCompra> productoCompras = new HashSet<>();
@@ -117,6 +123,16 @@ public class Inventory {
 
     public void setProductoCompras(Set<ProductoCompra> productoCompras) {
         this.productoCompras = productoCompras;
+    }
+
+
+    public Facturacion getFacturacion() {
+        return facturacion;
+    }
+
+
+    public void setFacturacion(Facturacion facturacion) {
+        this.facturacion = facturacion;
     }
 
 

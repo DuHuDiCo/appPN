@@ -70,7 +70,10 @@ public class User implements UserDetails{
     @JsonIgnore
     private List<Client> clients = new ArrayList<>();
 
-
+    
+    @OneToMany(mappedBy = "user", cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Facturacion> facturaciones = new ArrayList<>();
 
     
 
@@ -230,6 +233,18 @@ public class User implements UserDetails{
 
     public void setClients(List<Client> clients) {
         this.clients = clients;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public List<Facturacion> getFacturaciones() {
+        return facturaciones;
+    }
+
+    public void setFacturaciones(List<Facturacion> facturaciones) {
+        this.facturaciones = facturaciones;
     }
 
     

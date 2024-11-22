@@ -1,8 +1,11 @@
 package com.apppn.apppn.Models;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,9 +14,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "PRODUCTO_COMPRA")
@@ -50,9 +55,11 @@ public class ProductoCompra {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "CLIENT_ID")
-    private Client client;
+    //facturacion
+    @OneToMany(mappedBy = "productoCompra", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("productoCompra")
+    private List<ProductoCompraFacturacion> productoCompraFacturacion = new ArrayList<>();
+
 
     
     
@@ -136,14 +143,7 @@ public class ProductoCompra {
     }
 
 
-    public Client getClient() {
-        return client;
-    }
-
-
-    public void setClient(Client client) {
-        this.client = client;
-    }
+ 
 
 
     public Double getFlete() {
@@ -153,6 +153,16 @@ public class ProductoCompra {
 
     public void setFlete(Double flete) {
         this.flete = flete;
+    }
+
+
+    public List<ProductoCompraFacturacion> getProductoCompraFacturacion() {
+        return productoCompraFacturacion;
+    }
+
+
+    public void setProductoCompraFacturacion(List<ProductoCompraFacturacion> productoCompraFacturacion) {
+        this.productoCompraFacturacion = productoCompraFacturacion;
     }
 
 
