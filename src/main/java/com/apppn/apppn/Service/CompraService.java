@@ -3,6 +3,7 @@ package com.apppn.apppn.Service;
 import org.springframework.http.ResponseEntity;
 
 import com.apppn.apppn.DTO.Request.CompraDTO;
+import com.apppn.apppn.DTO.Request.FleteDTO;
 import com.apppn.apppn.Models.Compra;
 
 public interface CompraService {
@@ -20,5 +21,7 @@ public interface CompraService {
     public ResponseEntity<Object> obtenerCompra(Long idCompra);
 
     public ResponseEntity<Object> guardarCompraBD(Compra compra);
+
+    public ResponseEntity<Object> agregarValorFlete(Long idCompra,FleteDTO fleteDTO);
 
 }

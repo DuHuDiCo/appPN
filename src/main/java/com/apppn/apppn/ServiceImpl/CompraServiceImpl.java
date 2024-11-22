@@ -12,6 +12,7 @@ import org.springframework.util.CollectionUtils;
 
 import com.apppn.apppn.DTO.Request.CompraDTO;
 import com.apppn.apppn.DTO.Request.CompraProductoDTO;
+import com.apppn.apppn.DTO.Request.FleteDTO;
 import com.apppn.apppn.Enums.TipoVentaENUM;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Exceptions.SuccessException;
@@ -170,5 +171,31 @@ public class CompraServiceImpl implements CompraService {
     public ResponseEntity<Object> guardarCompraBD(Compra compra) {
         compra = compraRepository.save(compra);
         return ResponseEntity.status(HttpStatus.OK).body(compra);
+    }
+
+    @Override
+    public ResponseEntity<Object> agregarValorFlete(Long idCompra,FleteDTO fleteDTO) {
+        Compra compra = compraRepository.findById(idCompra).orElse(null);
+        if(Objects.isNull(compra)){
+            return ResponseEntity.badRequest().body(new ErrorResponse("El compra no existe"));
+        }
+
+        for(Long idProducto : fleteDTO.getIdProductos()){
+
+
+            Double fleteIndividual = fleteDTO.getFlete()/fleteDTO.getIdProductos().size();
+            
+            ProductoCompra productoCompra = compra.getProductoCompras().stream().filter(p -> p.getIdProductoCompra().equals(idProducto)).findFirst().orElse(null);
+            if(Objects.isNull(productoCompra)){
+                return ResponseEntity.badRequest().body(new ErrorResponse("El producto no existe"));
+            }
+            productoCompra.setFlete(fleteIndividual);
+
+        }
+
+        compra = compraRepository.save(compra);
+        return ResponseEntity.status(HttpStatus.OK).body(compra);
+
+        
     }
 }
