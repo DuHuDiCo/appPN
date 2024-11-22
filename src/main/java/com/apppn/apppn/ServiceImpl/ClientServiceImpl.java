@@ -68,7 +68,7 @@ public class ClientServiceImpl implements ClientService {
         newClient.setLastname(clientDTO.getLastname());
         newClient.setEmail(clientDTO.getEmail());
         newClient.setPhone(clientDTO.getPhone());
-        newClient.setEnabled(clientDTO.getIsEnabled());
+        newClient.setEnabled(clientDTO.getEnabled());
         newClient.setUser(user);
 
         newClient = clientRepository.save(newClient);
@@ -114,7 +114,7 @@ public class ClientServiceImpl implements ClientService {
         client.setLastname(clientDTO.getLastname());
         client.setEmail(clientDTO.getEmail());
         client.setPhone(clientDTO.getPhone());
-        client.setEnabled(clientDTO.getIsEnabled());
+        client.setEnabled(clientDTO.getEnabled());
 
         client = clientRepository.save(client);
         return ResponseEntity.status(HttpStatus.OK).body(client);

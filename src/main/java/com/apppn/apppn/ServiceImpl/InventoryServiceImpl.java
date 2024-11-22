@@ -39,7 +39,7 @@ public class InventoryServiceImpl implements InventoryService {
         Inventory inventory = new Inventory();
         inventory.setDateInventory(inventoryDTO.getDateInventory());
         inventory.setTotalInventoryValue(inventoryDTO.getTotalInventoryValue());
-        inventory.setTotalCostValue(inventoryDTO.getTotalCostValue());
+        
         inventory.setQuantity(inventoryDTO.getQuantity());
 
         ResponseEntity<?> user = userService.getUserById(inventoryDTO.getUserId());

@@ -28,10 +28,6 @@ public class TipoVenta {
     private String tipoVenta;
 
 
-    @OneToMany(mappedBy = "tipoVenta", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    List<ProductoCompra> productoCompras = new ArrayList<>();
-
 
     public TipoVenta() {
     }
@@ -57,15 +53,5 @@ public class TipoVenta {
     }
 
 
-    public List<ProductoCompra> getProductoCompras() {
-        return productoCompras;
-    }
-
-
-    public void setProductoCompras(List<ProductoCompra> productoCompras) {
-        this.productoCompras = productoCompras;
-    }
-
-    
 
 }

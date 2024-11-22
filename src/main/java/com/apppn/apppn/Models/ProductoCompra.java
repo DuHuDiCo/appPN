@@ -44,13 +44,7 @@ public class ProductoCompra {
 
     @ManyToOne
     @JoinColumn(name = "PRODUCTO_ID")
-    private Producto producto;
-
-
-    @ManyToOne
-    @JoinColumn(name = "TIPO_VENTA_ID")
-    private TipoVenta tipoVenta;
-
+    private Producto producto;    
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -120,15 +114,6 @@ public class ProductoCompra {
         this.producto = producto;
     }
 
-
-    public TipoVenta getTipoVenta() {
-        return tipoVenta;
-    }
-
-
-    public void setTipoVenta(TipoVenta tipoVenta) {
-        this.tipoVenta = tipoVenta;
-    }
 
 
     public User getUser() {

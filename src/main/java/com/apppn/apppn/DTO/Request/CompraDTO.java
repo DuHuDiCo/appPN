@@ -14,7 +14,7 @@ public class CompraDTO {
 
     private List<CompraProductoDTO> productos = new ArrayList<>();
 
-    private Double flete;
+    
     private Double totalCompra;
     private Double totalPagar;
     
@@ -46,13 +46,6 @@ public class CompraDTO {
         this.productos = productos;
     }
 
-    public Double getFlete() {
-        return flete;
-    }
-
-    public void setFlete(Double flete) {
-        this.flete = flete;
-    }
 
     public Double getTotalCompra() {
         return totalCompra;

@@ -6,7 +6,7 @@ public class ClientDTO {
     private String lastname;
     private String email;
     private String phone;
-    private Boolean isEnabled;
+    private Boolean enabled;
     
 
 
@@ -37,12 +37,13 @@ public class ClientDTO {
     public void setPhone(String phone) {
         this.phone = phone;
     }
-    public Boolean getIsEnabled() {
-        return isEnabled;
+    public Boolean getEnabled() {
+        return enabled;
     }
-    public void setIsEnabled(Boolean isEnabled) {
-        this.isEnabled = isEnabled;
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
     }
+
 
     
 

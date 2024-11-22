@@ -35,8 +35,7 @@ public class Inventory {
     @Column(name = "TOTAL_INVENTORY_VALUE")
     private Double totalInventoryValue;
 
-    @Column(name = "TOTAL_COST_VALUE")
-    private Double totalCostValue;
+    
 
     @Column(name = "QUANTITY")
     private Integer quantity;
@@ -88,16 +87,6 @@ public class Inventory {
 
     public void setTotalInventoryValue(Double totalInventoryValue) {
         this.totalInventoryValue = totalInventoryValue;
-    }
-
-
-    public Double getTotalCostValue() {
-        return totalCostValue;
-    }
-
-
-    public void setTotalCostValue(Double totalCostValue) {
-        this.totalCostValue = totalCostValue;
     }
 
 
