@@ -4,11 +4,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 
+import com.apppn.apppn.Models.ProductoCompraFacturacion;
 import com.apppn.apppn.Security.Security.JwtUtils;
 
 @Service
@@ -59,6 +61,14 @@ public class Functions {
             return null;
         }
         
+    }
+
+
+    public Double obtenerValorLiquidado(List<ProductoCompraFacturacion> productoCompraFacturacion) {
+        for (ProductoCompraFacturacion productoCompraFacturacionDB : productoCompraFacturacion) {
+
+        }
+        return null;
     }
 
 }
