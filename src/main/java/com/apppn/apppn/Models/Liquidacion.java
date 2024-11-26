@@ -49,8 +49,60 @@ public class Liquidacion {
     @JsonIgnoreProperties("liquidacion")
     private List<ProductoCompraFacturacion> productoCompraFacturacion = new ArrayList<>();
 
+    public Liquidacion() {
+    }
+
+    public Long getIdLiquidacion() {
+        return idLiquidacion;
+    }
+
+    public void setIdLiquidacion(Long idLiquidacion) {
+        this.idLiquidacion = idLiquidacion;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public Double getValorVenta() {
+        return valorVenta;
+    }
+
+    public void setValorVenta(Double valorVenta) {
+        this.valorVenta = valorVenta;
+    }
+
+    public Double getValorLiquidado() {
+        return valorLiquidado;
+    }
+
+    public void setValorLiquidado(Double valorLiquidado) {
+        this.valorLiquidado = valorLiquidado;
+    }
+
+    public User getVendedor() {
+        return vendedor;
+    }
+
+    public void setVendedor(User vendedor) {
+        this.vendedor = vendedor;
+    }
+
+    public List<ProductoCompraFacturacion> getProductoCompraFacturacion() {
+        return productoCompraFacturacion;
+    }
+
+    public void setProductoCompraFacturacion(List<ProductoCompraFacturacion> productoCompraFacturacion) {
+        this.productoCompraFacturacion = productoCompraFacturacion;
+    }
 
 
+
+    
 
 
 }

@@ -2,10 +2,12 @@ package com.apppn.apppn.ServiceImpl;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import com.apppn.apppn.DTO.Request.FacturacionDTO;
 import com.apppn.apppn.DTO.Request.FacturacionProductosDTO;
@@ -111,6 +113,29 @@ public class FacturacionServiceImpl implements FacturacionService {
         return ResponseEntity.status(HttpStatus.OK).body(facturaciones);
 
 
+    }
+
+    @Override
+    public ResponseEntity<?> obtenerProductosInventarioByUser(Long idUser) {
+        ResponseEntity<?> response = userService.getUserById(idUser);
+        if (!response.getStatusCode().equals(HttpStatus.OK)) {
+            return response;
+        }
+        User user = (User) response.getBody();
+        if (Objects.isNull(user)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El usuario no existe"));
+        }
+        List<Facturacion> facturacions = facturacionRepository.findByUser(user); 
+        if(CollectionUtils.isEmpty(facturacions)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("No hay facturaciones para este usuario"));
+        }
+        List<Facturacion> productos = facturacions.stream().filter(f -> f.getProductoCompraFacturacion().stream().allMatch(p->Objects.isNull(p.getFacturacion()))).collect(Collectors.toList());
+
+        if(CollectionUtils.isEmpty(productos)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("No hay productos facturados"));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(productos);
     }
 
 

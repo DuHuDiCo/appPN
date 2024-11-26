@@ -14,6 +14,7 @@ import com.apppn.apppn.DTO.Request.InventoryDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Models.Inventory;
 import com.apppn.apppn.Models.ProductoCompra;
+import com.apppn.apppn.Models.ProductoCompraFacturacion;
 import com.apppn.apppn.Models.User;
 import com.apppn.apppn.Repository.InventoryRepository;
 import com.apppn.apppn.Service.InventoryService;
@@ -100,4 +101,9 @@ public class InventoryServiceImpl implements InventoryService {
 
     }
 
+   
+
+
+
+    
 }

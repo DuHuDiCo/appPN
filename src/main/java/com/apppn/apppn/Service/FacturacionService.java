@@ -10,4 +10,6 @@ public interface FacturacionService {
 
     public ResponseEntity<?> getFacturaciones();
 
+    public ResponseEntity<?> obtenerProductosInventarioByUser(Long idUser);
+
 }

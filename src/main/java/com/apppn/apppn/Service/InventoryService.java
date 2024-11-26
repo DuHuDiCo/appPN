@@ -12,4 +12,7 @@ public interface InventoryService {
 
     public ResponseEntity<?> getInventories(Long idUser);
 
+
+    
+
 }
