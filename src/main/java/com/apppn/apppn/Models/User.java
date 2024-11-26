@@ -59,6 +59,7 @@ public class User implements UserDetails{
     private List<UserRoles> userRoles = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<ProductoCompra> productoCompras = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)

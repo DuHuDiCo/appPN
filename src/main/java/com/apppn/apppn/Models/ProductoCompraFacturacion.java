@@ -40,6 +40,11 @@ public class ProductoCompraFacturacion {
     @Column(name = "VALOR_VENTA")
     private Double valorVenta;
 
+    @ManyToOne
+    @JoinColumn(name = "LIQUIDACION_ID")
+    @JsonIgnoreProperties("productoCompraFacturacion")
+    private Liquidacion liquidacion;
+
 
     public ProductoCompraFacturacion() {
     }
@@ -82,6 +87,14 @@ public class ProductoCompraFacturacion {
 
     public void setValorVenta(Double valorVenta) {
         this.valorVenta = valorVenta;
+    }
+
+    public Liquidacion getLiquidacion() {
+        return liquidacion;
+    }
+
+    public void setLiquidacion(Liquidacion liquidacion) {
+        this.liquidacion = liquidacion;
     }
 
 
