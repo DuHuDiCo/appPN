@@ -1,6 +1,7 @@
 package com.apppn.apppn.Controllers;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,7 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.apppn.apppn.DTO.Request.ProductDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
@@ -34,43 +37,54 @@ public class ProductoController {
         this.productoService = productoService;
     }
 
-
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Producto.class))),
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            
-    })
-    @PostMapping("/")
-    public ResponseEntity<?> saveProduct(@ModelAttribute ProductDTO producto) {
-        return productoService.createProduct(producto);
-    }
 
+    })
+    @PostMapping(value = "/", consumes = "multipart/form-data")
+    public ResponseEntity<?> saveProduct(
+            @RequestPart("producto") String producto,
+            @RequestPart("descripcion") String descripcion,
+            @RequestPart(value = "imagen", required = false) MultipartFile imagen,
+            @RequestPart("clasificacionProducto") Long clasificacionProducto) {
+
+        ProductDTO productDTO = new ProductDTO();
+        productDTO.setProducto(producto);
+        productDTO.setDescripcion(descripcion);
+        if(Objects.isNull(productDTO.getImagen())){
+            productDTO.setImagen(imagen);
+        }
+        productDTO.setClasificacionProducto(clasificacionProducto);
+
+        return productoService.createProduct(productDTO);
+    }
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = SuccessException.class))),
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            
+
     })
     @DeleteMapping("/{idProducto}")
     public ResponseEntity<?> deleteProduct(@PathVariable("idProducto") Long idProducto) {
         return productoService.deleteProduct(idProducto);
     }
 
-
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Producto.class))),
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            
+
     })
     @PutMapping("/{idProducto}")
-    public ResponseEntity<?> editProduct(@PathVariable("idProducto") Long idProducto,@ModelAttribute ProductDTO producto) {
-        return productoService.editProduct(idProducto,producto);
+    public ResponseEntity<?> editProduct(@PathVariable("idProducto") Long idProducto,
+            @ModelAttribute ProductDTO producto) {
+        return productoService.editProduct(idProducto, producto);
     }
 
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = List.class))),
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            
+
     })
     @GetMapping("/")
     public ResponseEntity<?> getProducts() {
