@@ -52,7 +52,7 @@ public class ProductoController {
         ProductDTO productDTO = new ProductDTO();
         productDTO.setProducto(producto);
         productDTO.setDescripcion(descripcion);
-        if(Objects.isNull(productDTO.getImagen())){
+        if(Objects.nonNull(productDTO.getImagen())){
             productDTO.setImagen(imagen);
         }
         productDTO.setClasificacionProducto(clasificacionProducto);
