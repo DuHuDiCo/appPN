@@ -25,10 +25,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductoRepository productRepository;
     private final ArchivoService archivoService;
     private final ClasificacionProductoService clasificacionProductoService;
-    
 
-    
-  
     public ProductServiceImpl(ProductoRepository productRepository, ArchivoService archivoService,
             ClasificacionProductoService clasificacionProductoService) {
         this.productRepository = productRepository;
@@ -47,36 +44,36 @@ public class ProductServiceImpl implements ProductService {
         producto.setProducto(productDTO.getProducto());
         producto.setDescripcion(productDTO.getDescripcion());
 
-
-
-        ResponseEntity<?> response = clasificacionProductoService.getClasificacionProducto(productDTO.getClasificacionProducto());
-        if(!response.getStatusCode().equals(HttpStatus.OK)){
+        ResponseEntity<?> response = clasificacionProductoService
+                .getClasificacionProducto(productDTO.getClasificacionProducto());
+        if (!response.getStatusCode().equals(HttpStatus.OK)) {
             return response;
         }
         ClasificacionProducto clasificacionProducto = (ClasificacionProducto) response.getBody();
-        if(Objects.isNull(clasificacionProducto)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Clasificacion Producto no encontrado"));
+        if (Objects.isNull(clasificacionProducto)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("Clasificacion Producto no encontrado"));
         }
         producto.setClasificacionProducto(clasificacionProducto);
 
-
         // IMAGEN PRODUCTO
+        if (Objects.nonNull(productDTO.getImagen())) {
 
-        ResponseEntity<?> archivos = archivoService.saveFile(productDTO.getImagen(), "/data/uploads/");
-        if(!archivos.getStatusCode().equals(HttpStatus.OK)){
-            return archivos;
+            ResponseEntity<?> archivos = archivoService.saveFile(productDTO.getImagen(), "/data/uploads/");
+            if (!archivos.getStatusCode().equals(HttpStatus.OK)) {
+                return archivos;
+            }
+
+            Archivos file = (Archivos) archivos.getBody();
+            if (Objects.isNull(file)) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(new ErrorResponse("Error al subir imagen"));
+            }
+            producto = productRepository.save(producto);
+            producto.agregarImagen(file);
         }
 
-        Archivos file = (Archivos) archivos.getBody();
-        if(Objects.isNull(file)){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Error al subir imagen"));
-        }
         producto = productRepository.save(producto);
-        producto.agregarImagen(file);
-
-        producto = productRepository.save(producto);
-
-        
 
         return ResponseEntity.status(HttpStatus.OK).body(producto);
 
@@ -99,13 +96,14 @@ public class ProductServiceImpl implements ProductService {
         // IMAGEN PRODUCTO
 
         ResponseEntity<?> archivos = archivoService.saveFile(productDTO.getImagen(), "/data/uploads/");
-        if(!archivos.getStatusCode().equals(HttpStatus.OK)){
+        if (!archivos.getStatusCode().equals(HttpStatus.OK)) {
             return archivos;
         }
 
         Archivos file = (Archivos) archivos.getBody();
-        if(Objects.isNull(file)){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Error al subir imagen"));
+        if (Objects.isNull(file)) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("Error al subir imagen"));
         }
         product = productRepository.save(product);
         product.agregarImagen(file);
