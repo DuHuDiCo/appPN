@@ -34,7 +34,7 @@ public class ArchivosController {
             @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @GetMapping("/")
-    public CompletableFuture<ResponseEntity<?>> getArchivos(@RequestParam("file") Long file) {
+    public CompletableFuture<ResponseEntity<Object>> getArchivos(@RequestParam("file") Long file) {
         return archivosService.getFiles(file);
     }
 

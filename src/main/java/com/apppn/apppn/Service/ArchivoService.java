@@ -16,6 +16,6 @@ public interface ArchivoService {
     public ResponseEntity<?> deleteFile(Archivos archivos);
 
 
-    public CompletableFuture<ResponseEntity<?>>  getFiles(Long idFile);
+    public CompletableFuture<ResponseEntity<Object>>  getFiles(Long idFile);
 
 }

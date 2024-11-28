@@ -1,10 +1,18 @@
 package com.apppn.apppn.ServiceImpl;
 
 import java.io.IOException;
+
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
+
+
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -43,16 +51,14 @@ public class ArchivoServiceImpl implements ArchivoService {
             archivo = archivoRepository.save(archivo);
 
             archivo.setUrlPath(urlBack.concat("/api/v1/files/?file=").concat(String.valueOf(archivo.getIdArchivo())));
-            
 
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(e.getMessage()));
         }
-        
 
         archivo = archivoRepository.save(archivo);
-        
-        return ResponseEntity.status(HttpStatus.OK).body(archivo);  
+
+        return ResponseEntity.status(HttpStatus.OK).body(archivo);
     }
 
     @Override
@@ -68,15 +74,30 @@ public class ArchivoServiceImpl implements ArchivoService {
     }
 
     @Override
-    public CompletableFuture<ResponseEntity<?>> getFiles(Long idFile) {
+    public CompletableFuture<ResponseEntity<Object>> getFiles(Long idFile) {
         return CompletableFuture.supplyAsync(() -> {
-            Archivos archivos = archivoRepository.findById(idFile).orElse(null);
-            if (Objects.isNull(archivos)) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Archivo no encontrado"));
+            try {
+                Archivos archivos = archivoRepository.findById(idFile).orElse(null);
+                if (Objects.isNull(archivos)) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Archivo no encontrado"));
+                }
+                Path filePath = Paths.get(archivos.getRuta()).normalize();
+                Resource resource = new UrlResource(filePath.toUri());
+                if (resource.exists()) {
+
+                    return ResponseEntity.status(HttpStatus.OK)
+                            .header(HttpHeaders.CONTENT_DISPOSITION,
+                                    "inline; filename=\"".concat(resource.getFilename()).concat("\""))
+                            .body(resource);
+                } else {
+
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                            .body(new ErrorResponse("FILE PATH NO ENCONTRADO"));
+                }
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse(e.getMessage()));
             }
-            return ResponseEntity.status(HttpStatus.OK).body(archivos);
         });
     }
 
-   
 }
