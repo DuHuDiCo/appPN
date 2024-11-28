@@ -2,6 +2,7 @@ package com.apppn.apppn.ServiceImpl;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import com.apppn.apppn.DTO.Request.LiquidacionDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Models.Liquidacion;
 import com.apppn.apppn.Models.ProductoCompraFacturacion;
+import com.apppn.apppn.Models.User;
 import com.apppn.apppn.Repository.LiquidacionRepository;
 import com.apppn.apppn.Repository.ProductoCompraFacturacionRepository;
 
@@ -58,8 +60,23 @@ public class LiquidacionServiceImpl implements LiquidacionService {
 
         for (ProductoCompraFacturacion productoCompraFacturacionDB : productoCompraFacturacion) {
             liquidacion.setValorVenta(liquidacion.getValorVenta() + productoCompraFacturacionDB.getValorVenta());
+            liquidacion.agregarProductoCompraFacturacion(productoCompraFacturacionDB);
         }
-        return null;
+        liquidacion.setValorLiquidado(valorLiquidado);
+
+        ResponseEntity<?> response = userService.getUserById(productoCompraFacturacion.get(0).getFacturacion().getUser().getIdUser());
+        if (!response.getStatusCode().equals(HttpStatus.OK)) {
+            return response;
+        }
+        User user = (User) response.getBody();
+        if (Objects.isNull(user)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("USUARIO NO ENCONTRADO"));
+        }
+
+
+        liquidacion.setVendedor(user);
+        liquidacion = liquidacionRepository.save(liquidacion);
+        return ResponseEntity.status(HttpStatus.OK).body(liquidacion);
     }
 
 }

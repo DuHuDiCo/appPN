@@ -52,6 +52,11 @@ public class Liquidacion {
     public Liquidacion() {
     }
 
+    public void agregarProductoCompraFacturacion(ProductoCompraFacturacion productoCompraFacturacion) {
+        this.productoCompraFacturacion.add(productoCompraFacturacion);
+        productoCompraFacturacion.setLiquidacion(this);
+    }
+
     public Long getIdLiquidacion() {
         return idLiquidacion;
     }
