@@ -93,20 +93,25 @@ public class ProductServiceImpl implements ProductService {
         }
         product.setProducto(productDTO.getProducto());
         product.setDescripcion(productDTO.getDescripcion());
+        
         // IMAGEN PRODUCTO
+        if (Objects.nonNull(productDTO.getImagen())) {
 
-        ResponseEntity<?> archivos = archivoService.saveFile(productDTO.getImagen(), "/data/uploads/");
-        if (!archivos.getStatusCode().equals(HttpStatus.OK)) {
-            return archivos;
-        }
+            ResponseEntity<?> archivos = archivoService.saveFile(productDTO.getImagen(), "/data/uploads/");
+            if (!archivos.getStatusCode().equals(HttpStatus.OK)) {
+                return archivos;
+            }
 
-        Archivos file = (Archivos) archivos.getBody();
-        if (Objects.isNull(file)) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("Error al subir imagen"));
+            Archivos file = (Archivos) archivos.getBody();
+            if (Objects.isNull(file)) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(new ErrorResponse("Error al subir imagen"));
+            }
+            product = productRepository.save(product);
+            product.agregarImagen(file);
         }
         product = productRepository.save(product);
-        product.agregarImagen(file);
+        
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
