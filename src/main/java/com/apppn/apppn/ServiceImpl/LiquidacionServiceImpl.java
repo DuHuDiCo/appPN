@@ -53,6 +53,9 @@ public class LiquidacionServiceImpl implements LiquidacionService {
                     .body(new ErrorResponse("ERROR AL PARSEAR LA FECHA Y HORA"));
         }
 
+
+        Double valorLiquidado = functions.obtenerValorLiquidado(productoCompraFacturacion);
+
         for (ProductoCompraFacturacion productoCompraFacturacionDB : productoCompraFacturacion) {
             liquidacion.setValorVenta(liquidacion.getValorVenta() + productoCompraFacturacionDB.getValorVenta());
         }

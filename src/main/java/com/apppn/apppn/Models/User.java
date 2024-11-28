@@ -54,6 +54,9 @@ public class User implements UserDetails{
     @Column(name = "IS_ENABLED")
     private Boolean enabled;
 
+    @Column(name = "PORCENTAJE_LIQUIDACION")
+    private Integer porcentajeLiquidacion;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private List<UserRoles> userRoles = new ArrayList<>();
@@ -246,6 +249,14 @@ public class User implements UserDetails{
 
     public void setFacturaciones(List<Facturacion> facturaciones) {
         this.facturaciones = facturaciones;
+    }
+
+    public Integer getPorcentajeLiquidacion() {
+        return porcentajeLiquidacion;
+    }
+
+    public void setPorcentajeLiquidacion(Integer porcentajeLiquidacion) {
+        this.porcentajeLiquidacion = porcentajeLiquidacion;
     }
 
     

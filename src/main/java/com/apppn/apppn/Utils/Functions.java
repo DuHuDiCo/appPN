@@ -16,7 +16,6 @@ import com.apppn.apppn.Security.Security.JwtUtils;
 @Service
 public class Functions {
 
-
     private final HttpServletRequest request;
     private final JwtUtils jwtUtils;
 
@@ -28,7 +27,6 @@ public class Functions {
     public boolean isTokenExpired(Instant tokenExpiryTime) {
         return Instant.now().isAfter(tokenExpiryTime);
     }
-
 
     public Date obtenerFechaYhora() throws ParseException {
         // Obtener la fecha y hora actual en milisegundos
@@ -51,22 +49,27 @@ public class Functions {
 
     }
 
-
-    public String obtenerUsernameByToken(){
+    public String obtenerUsernameByToken() {
         try {
             String token = request.getAttribute("token").toString();
-        String username = jwtUtils.extractUsername(token);
-        return username;
+            String username = jwtUtils.extractUsername(token);
+            return username;
         } catch (Exception e) {
             return null;
         }
-        
+
     }
 
-
     public Double obtenerValorLiquidado(List<ProductoCompraFacturacion> productoCompraFacturacion) {
+        Double valorLiquidado = 0.0;
         for (ProductoCompraFacturacion productoCompraFacturacionDB : productoCompraFacturacion) {
+            Double valorVenta = productoCompraFacturacionDB.getValorVenta();
+            Double valorTotalCosto = (productoCompraFacturacionDB.getProductoCompra().getCosto()
+                    * productoCompraFacturacionDB.getProductoCompra().getCantidad())
+                    + productoCompraFacturacionDB.getProductoCompra().getFlete();
 
+            valorLiquidado = valorLiquidado + ((valorVenta - valorTotalCosto)
+                    * productoCompraFacturacionDB.getFacturacion().getUser().getPorcentajeLiquidacion()) / 100;
         }
         return null;
     }

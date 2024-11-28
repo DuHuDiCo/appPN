@@ -11,6 +11,8 @@ public class UserDTO {
     private String email;
     private String password;
     private Boolean enabled;
+    private Integer porcentajeLiquidacion;
+    
     
     private List<RoleDTO> roles = new ArrayList<>();
     
@@ -57,6 +59,12 @@ public class UserDTO {
     }
     public void setEnabled(Boolean enable) {
         this.enabled = enable;
+    }
+    public Integer getPorcentajeLiquidacion() {
+        return porcentajeLiquidacion;
+    }
+    public void setPorcentajeLiquidacion(Integer porcentajeLiquidacion) {
+        this.porcentajeLiquidacion = porcentajeLiquidacion;
     }
    
     

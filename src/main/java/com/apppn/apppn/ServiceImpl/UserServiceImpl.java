@@ -50,6 +50,7 @@ public class UserServiceImpl implements UserService {
             newUser.setName(userDTO.getName());
             newUser.setLastname(userDTO.getLastname());
             newUser.setEnabled(true);
+            newUser.setPorcentajeLiquidacion(userDTO.getPorcentajeLiquidacion());
             if(Objects.nonNull(userDTO.getPassword())){
                 newUser.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
             }
