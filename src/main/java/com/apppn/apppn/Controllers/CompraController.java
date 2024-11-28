@@ -46,7 +46,7 @@ public class CompraController {
             @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @PostMapping("/")
-    public ResponseEntity<?> agregarCompra(CompraDTO compra) {
+    public ResponseEntity<?> agregarCompra(@RequestBody CompraDTO compra) {
         return compraService.crearCompra(compra);
     }
 
