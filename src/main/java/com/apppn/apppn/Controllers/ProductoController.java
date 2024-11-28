@@ -42,7 +42,7 @@ public class ProductoController {
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
 
     })
-    @PostMapping(value = "/", consumes = "application/octet-stream")
+    @PostMapping(value = "/", consumes = "multipart/form-data")
     public ResponseEntity<?> saveProduct(
             @RequestPart("producto") String producto,
             @RequestPart("descripcion") String descripcion,
