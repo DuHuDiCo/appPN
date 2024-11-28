@@ -52,6 +52,7 @@ public class CompraServiceImpl implements CompraService {
 
     @Override
     public ResponseEntity<Object> crearCompra(CompraDTO compraDTO) {
+        System.out.println("compraDTO.getIdProveedor() "+compraDTO.getIdProveedor());
 
         Proveedor proveedor = proveedorRepository.findById(compraDTO.getIdProveedor()).orElse(null);
         if (Objects.isNull(proveedor)) {
