@@ -61,4 +61,14 @@ public class CompraController {
         return compraService.agregarValorFlete(idCompra, fleteDTO);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Compra.class))),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @PutMapping("/{idCompra}")
+    public ResponseEntity<?> editarCompra(@PathVariable("idCompra") Long idCompra, @RequestBody CompraDTO compraDTO) {
+        return compraService.editarCompra(idCompra, compraDTO);
+    }
+
 }
