@@ -42,20 +42,10 @@ public class ProductoController {
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
 
     })
-    @PostMapping(value = "/", consumes = "multipart/form-data")
-    public ResponseEntity<?> saveProduct(
-            @RequestPart("producto") String producto,
-            @RequestPart("descripcion") String descripcion,
-            @RequestPart(value = "imagen", required = false) MultipartFile imagen,
-            @RequestPart("clasificacionProducto") Long clasificacionProducto) {
+    @PostMapping(value = "/")
+    public ResponseEntity<?> saveProduct(@ModelAttribute ProductDTO productDTO) {
 
-        ProductDTO productDTO = new ProductDTO();
-        productDTO.setProducto(producto);
-        productDTO.setDescripcion(descripcion);
-        if(Objects.nonNull(productDTO.getImagen())){
-            productDTO.setImagen(imagen);
-        }
-        productDTO.setClasificacionProducto(clasificacionProducto);
+       
 
         return productoService.createProduct(productDTO);
     }
