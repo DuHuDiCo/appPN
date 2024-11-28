@@ -2,10 +2,12 @@ package com.apppn.apppn.ServiceImpl;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -65,4 +67,16 @@ public class ArchivoServiceImpl implements ArchivoService {
         return ResponseEntity.status(HttpStatus.OK).body(archivos);
     }
 
+    @Override
+    public CompletableFuture<ResponseEntity<?>> getFiles(Long idFile) {
+        return CompletableFuture.supplyAsync(() -> {
+            Archivos archivos = archivoRepository.findById(idFile).orElse(null);
+            if (Objects.isNull(archivos)) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Archivo no encontrado"));
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(archivos);
+        });
+    }
+
+   
 }
