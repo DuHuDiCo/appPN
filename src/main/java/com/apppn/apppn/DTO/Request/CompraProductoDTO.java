@@ -6,8 +6,6 @@ public class CompraProductoDTO {
     private Double costo;
     private Long idProducto;
     private Long idUsuario;
-    private Boolean estimarFlete;
-    private Boolean isDescuentoInicial;
     
 
 
@@ -33,18 +31,7 @@ public class CompraProductoDTO {
         this.idProducto = idProducto;
     }
    
-    public Boolean getIsDescuentoInicial() {
-        return isDescuentoInicial;
-    }
-    public void setIsDescuentoInicial(Boolean isDescuentoInicial) {
-        this.isDescuentoInicial = isDescuentoInicial;
-    }
-    public Boolean getEstimarFlete() {
-        return estimarFlete;
-    }
-    public void setEstimarFlete(Boolean estimarFlete) {
-        this.estimarFlete = estimarFlete;
-    }
+   
     public Long getIdUsuario() {
         return idUsuario;
     }

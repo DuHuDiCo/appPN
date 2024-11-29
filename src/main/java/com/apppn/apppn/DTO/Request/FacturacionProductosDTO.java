@@ -6,6 +6,12 @@ public class FacturacionProductosDTO {
     private Long idProductoCompra;
     private Long idCliente;
     private Double valorVenta;
+    private Double descuentoPagoInicial;
+    
+
+
+
+
     public FacturacionProductosDTO() {
     }
     public Long getIdProductoCompra() {
@@ -25,6 +31,12 @@ public class FacturacionProductosDTO {
     }
     public void setValorVenta(Double valorVenta) {
         this.valorVenta = valorVenta;
+    }
+    public Double getDescuentoPagoInicial() {
+        return descuentoPagoInicial;
+    }
+    public void setDescuentoPagoInicial(Double descuentoPagoInicial) {
+        this.descuentoPagoInicial = descuentoPagoInicial;
     }
 
 

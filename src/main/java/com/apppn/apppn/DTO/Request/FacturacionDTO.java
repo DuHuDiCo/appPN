@@ -8,6 +8,7 @@ public class FacturacionDTO {
 
     private Long idInventario;
 
+    
 
     private List<FacturacionProductosDTO> productos = new ArrayList<>();
 
@@ -35,6 +36,8 @@ public class FacturacionDTO {
         this.productos = productos;
     }
 
+
+  
     
 
     

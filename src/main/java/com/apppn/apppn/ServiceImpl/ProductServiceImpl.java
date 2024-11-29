@@ -93,7 +93,20 @@ public class ProductServiceImpl implements ProductService {
         }
         product.setProducto(productDTO.getProducto());
         product.setDescripcion(productDTO.getDescripcion());
-        
+
+        ResponseEntity<?> response = clasificacionProductoService
+                .getClasificacionProducto(productDTO.getClasificacionProducto());
+        if (!response.getStatusCode().equals(HttpStatus.OK)) {
+            return response;
+        }
+
+        ClasificacionProducto clasificacionProducto = (ClasificacionProducto) response.getBody();
+        if (Objects.isNull(clasificacionProducto)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("Clasificacion Producto no encontrado"));
+        }
+        product.setClasificacionProducto(clasificacionProducto);
+
         // IMAGEN PRODUCTO
         if (Objects.nonNull(productDTO.getImagen())) {
 
@@ -111,7 +124,7 @@ public class ProductServiceImpl implements ProductService {
             product.agregarImagen(file);
         }
         product = productRepository.save(product);
-        
+
         return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
