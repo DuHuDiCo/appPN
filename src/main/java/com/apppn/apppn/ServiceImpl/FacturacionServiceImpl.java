@@ -71,6 +71,7 @@ public class FacturacionServiceImpl implements FacturacionService {
             ProductoCompraFacturacion productoCompraFacturacion = new ProductoCompraFacturacion();
             productoCompraFacturacion.setProductoCompra(productoCompra);
             productoCompraFacturacion.setValorVenta(producto.getValorVenta());
+            productoCompraFacturacion.setDescuentoPagoInicial(producto.getDescuentoPagoInicial());
 
             facturacion.setTotalFacturacion(facturacion.getTotalFacturacion() + producto.getValorVenta());
             
