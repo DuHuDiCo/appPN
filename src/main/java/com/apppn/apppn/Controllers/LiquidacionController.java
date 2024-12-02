@@ -1,6 +1,7 @@
 package com.apppn.apppn.Controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,7 +32,7 @@ public class LiquidacionController {
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    @GetMapping("/")
+    @PostMapping("/")
     public Object saveLiquidacion(@RequestBody LiquidacionDTO liquidacionDTO) {
         return liquidacionService.saveLiquidacion(liquidacionDTO);
     }
