@@ -9,4 +9,7 @@ public interface LiquidacionService {
 
     public ResponseEntity<?> saveLiquidacion(LiquidacionDTO liquidacionDTO);
 
+
+    public ResponseEntity<?> getLiquidacionesByUser(Long idUser);
+
 }

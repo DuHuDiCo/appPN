@@ -1,6 +1,7 @@
 package com.apppn.apppn.Controllers;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,5 +37,18 @@ public class LiquidacionController {
     public Object saveLiquidacion(@RequestBody LiquidacionDTO liquidacionDTO) {
         return liquidacionService.saveLiquidacion(liquidacionDTO);
     }
+
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Liquidacion.class))),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @GetMapping("/{idUser}")
+    public Object getLiquidacionesByUser(@PathVariable Long idUser) {
+        return liquidacionService.getLiquidacionesByUser(idUser);
+    }
+
+
 
 }

@@ -79,4 +79,11 @@ public class LiquidacionServiceImpl implements LiquidacionService {
         return ResponseEntity.status(HttpStatus.OK).body(liquidacion);
     }
 
+    @Override
+    public ResponseEntity<?> getLiquidacionesByUser(Long idUser) {
+        List<Liquidacion> liquidaciones = liquidacionRepository.findByVendedor(idUser);
+        return ResponseEntity.status(HttpStatus.OK).body(liquidaciones);
+        
+    }
+
 }
