@@ -74,6 +74,7 @@ public class PagoServiceImpl implements PagoService {
 
         // LIBERAR A INVENTARIO
         InventoryDTO inventoryDTO = new InventoryDTO();
+        inventoryDTO.setQuantity(0);
         try {
             inventoryDTO.setDateInventory(functions.obtenerFechaYhora());
         } catch (ParseException e) {
