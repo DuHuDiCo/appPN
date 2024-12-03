@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,11 +20,14 @@ import com.apppn.apppn.Models.Compra;
 import com.apppn.apppn.Models.Inventory;
 import com.apppn.apppn.Models.Pago;
 import com.apppn.apppn.Models.ProductoCompra;
+import com.apppn.apppn.Models.User;
 import com.apppn.apppn.Repository.PagoRepository;
+import com.apppn.apppn.Security.Security.JwtUtils;
 import com.apppn.apppn.Service.ArchivoService;
 import com.apppn.apppn.Service.CompraService;
 import com.apppn.apppn.Service.InventoryService;
 import com.apppn.apppn.Service.PagoService;
+import com.apppn.apppn.Service.UserService;
 import com.apppn.apppn.Utils.Functions;
 
 @Service
@@ -33,14 +38,24 @@ public class PagoServiceImpl implements PagoService {
     private final CompraService compraService;
     private final InventoryService inventoryService;
     private final Functions functions;
+    private final HttpServletRequest request;
+    private final JwtUtils jwtUtils;
+    private final UserService userService;
 
-    public PagoServiceImpl(PagoRepository pagoRepository, InventoryService inventoryService,
-            ArchivoService archivosService, CompraService compraService,Functions functions) {
+    
+
+
+    public PagoServiceImpl(PagoRepository pagoRepository, ArchivoService archivosService, CompraService compraService,
+            InventoryService inventoryService, Functions functions, HttpServletRequest request, JwtUtils jwtUtils,
+            UserService userService) {
         this.pagoRepository = pagoRepository;
         this.archivosService = archivosService;
         this.compraService = compraService;
         this.inventoryService = inventoryService;
         this.functions = functions;
+        this.request = request;
+        this.jwtUtils = jwtUtils;
+        this.userService = userService;
     }
 
     @Override
@@ -66,6 +81,34 @@ public class PagoServiceImpl implements PagoService {
 
         pago.setArchivos(archivos);
         compra.setPago(pago);
+        try {
+            pago.setFechaPago(functions.obtenerFechaYhora());
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+
+
+        String token = request.getAttribute("token").toString();
+
+        String username = jwtUtils.extractUsername(token);
+        if (Objects.isNull(username)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("Token no valido"));
+        }
+
+        ResponseEntity<?> responseUser = userService.getUserByEmail(username);
+        if (!responseUser.getStatusCode().equals(HttpStatus.OK)) {
+            return responseUser;
+        }
+
+
+        User user = (User) responseUser.getBody();
+        if (Objects.isNull(user)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El usuario no existe"));
+        }
+        pago.setUser(user);
+
 
         ResponseEntity<?> compraResponse = compraService.guardarCompraBD(compra);
         if (!compraResponse.getStatusCode().equals(HttpStatus.OK)) {

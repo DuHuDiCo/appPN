@@ -1,5 +1,7 @@
 package com.apppn.apppn.Models;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "PAGO")
@@ -21,7 +25,8 @@ public class Pago {
 
 
     @Column(name = "FECHA_PAGO")
-    private String fechaPago;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaPago;
 
 
     @ManyToOne
@@ -48,13 +53,7 @@ public class Pago {
         this.idPago = idPago;
     }
 
-    public String getFechaPago() {
-        return fechaPago;
-    }
-
-    public void setFechaPago(String fechaPago) {
-        this.fechaPago = fechaPago;
-    }
+  
 
     public Archivos getArchivos() {
         return archivos;
@@ -78,6 +77,14 @@ public class Pago {
 
     public void setTotalPago(Double totalPago) {
         this.totalPago = totalPago;
+    }
+
+    public Date getFechaPago() {
+        return fechaPago;
+    }
+
+    public void setFechaPago(Date fechaPago) {
+        this.fechaPago = fechaPago;
     }
 
 
