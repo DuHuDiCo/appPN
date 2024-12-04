@@ -13,7 +13,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "PRODUCTO_COMPRA")
+@Table(name = "PRODUCTO_COMPRA_INVENTORY")
 public class ProductoCompraInventory {
 
     @Id
