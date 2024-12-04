@@ -61,7 +61,8 @@ public class InventoryServiceImpl implements InventoryService {
 
         
 
-        return ResponseEntity.status(HttpStatus.OK).body(productoCompraInventoryRepository.saveAll(inventory.getProductoCompras()));
+        productoCompraInventoryRepository.saveAll(inventory.getProductoCompras());
+        return ResponseEntity.status(HttpStatus.OK).body(inventory);
 
     }
 
