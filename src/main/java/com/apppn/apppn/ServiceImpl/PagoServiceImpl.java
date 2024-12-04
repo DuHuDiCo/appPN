@@ -158,7 +158,7 @@ public class PagoServiceImpl implements PagoService {
       
 
 
-        return ResponseEntity.status(HttpStatus.OK).body(compra);
+        return ResponseEntity.status(HttpStatus.OK).body(pago);
     }
 
     @Override
