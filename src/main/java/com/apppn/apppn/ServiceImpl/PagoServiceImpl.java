@@ -122,6 +122,7 @@ public class PagoServiceImpl implements PagoService {
 
         // LIBERAR A INVENTARIO
         InventoryDTO inventoryDTO = new InventoryDTO();
+        inventoryDTO.setTotalInventoryValue(0.0);
         inventoryDTO.setQuantity(0);
         try {
             inventoryDTO.setDateInventory(functions.obtenerFechaYhora());
@@ -135,7 +136,8 @@ public class PagoServiceImpl implements PagoService {
 
         for (ProductoCompra pro : compra.getProductoCompras()) {
             inventoryDTO.setQuantity(inventoryDTO.getQuantity() + pro.getCantidad());
-            inventoryDTO.setTotalInventoryValue(inventoryDTO.getTotalInventoryValue() );
+            Double valorPro = (pro.getCosto() + pro.getFlete()) * pro.getCantidad();
+            inventoryDTO.setTotalInventoryValue(inventoryDTO.getTotalInventoryValue() + valorPro);
         }
 
         inventoryDTO.setUserId(compra.getProveedor().getIdProveedor());
