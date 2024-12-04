@@ -12,6 +12,6 @@ import com.apppn.apppn.Models.User;
 public interface InventoryRepository extends JpaRepository<Inventory, Long> {
 
 
-    List<Inventory> findByUser(User user);
+    
 
 }

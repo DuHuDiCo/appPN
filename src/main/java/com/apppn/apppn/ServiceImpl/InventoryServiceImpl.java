@@ -94,7 +94,7 @@ public class InventoryServiceImpl implements InventoryService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El usuario no existe"));
         }
 
-        List<Inventory> inventories = inventoryRepository.findByUser(user);
+        List<Inventory> inventories = inventoryRepository.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(inventories);
 
     }
