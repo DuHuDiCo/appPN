@@ -21,6 +21,7 @@ import com.apppn.apppn.Models.Inventory;
 import com.apppn.apppn.Models.Pago;
 import com.apppn.apppn.Models.ProductoCompra;
 import com.apppn.apppn.Models.User;
+import com.apppn.apppn.Repository.CompraRepository;
 import com.apppn.apppn.Repository.PagoRepository;
 import com.apppn.apppn.Security.Security.JwtUtils;
 import com.apppn.apppn.Service.ArchivoService;
@@ -41,13 +42,16 @@ public class PagoServiceImpl implements PagoService {
     private final HttpServletRequest request;
     private final JwtUtils jwtUtils;
     private final UserService userService;
+    private final CompraRepository compraRepository;    
 
     
 
 
+  
+
     public PagoServiceImpl(PagoRepository pagoRepository, ArchivoService archivosService, CompraService compraService,
             InventoryService inventoryService, Functions functions, HttpServletRequest request, JwtUtils jwtUtils,
-            UserService userService) {
+            UserService userService, CompraRepository compraRepository) {
         this.pagoRepository = pagoRepository;
         this.archivosService = archivosService;
         this.compraService = compraService;
@@ -56,6 +60,7 @@ public class PagoServiceImpl implements PagoService {
         this.request = request;
         this.jwtUtils = jwtUtils;
         this.userService = userService;
+        this.compraRepository = compraRepository;
     }
 
     @Override
@@ -169,7 +174,15 @@ public class PagoServiceImpl implements PagoService {
         if (Objects.isNull(pago)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Pago no encontrado"));
         }
-        pagoRepository.delete(pago);
+
+        Compra compra = compraRepository.findByPago(pago);
+        if(Objects.nonNull(compra)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El pago no puede eliminarse porque esta relacionado con una compra"));
+        }
+        compra.setPago(null);
+
+
+        compra = compraRepository.save(compra);
         return ResponseEntity.status(HttpStatus.OK).body(new SuccessException("El pago ha sido eliminado"));
 
     }
