@@ -140,7 +140,7 @@ public class PagoServiceImpl implements PagoService {
             inventoryDTO.setTotalInventoryValue(inventoryDTO.getTotalInventoryValue() + valorPro);
         }
 
-        inventoryDTO.setUserId(compra.getProveedor().getIdProveedor());
+      
 
         inventoryDTO.setProductos(compra.getProductoCompras());
 

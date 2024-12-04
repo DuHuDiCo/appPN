@@ -64,9 +64,9 @@ public class Functions {
         Double valorLiquidado = 0.0;
         for (ProductoCompraFacturacion productoCompraFacturacionDB : productoCompraFacturacion) {
             Double valorVenta = productoCompraFacturacionDB.getValorVenta();
-            Double valorTotalCosto = (productoCompraFacturacionDB.getProductoCompra().getCosto()
-                    * productoCompraFacturacionDB.getProductoCompra().getCantidad())
-                    + productoCompraFacturacionDB.getProductoCompra().getFlete();
+            Double valorTotalCosto = (productoCompraFacturacionDB.getProductoCompra().getProductoCompra().getCosto()
+                    * productoCompraFacturacionDB.getProductoCompra().getProductoCompra().getCantidad())
+                    + productoCompraFacturacionDB.getProductoCompra().getProductoCompra().getFlete();
 
             valorLiquidado = valorLiquidado + ((valorVenta - valorTotalCosto)
                     * productoCompraFacturacionDB.getFacturacion().getUser().getPorcentajeLiquidacion()) / 100;

@@ -12,7 +12,7 @@ public class InventoryDTO {
     private Double totalInventoryValue;
     private Double totalCostValue;
     private Integer quantity;
-    private Long userId;
+    
 
     private List<ProductoCompra> productos = new ArrayList<>();
     
@@ -22,16 +22,7 @@ public class InventoryDTO {
 
 
     
-    public InventoryDTO(Date dateInventory, Double totalInventoryValue, Double totalCostValue, Integer quantity,
-            Long userId) {
-        this.dateInventory = dateInventory;
-        this.totalInventoryValue = totalInventoryValue;
-        this.totalCostValue = totalCostValue;
-        this.quantity = quantity;
-        this.userId = userId;
-    }
-
-
+  
 
     public Date getDateInventory() {
         return dateInventory;
@@ -57,14 +48,7 @@ public class InventoryDTO {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
-    public Long getUserId() {
-        return userId;
-    }
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-
+  
 
     public List<ProductoCompra> getProductos() {
         return productos;

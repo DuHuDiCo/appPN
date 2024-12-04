@@ -17,6 +17,7 @@ import com.apppn.apppn.Models.Facturacion;
 import com.apppn.apppn.Models.Inventory;
 import com.apppn.apppn.Models.ProductoCompra;
 import com.apppn.apppn.Models.ProductoCompraFacturacion;
+import com.apppn.apppn.Models.ProductoCompraInventory;
 import com.apppn.apppn.Models.User;
 import com.apppn.apppn.Repository.ClientRepository;
 import com.apppn.apppn.Repository.FacturacionRepository;
@@ -63,7 +64,7 @@ public class FacturacionServiceImpl implements FacturacionService {
         Facturacion facturacion = new Facturacion();
 
         for(FacturacionProductosDTO producto : facturacionDTO.getProductos()){
-            ProductoCompra productoCompra = inventory.getProductoCompras().stream().filter(p -> p.getIdProductoCompra().equals(producto.getIdProductoCompra())).findFirst().orElse(null);
+            ProductoCompraInventory productoCompra = inventory.getProductoCompras().stream().filter(p -> p.getIdProductoCompraInventory().equals(producto.getIdProductoCompra())).findFirst().orElse(null);
             if(Objects.isNull(productoCompra)){
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("No existe el Producto con ese id"));
             }

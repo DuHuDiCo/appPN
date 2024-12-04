@@ -15,8 +15,10 @@ import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Models.Inventory;
 import com.apppn.apppn.Models.ProductoCompra;
 import com.apppn.apppn.Models.ProductoCompraFacturacion;
+import com.apppn.apppn.Models.ProductoCompraInventory;
 import com.apppn.apppn.Models.User;
 import com.apppn.apppn.Repository.InventoryRepository;
+import com.apppn.apppn.Repository.ProductoCompraInventoryRepository;
 import com.apppn.apppn.Service.InventoryService;
 import com.apppn.apppn.Service.UserService;
 import com.apppn.apppn.Utils.Functions;
@@ -27,12 +29,16 @@ public class InventoryServiceImpl implements InventoryService {
     private final InventoryRepository inventoryRepository;
     private final UserService userService;
     private final Functions functions;
+    private final ProductoCompraInventoryRepository productoCompraInventoryRepository;
 
-    public InventoryServiceImpl(InventoryRepository inventoryRepository, UserService userService, Functions functions) {
+    
+
+    public InventoryServiceImpl(InventoryRepository inventoryRepository, UserService userService, Functions functions,
+            ProductoCompraInventoryRepository productoCompraInventoryRepository) {
         this.inventoryRepository = inventoryRepository;
         this.userService = userService;
         this.functions = functions;
-
+        this.productoCompraInventoryRepository = productoCompraInventoryRepository;
     }
 
     @Override
@@ -43,27 +49,19 @@ public class InventoryServiceImpl implements InventoryService {
         
         inventory.setQuantity(inventoryDTO.getQuantity());
 
-        ResponseEntity<?> user = userService.getUserById(inventoryDTO.getUserId());
-        if (!user.getStatusCode().equals(HttpStatus.OK)) {
-            return user;
+
+
+        for (ProductoCompra producto : inventoryDTO.getProductos()) {
+            ProductoCompraInventory productoCompraInventory = new ProductoCompraInventory();
+            productoCompraInventory.setProductoCompra(producto);
+            productoCompraInventory.setInventory(inventory);
+            productoCompraInventory.setUser(producto.getUser());
+            inventory.agregarProductoCompra(productoCompraInventory);
         }
 
-        User userDB = (User) user.getBody();
-        if (Objects.isNull(userDB)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("User not found"));
-        }
-        inventory.setUser(userDB);
+        
 
-        inventory = inventoryRepository.save(inventory);
-
-        for (ProductoCompra pro : inventoryDTO.getProductos()) {
-            inventory.agregarProducto(pro);
-
-        }
-
-        inventory = inventoryRepository.save(inventory);
-
-        return ResponseEntity.status(HttpStatus.OK).body(inventory);
+        return ResponseEntity.status(HttpStatus.OK).body(productoCompraInventoryRepository.saveAll(inventory.getProductoCompras()));
 
     }
 

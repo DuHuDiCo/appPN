@@ -62,10 +62,10 @@ public class ProductoCompra {
 
 
     
-    
-    @ManyToMany(mappedBy = "productoCompras")
+    @OneToMany(mappedBy = "productoCompra", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
-    private Set<Inventory> inventories = new HashSet<>();
+    private List<ProductoCompraInventory> productoCompraInventory = new ArrayList<>();
+   
 
 
     public ProductoCompra() {
@@ -133,14 +133,7 @@ public class ProductoCompra {
     }
 
 
-    public Set<Inventory> getInventories() {
-        return inventories;
-    }
-
-
-    public void setInventories(Set<Inventory> inventories) {
-        this.inventories = inventories;
-    }
+  
 
 
  
@@ -163,6 +156,16 @@ public class ProductoCompra {
 
     public void setProductoCompraFacturacion(List<ProductoCompraFacturacion> productoCompraFacturacion) {
         this.productoCompraFacturacion = productoCompraFacturacion;
+    }
+
+
+    public List<ProductoCompraInventory> getProductoCompraInventory() {
+        return productoCompraInventory;
+    }
+
+
+    public void setProductoCompraInventory(List<ProductoCompraInventory> productoCompraInventory) {
+        this.productoCompraInventory = productoCompraInventory;
     }
 
 
