@@ -32,8 +32,8 @@ public class InventoryController {
             
     })
     @GetMapping("/byUser")
-    public ResponseEntity<?> getInventories(@RequestParam("idUser") Long idUser) {
-        return inventoryService.getInventories(idUser);
+    public ResponseEntity<?> getInventories(@RequestParam("idUser") Long idUser, @RequestParam("isNull") Boolean isnull) {
+        return inventoryService.getInventories(idUser, isnull);
     }
 
     
