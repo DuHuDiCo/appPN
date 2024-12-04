@@ -3,6 +3,7 @@ package com.apppn.apppn.ServiceImpl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -67,35 +68,16 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public ResponseEntity<?> getInventories(Long idUser) {
+    public ResponseEntity<?> getInventories(Long idUser, Boolean isnull) {
 
-        String username = null;
-        User user = null;
-        ResponseEntity<?> userResponse = null;
+        List<Inventory> inventories = inventoryRepository.listarInventarioByUser(idUser, isnull);
 
-        if (Objects.isNull(idUser)) {
-            username = functions.obtenerUsernameByToken();
+        for (Inventory inventory : inventories) {
+            inventory.setProductoCompras(inventory.getProductoCompras().stream().filter(p->p.getUser().getIdUser().equals(idUser)).collect(Collectors.toList()));
         }
 
-        if (Objects.nonNull(username)) {
-            userResponse = userService.getUserByEmail(username);
-            if (!userResponse.getStatusCode().equals(HttpStatus.OK)) {
-                return userResponse;
-            }
 
-        } else {
-            userResponse = userService.getUserById(idUser);
-            if (!userResponse.getStatusCode().equals(HttpStatus.OK)) {
-                return userResponse;
-            }
-        }
 
-        user = (User) userResponse.getBody();
-        if (Objects.isNull(user)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El usuario no existe"));
-        }
-
-        List<Inventory> inventories = inventoryRepository.findAll();
         return ResponseEntity.status(HttpStatus.OK).body(inventories);
 
     }

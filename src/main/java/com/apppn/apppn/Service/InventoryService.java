@@ -10,7 +10,7 @@ public interface InventoryService {
     public ResponseEntity<?> saveInventory(InventoryDTO inventoryDTO);
 
 
-    public ResponseEntity<?> getInventories(Long idUser);
+    public ResponseEntity<?> getInventories(Long idUser, Boolean isnull);
 
 
     
