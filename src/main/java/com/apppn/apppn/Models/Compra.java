@@ -47,7 +47,7 @@ public class Compra {
     @Column(name = "TOTAL_PAGAR")
     private Double totalPagar;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "PAGO_ID", referencedColumnName = "ID_PAGO")
     private Pago pago;
     
