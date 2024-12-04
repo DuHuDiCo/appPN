@@ -14,7 +14,7 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
 
 
 
-    @Query(value = "SELECT * FROM inventory LEFT JOIN producto_compra_inventory ON producto_compra_inventory.inventory_id = inventory.id_inventory WHERE producto_compra_inventory.user_id = :idUser AND inventory.facturacion_id = :isnull", nativeQuery = true)
-    List<Inventory> listarInventarioByUser(Long idUser, Boolean isnull);
+    @Query(value = "SELECT * FROM inventory LEFT JOIN producto_compra_inventory ON producto_compra_inventory.inventory_id = inventory.id_inventory WHERE producto_compra_inventory.user_id = :idUser AND inventory.facturacion_id :isnull", nativeQuery = true)
+    List<Inventory> listarInventarioByUser(Long idUser, String isnull);
 
 }
