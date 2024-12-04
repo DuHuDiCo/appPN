@@ -55,10 +55,11 @@ public class PagoController {
             @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             
     })
-    @DeleteMapping("/{idCompra}/{idPago}")
-    public ResponseEntity<?> eliminarPagao(@PathVariable("idCompra") Long idCompra, @PathVariable("idPago") Long idPago) {
-        return pagoService.eliminarPago(idCompra, idPago);
+    @DeleteMapping("/{idPago}")
+    public ResponseEntity<?> eliminarPagao( @PathVariable("idPago") Long idPago) {
+        return pagoService.eliminarPago( idPago);
     }
+    
 
 
 }

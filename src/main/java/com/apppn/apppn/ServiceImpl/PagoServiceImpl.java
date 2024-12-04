@@ -164,23 +164,12 @@ public class PagoServiceImpl implements PagoService {
     }
 
     @Override
-    public ResponseEntity<?> eliminarPago(Long idCompra, Long idPago) {
-        ResponseEntity<Object> response = compraService.obtenerCompra(idCompra);
-        if (!response.getStatusCode().equals(HttpStatus.OK)) {
-            return response;
+    public ResponseEntity<?> eliminarPago( Long idPago) {
+        Pago pago = pagoRepository.findById(idPago).orElse(null);
+        if (Objects.isNull(pago)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Pago no encontrado"));
         }
-
-        Compra compra = (Compra) response.getBody();
-        if (Objects.isNull(compra)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El compra no existe"));
-        }
-        compra.setPago(null);
-
-        ResponseEntity<?> compraResponse = compraService.guardarCompraBD(compra);
-        if (!compraResponse.getStatusCode().equals(HttpStatus.OK)) {
-            return compraResponse;
-        }
-
+        pagoRepository.delete(pago);
         return ResponseEntity.status(HttpStatus.OK).body(new SuccessException("El pago ha sido eliminado"));
 
     }
