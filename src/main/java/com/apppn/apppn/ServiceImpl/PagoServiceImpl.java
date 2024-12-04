@@ -176,8 +176,8 @@ public class PagoServiceImpl implements PagoService {
         }
 
         Compra compra = compraRepository.findByPago(pago);
-        if(Objects.nonNull(compra)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El pago no puede eliminarse porque esta relacionado con una compra"));
+        if(Objects.isNull(compra)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("No existe compra con ese pago"));
         }
         compra.setPago(null);
 
