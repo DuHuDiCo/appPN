@@ -27,12 +27,12 @@ public class ProductoCompraInventory {
     private ProductoCompra productoCompra;
 
     @ManyToOne(cascade =  CascadeType.PERSIST)
-    @JoinColumn(name = "PRODUCTO_COMPRA_ID")
+    @JoinColumn(name = "INVENTORY_ID")
     @JsonIgnore
     private Inventory inventory;
 
     @ManyToOne
-    @JoinColumn(name = "PRODUCTO_COMPRA_ID")
+    @JoinColumn(name = "USER_ID")
     private User user;
 
     public ProductoCompraInventory() {
