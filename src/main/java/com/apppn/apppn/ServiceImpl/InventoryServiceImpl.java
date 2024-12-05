@@ -20,6 +20,7 @@ import com.apppn.apppn.Models.ProductoCompraInventory;
 import com.apppn.apppn.Models.User;
 import com.apppn.apppn.Repository.InventoryRepository;
 import com.apppn.apppn.Repository.ProductoCompraInventoryRepository;
+import com.apppn.apppn.Security.Security.JwtUtils;
 import com.apppn.apppn.Service.InventoryService;
 import com.apppn.apppn.Service.UserService;
 import com.apppn.apppn.Utils.Functions;
@@ -31,15 +32,23 @@ public class InventoryServiceImpl implements InventoryService {
     private final UserService userService;
     private final Functions functions;
     private final ProductoCompraInventoryRepository productoCompraInventoryRepository;
+    private final HttpServletRequest request;
+    private final JwtUtils jwtUtils;
 
     
 
+
+  
+
     public InventoryServiceImpl(InventoryRepository inventoryRepository, UserService userService, Functions functions,
-            ProductoCompraInventoryRepository productoCompraInventoryRepository) {
+            ProductoCompraInventoryRepository productoCompraInventoryRepository, HttpServletRequest request,
+            JwtUtils jwtUtils) {
         this.inventoryRepository = inventoryRepository;
         this.userService = userService;
         this.functions = functions;
         this.productoCompraInventoryRepository = productoCompraInventoryRepository;
+        this.request = request;
+        this.jwtUtils = jwtUtils;
     }
 
     @Override
@@ -68,12 +77,31 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public ResponseEntity<?> getInventories(Long idUser, Boolean isnull) {
+    public ResponseEntity<?> getInventories( Boolean isnull) {
 
-        List<Inventory> inventories = isnull?inventoryRepository.listarInventarioSinFacturacionByUser(idUser): inventoryRepository.listarInventarioSinFacturacionByUser(idUser);
+
+        String token = request.getAttribute("token").toString();
+
+        String username = jwtUtils.extractUsername(token);
+        if (username == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("Token no valido"));
+        }
+
+        ResponseEntity<?> response = userService.getUserByEmail(username);
+        if (!response.getStatusCode().equals(HttpStatus.OK)) {
+            return response;
+        }
+
+        User user = (User) response.getBody();
+        if (Objects.isNull(user)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("Usuario no encontrado"));
+        }
+
+
+        List<Inventory> inventories = isnull?inventoryRepository.listarInventarioSinFacturacionByUser(user.getIdUser()): inventoryRepository.listarInventarioSinFacturacionByUser(user.getIdUser());
 
         for (Inventory inventory : inventories) {
-            inventory.setProductoCompras(inventory.getProductoCompras().stream().filter(p->p.getUser().getIdUser().equals(idUser)).collect(Collectors.toList()));
+            inventory.setProductoCompras(inventory.getProductoCompras().stream().filter(p->p.getUser().getIdUser().equals(user.getIdUser())).collect(Collectors.toList()));
         }
 
 
