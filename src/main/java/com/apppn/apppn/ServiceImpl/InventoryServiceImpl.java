@@ -70,7 +70,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public ResponseEntity<?> getInventories(Long idUser, Boolean isnull) {
 
-        List<Inventory> inventories = isnull?inventoryRepository.listarInventarioConFacturacionByUser(idUser): inventoryRepository.listarInventarioSinFacturacionByUser(idUser);
+        List<Inventory> inventories = isnull?inventoryRepository.listarInventarioSinFacturacionByUser(idUser): inventoryRepository.listarInventarioSinFacturacionByUser(idUser);
 
         for (Inventory inventory : inventories) {
             inventory.setProductoCompras(inventory.getProductoCompras().stream().filter(p->p.getUser().getIdUser().equals(idUser)).collect(Collectors.toList()));
