@@ -11,7 +11,7 @@ public interface PagoService {
     
     public ResponseEntity<?> obtenerPagos();
 
-    public ResponseEntity<?> eliminarPago(Long idPago);
+    public ResponseEntity<?> eliminarPago(Long idPago, Long idInventario);
 
 
 }

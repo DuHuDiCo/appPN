@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apppn.apppn.DTO.Request.PagoDTO;
@@ -56,8 +57,8 @@ public class PagoController {
             
     })
     @DeleteMapping("/{idPago}")
-    public ResponseEntity<?> eliminarPagao( @PathVariable("idPago") Long idPago) {
-        return pagoService.eliminarPago( idPago);
+    public ResponseEntity<?> eliminarPagao( @PathVariable("idPago") Long idPago, @RequestParam("idInventario") Long idInventario) {
+        return pagoService.eliminarPago( idPago, idInventario);
     }
     
 

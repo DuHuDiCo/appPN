@@ -175,7 +175,7 @@ public class PagoServiceImpl implements PagoService {
     }
 
     @Override
-    public ResponseEntity<?> eliminarPago( Long idPago) {
+    public ResponseEntity<?> eliminarPago( Long idPago, Long idInventario) {
         Pago pago = pagoRepository.findById(idPago).orElse(null);
         if (Objects.isNull(pago)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Pago no encontrado"));
@@ -188,15 +188,14 @@ public class PagoServiceImpl implements PagoService {
         compra.setPago(null);
         compra = compraRepository.save(compra);
 
-        List<Inventory> inventories = inventoryRepository.obtenerInventarioByIdPago(idPago);
-        
-        Inventory inventory = inventories.stream().filter(i->i.getProductoCompras().stream().anyMatch(p->p.getProductoCompra().getCompra().getPago().getIdPago().equals(idPago))).findFirst().orElse(null);
-        if(Objects.isNull(inventory)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("No existe inventario con ese pago"));
+        if (Objects.nonNull(idInventario)) {
+            Inventory inventory = inventoryRepository.findById(idInventario).orElse(null);
+            if (Objects.isNull(inventory)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El inventario no existe"));
+            }
+            inventoryRepository.delete(inventory);
+            
         }
-
-
-        inventoryRepository.delete(inventory);
 
         
         return ResponseEntity.status(HttpStatus.OK).body(new SuccessException("El pago ha sido eliminado"));
