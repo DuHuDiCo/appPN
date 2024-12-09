@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "PRODUCTO_COMPRA_INVENTORY")
@@ -28,7 +29,7 @@ public class ProductoCompraInventory {
 
     @ManyToOne(cascade =  CascadeType.PERSIST)
     @JoinColumn(name = "INVENTORY_ID")
-    @JsonIgnore
+    @JsonIgnoreProperties("productoCompras")
     private Inventory inventory;
 
     @ManyToOne
