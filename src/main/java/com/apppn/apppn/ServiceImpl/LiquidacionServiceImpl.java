@@ -81,7 +81,18 @@ public class LiquidacionServiceImpl implements LiquidacionService {
 
     @Override
     public ResponseEntity<?> getLiquidacionesByUser(Long idUser) {
-        List<Liquidacion> liquidaciones = liquidacionRepository.findByVendedor(idUser);
+
+        ResponseEntity<?> response = userService.getUserById(idUser);
+        if (!response.getStatusCode().equals(HttpStatus.OK)) {
+            return response;
+        }
+        User user = (User) response.getBody();
+        if (Objects.isNull(user)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("USUARIO NO ENCONTRADO"));
+        }
+
+
+        List<Liquidacion> liquidaciones = liquidacionRepository.findByVendedor(user);
         return ResponseEntity.status(HttpStatus.OK).body(liquidaciones);
         
     }
