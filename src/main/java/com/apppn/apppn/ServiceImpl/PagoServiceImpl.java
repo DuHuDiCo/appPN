@@ -22,6 +22,7 @@ import com.apppn.apppn.Models.Pago;
 import com.apppn.apppn.Models.ProductoCompra;
 import com.apppn.apppn.Models.User;
 import com.apppn.apppn.Repository.CompraRepository;
+import com.apppn.apppn.Repository.InventoryRepository;
 import com.apppn.apppn.Repository.PagoRepository;
 import com.apppn.apppn.Security.Security.JwtUtils;
 import com.apppn.apppn.Service.ArchivoService;
@@ -43,6 +44,8 @@ public class PagoServiceImpl implements PagoService {
     private final JwtUtils jwtUtils;
     private final UserService userService;
     private final CompraRepository compraRepository;    
+    private final InventoryRepository inventoryRepository;
+
 
     
 
@@ -51,7 +54,7 @@ public class PagoServiceImpl implements PagoService {
 
     public PagoServiceImpl(PagoRepository pagoRepository, ArchivoService archivosService, CompraService compraService,
             InventoryService inventoryService, Functions functions, HttpServletRequest request, JwtUtils jwtUtils,
-            UserService userService, CompraRepository compraRepository) {
+            UserService userService, CompraRepository compraRepository, InventoryRepository inventoryRepository) {
         this.pagoRepository = pagoRepository;
         this.archivosService = archivosService;
         this.compraService = compraService;
@@ -61,6 +64,7 @@ public class PagoServiceImpl implements PagoService {
         this.jwtUtils = jwtUtils;
         this.userService = userService;
         this.compraRepository = compraRepository;
+        this.inventoryRepository = inventoryRepository;
     }
 
     @Override
@@ -182,9 +186,19 @@ public class PagoServiceImpl implements PagoService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("No existe compra con ese pago"));
         }
         compra.setPago(null);
-
-
         compra = compraRepository.save(compra);
+
+        List<Inventory> inventories = inventoryRepository.obtenerInventarioByIdPago(idPago);
+        
+        Inventory inventory = inventories.stream().filter(i->i.getProductoCompras().stream().anyMatch(p->p.getProductoCompra().getCompra().getPago().getIdPago().equals(idPago))).findFirst().orElse(null);
+        if(Objects.isNull(inventory)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("No existe inventario con ese pago"));
+        }
+
+
+        inventoryRepository.delete(inventory);
+
+        
         return ResponseEntity.status(HttpStatus.OK).body(new SuccessException("El pago ha sido eliminado"));
 
     }
