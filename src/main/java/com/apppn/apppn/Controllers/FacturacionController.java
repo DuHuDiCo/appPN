@@ -37,8 +37,8 @@ public class FacturacionController {
             @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @GetMapping("/")
-    public ResponseEntity<?> obtenerFacturaciones() {
-        return facturacionService.getFacturaciones();
+    public ResponseEntity<?> obtenerFacturaciones(@RequestParam("idUser") Long idUser) {
+        return facturacionService.getFacturaciones(idUser);
     }
 
 

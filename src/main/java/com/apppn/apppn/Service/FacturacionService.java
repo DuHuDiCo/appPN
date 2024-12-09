@@ -8,7 +8,7 @@ public interface FacturacionService {
 
     public ResponseEntity<?> cearFacturacion(FacturacionDTO facturacionDTO);
 
-    public ResponseEntity<?> getFacturaciones();
+    public ResponseEntity<?> getFacturaciones(Long idUser);
 
     public ResponseEntity<?> obtenerProductosInventarioByUser(Long idUser);
 

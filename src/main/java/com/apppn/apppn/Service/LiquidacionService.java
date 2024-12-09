@@ -12,4 +12,6 @@ public interface LiquidacionService {
 
     public ResponseEntity<?> getLiquidacionesByUser(Long idUser);
 
+    
+
 }
