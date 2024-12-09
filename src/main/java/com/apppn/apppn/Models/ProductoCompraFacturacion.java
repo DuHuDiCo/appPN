@@ -40,6 +40,9 @@ public class ProductoCompraFacturacion {
     @Column(name = "VALOR_VENTA")
     private Double valorVenta;
 
+    @Column(name = "CANTIDAD")
+    private Integer cantidad;
+
 
     @Column(name = "DESCUENTO_PAGO_INICIAL")
     private Double descuentoPagoInicial;
@@ -112,6 +115,15 @@ public class ProductoCompraFacturacion {
         this.productoCompra = productoCompra;
     }
 
+    public Integer getCantidad() {
+        return cantidad;
+    }
 
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
+    }
+
+
+    
 
 }

@@ -41,6 +41,10 @@ public class Inventory {
     private Integer quantity;
 
 
+    @Column(name = "QUANTITY_SIN_FACTURACION")
+    private Integer quantitySinFacturacion;
+    
+    
     @ManyToOne
     @JoinColumn(name = "FACTURACION_ID")
     private Facturacion facturacion;
@@ -106,6 +110,14 @@ public class Inventory {
 
     public void setProductoCompras(List<ProductoCompraInventory> productoCompras) {
         this.productoCompras = productoCompras;
+    }
+
+    public Integer getQuantitySinFacturacion() {
+        return quantitySinFacturacion;
+    }
+
+    public void setQuantitySinFacturacion(Integer quantitySinFacturacion) {
+        this.quantitySinFacturacion = quantitySinFacturacion;
     }
 
 }

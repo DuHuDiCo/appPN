@@ -74,6 +74,9 @@ public class FacturacionServiceImpl implements FacturacionService {
             productoCompraFacturacion.setValorVenta(producto.getValorVenta());
             productoCompraFacturacion.setDescuentoPagoInicial(producto.getDescuentoPagoInicial());
 
+            productoCompraFacturacion.setCantidad(producto.getCantidad());
+            inventory.setQuantitySinFacturacion(inventory.getQuantity() - producto.getCantidad());
+
             facturacion.setTotalFacturacion(facturacion.getTotalFacturacion() + producto.getValorVenta());
             
             Client client = clientRepository.findById(producto.getIdCliente()).orElse(null);
