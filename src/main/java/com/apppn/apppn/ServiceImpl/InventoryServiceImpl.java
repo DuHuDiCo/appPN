@@ -98,7 +98,7 @@ public class InventoryServiceImpl implements InventoryService {
         }
 
 
-        List<Inventory> inventories = isnull?inventoryRepository.listarInventarioSinFacturacionByUser(user.getIdUser()): inventoryRepository.listarInventarioSinFacturacionByUser(user.getIdUser());
+        List<Inventory> inventories = isnull?inventoryRepository.listarInventarioConFacturacionByUser(user.getIdUser()): inventoryRepository.listarInventarioSinFacturacionByUser(user.getIdUser());
 
         for (Inventory inventory : inventories) {
             inventory.setProductoCompras(inventory.getProductoCompras().stream().filter(p->p.getUser().getIdUser().equals(user.getIdUser())).collect(Collectors.toList()));
