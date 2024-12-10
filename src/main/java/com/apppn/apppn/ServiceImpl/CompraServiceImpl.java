@@ -214,6 +214,7 @@ public class CompraServiceImpl implements CompraService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("PAGO NO ENCONTRADO"));
         }
 
+        System.out.println(pago.getIdPago());
         Compra compra = compraRepository.findByPago(pago);
         if (Objects.isNull(compra)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("COMPRA NO ENCONTRADA"));
