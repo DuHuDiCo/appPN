@@ -24,4 +24,6 @@ public interface CompraService {
 
     public ResponseEntity<Object> agregarValorFlete(Long idCompra,FleteDTO fleteDTO);
 
+    public ResponseEntity<Object> obtenerCompraByPago(Long idPago);
+
 }

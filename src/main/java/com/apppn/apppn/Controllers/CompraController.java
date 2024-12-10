@@ -71,4 +71,14 @@ public class CompraController {
         return compraService.editarCompra(idCompra, compraDTO);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Compra.class))),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @GetMapping("/{idPago}")
+    public ResponseEntity<?> obtenerCompraByPago(@PathVariable("idPago") Long idPago) {
+        return compraService.obtenerCompraByPago(idPago);
+    }
+
 }
