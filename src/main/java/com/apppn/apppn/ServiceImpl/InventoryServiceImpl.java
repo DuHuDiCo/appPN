@@ -66,12 +66,13 @@ public class InventoryServiceImpl implements InventoryService {
             productoCompraInventory.setProductoCompra(producto);
             productoCompraInventory.setInventory(inventory);
             productoCompraInventory.setUser(producto.getUser());
+            productoCompraInventory = productoCompraInventoryRepository.save(productoCompraInventory);
             inventory.agregarProductoCompra(productoCompraInventory);
         }
 
-        
+        inventory = inventoryRepository.save(inventory);
 
-        productoCompraInventoryRepository.saveAll(inventory.getProductoCompras());
+        
         return ResponseEntity.status(HttpStatus.OK).body(inventory);
 
     }
