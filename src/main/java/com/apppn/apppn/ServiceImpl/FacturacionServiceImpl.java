@@ -1,5 +1,6 @@
 package com.apppn.apppn.ServiceImpl;
 
+import java.text.ParseException;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -59,6 +60,12 @@ public class FacturacionServiceImpl implements FacturacionService {
 
         Facturacion facturacion = new Facturacion();
         facturacion.setTotalFacturacion(0.0);
+        try {
+            facturacion.setFecha(functions.obtenerFechaYhora());
+        } catch (ParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
 
         String username = functions.obtenerUsernameByToken();
         if (Objects.isNull(username)) {

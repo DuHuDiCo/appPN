@@ -55,11 +55,7 @@ public class ProductoCompra {
     @JoinColumn(name = "USER_ID")
     private User user;
 
-    //facturacion
-    @OneToMany(mappedBy = "productoCompra", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("productoCompra")
-    private List<ProductoCompraFacturacion> productoCompraFacturacion = new ArrayList<>();
-
+   
 
     
     @OneToMany(mappedBy = "productoCompra", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -148,15 +144,6 @@ public class ProductoCompra {
         this.flete = flete;
     }
 
-
-    public List<ProductoCompraFacturacion> getProductoCompraFacturacion() {
-        return productoCompraFacturacion;
-    }
-
-
-    public void setProductoCompraFacturacion(List<ProductoCompraFacturacion> productoCompraFacturacion) {
-        this.productoCompraFacturacion = productoCompraFacturacion;
-    }
 
 
     public List<ProductoCompraInventory> getProductoCompraInventory() {
