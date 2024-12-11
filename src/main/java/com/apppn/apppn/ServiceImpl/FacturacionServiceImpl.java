@@ -58,6 +58,7 @@ public class FacturacionServiceImpl implements FacturacionService {
         }
 
         Facturacion facturacion = new Facturacion();
+        facturacion.setTotalFacturacion(0.0);
 
         for (FacturacionProductosDTO producto : facturacionDTO.getProductos()) {
             ProductoCompraInventory productoCompra = inventory.getProductoCompras().stream()
