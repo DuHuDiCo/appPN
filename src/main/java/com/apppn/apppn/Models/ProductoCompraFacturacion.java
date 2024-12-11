@@ -55,7 +55,7 @@ public class ProductoCompraFacturacion {
 
     @ManyToOne
     @JoinColumn(name = "PRODUCTO_COMPRA_ID")
-    @JsonIgnoreProperties("productoCompraFacturacion")
+    @JsonIgnoreProperties({"productoCompraFacturacion", "productoCompraInventory"})
     private ProductoCompra productoCompra;
 
 

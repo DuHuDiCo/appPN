@@ -29,7 +29,7 @@ public class ProductoCompraInventory {
 
     @ManyToOne
     @JoinColumn(name = "PRODUCTO_COMPRA_ID")
-    @JsonIgnoreProperties("productoCompraInventory")
+    @JsonIgnoreProperties({"productoCompraFacturacion", "productoCompraInventory"})
     private ProductoCompra productoCompra;
 
     @ManyToOne(cascade =  CascadeType.PERSIST)
