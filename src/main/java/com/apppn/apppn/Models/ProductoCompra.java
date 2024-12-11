@@ -62,7 +62,9 @@ public class ProductoCompra {
 
 
     
-    
+    @OneToMany(mappedBy = "productoCompra", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("productoCompra")
+    private List<ProductoCompraInventory> productoCompraInventory = new ArrayList<>();
    
 
 
@@ -156,6 +158,15 @@ public class ProductoCompra {
         this.productoCompraFacturacion = productoCompraFacturacion;
     }
 
+
+    public List<ProductoCompraInventory> getProductoCompraInventory() {
+        return productoCompraInventory;
+    }
+
+
+    public void setProductoCompraInventory(List<ProductoCompraInventory> productoCompraInventory) {
+        this.productoCompraInventory = productoCompraInventory;
+    }
 
 
 

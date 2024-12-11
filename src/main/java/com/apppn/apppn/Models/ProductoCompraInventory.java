@@ -29,6 +29,7 @@ public class ProductoCompraInventory {
 
     @ManyToOne
     @JoinColumn(name = "PRODUCTO_COMPRA_ID")
+    @JsonIgnoreProperties("productoCompraInventory")
     private ProductoCompra productoCompra;
 
     @ManyToOne(cascade =  CascadeType.PERSIST)
@@ -41,9 +42,9 @@ public class ProductoCompraInventory {
     private User user;
 
 
-    @OneToMany(mappedBy = "productoCompra", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("productoCompra")
-    private List<ProductoCompraInventory> productoCompraInventory = new ArrayList<>();
+    @OneToMany(mappedBy = "productoCompraInventory", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("productoCompraInventory")
+    private List<ProductoCompraFacturacion> productoCompraFacturacions = new ArrayList<>();
 
     public ProductoCompraInventory() {
     }
@@ -78,6 +79,14 @@ public class ProductoCompraInventory {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<ProductoCompraFacturacion> getProductoCompraFacturacions() {
+        return productoCompraFacturacions;
+    }
+
+    public void setProductoCompraFacturacions(List<ProductoCompraFacturacion> productoCompraFacturacions) {
+        this.productoCompraFacturacions = productoCompraFacturacions;
     }
 
 

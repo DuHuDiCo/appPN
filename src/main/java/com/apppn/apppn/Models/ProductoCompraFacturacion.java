@@ -24,8 +24,8 @@ public class ProductoCompraFacturacion {
 
     @ManyToOne
     @JoinColumn(name = "PRODUCTO_COMPRA_ID")
-    @JsonIgnoreProperties("productoCompraInventory")
-    private ProductoCompraInventory productoCompra;
+    @JsonIgnoreProperties("productoCompraFacturacions")
+    private ProductoCompraInventory productoCompraInventory;
 
     @ManyToOne
     @JoinColumn(name = "CLIENT_ID")
@@ -107,13 +107,7 @@ public class ProductoCompraFacturacion {
         this.descuentoPagoInicial = descuentoPagoInicial;
     }
 
-    public ProductoCompraInventory getProductoCompra() {
-        return productoCompra;
-    }
-
-    public void setProductoCompra(ProductoCompraInventory productoCompra) {
-        this.productoCompra = productoCompra;
-    }
+    
 
     public Integer getCantidad() {
         return cantidad;
@@ -121,6 +115,14 @@ public class ProductoCompraFacturacion {
 
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public ProductoCompraInventory getProductoCompraInventory() {
+        return productoCompraInventory;
+    }
+
+    public void setProductoCompraInventory(ProductoCompraInventory productoCompraInventory) {
+        this.productoCompraInventory = productoCompraInventory;
     }
 
 
