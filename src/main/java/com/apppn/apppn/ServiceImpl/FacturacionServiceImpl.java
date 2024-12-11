@@ -60,17 +60,33 @@ public class FacturacionServiceImpl implements FacturacionService {
         Facturacion facturacion = new Facturacion();
         facturacion.setTotalFacturacion(0.0);
 
+        String username = functions.obtenerUsernameByToken();
+        if (Objects.isNull(username)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("No tienes permisos para acceder a esta ruta"));
+        }
+        ResponseEntity<?> response = userService.getUserByEmail(username);
+        if (!response.getStatusCode().equals(HttpStatus.OK)) {
+            return response;
+        }
+        User user = (User) response.getBody();
+        if (Objects.isNull(user)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("No existe el usuario con ese email"));
+        }
+        facturacion.setUser(user);
+
         for (FacturacionProductosDTO producto : facturacionDTO.getProductos()) {
-            ProductoCompraInventory productoCompra = inventory.getProductoCompras().stream()
-                    .filter(p -> p.getIdProductoCompraInventory().equals(producto.getIdProductoCompra())).findFirst()
+            ProductoCompraInventory productoCompraInventory = inventory.getProductoCompras().stream()
+                    .filter(p -> p.getProductoCompra().getIdProductoCompra().equals(producto.getIdProductoCompra())).findFirst()
                     .orElse(null);
-            if (Objects.isNull(productoCompra)) {
+            if (Objects.isNull(productoCompraInventory)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ErrorResponse("No existe el Producto con ese id"));
             }
 
             ProductoCompraFacturacion productoCompraFacturacion = new ProductoCompraFacturacion();
-            productoCompraFacturacion.setProductoCompraInventory(productoCompra);
+            productoCompraFacturacion.setProductoCompraInventory(productoCompraInventory);
             productoCompraFacturacion.setValorVenta(producto.getValorVenta());
             productoCompraFacturacion.setDescuentoPagoInicial(producto.getDescuentoPagoInicial());
 
