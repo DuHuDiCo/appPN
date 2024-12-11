@@ -53,6 +53,11 @@ public class ProductoCompraFacturacion {
     @JsonIgnoreProperties("productoCompraFacturacion")
     private Liquidacion liquidacion;
 
+    @ManyToOne
+    @JoinColumn(name = "PRODUCTO_COMPRA_ID")
+    @JsonIgnoreProperties("productoCompraFacturacion")
+    private ProductoCompra productoCompra;
+
 
     public ProductoCompraFacturacion() {
     }
@@ -123,6 +128,14 @@ public class ProductoCompraFacturacion {
 
     public void setProductoCompraInventory(ProductoCompraInventory productoCompraInventory) {
         this.productoCompraInventory = productoCompraInventory;
+    }
+
+    public ProductoCompra getProductoCompra() {
+        return productoCompra;
+    }
+
+    public void setProductoCompra(ProductoCompra productoCompra) {
+        this.productoCompra = productoCompra;
     }
 
 
