@@ -49,10 +49,11 @@ public class Inventory {
     
     @ManyToOne
     @JoinColumn(name = "FACTURACION_ID")
-    @JsonIgnoreProperties("inventories")
+    @JsonIgnoreProperties({"inventories", "productoCompraFacturacion"})
     private Facturacion facturacion;
 
     @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("inventory")
     List<ProductoCompraInventory> productoCompras = new ArrayList<>();
 
     public Inventory() {
