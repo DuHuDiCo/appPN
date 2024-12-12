@@ -14,7 +14,7 @@ import com.apppn.apppn.Models.ProductoCompraFacturacion;
 public interface ProductoCompraFacturacionRepository extends JpaRepository<ProductoCompraFacturacion, Long> {
 
 
-    @Query(value = "SELECT producto_compra_facturacion.* FROM `facturacion` LEFT JOIN producto_compra_facturacion ON producto_compra_facturacion.facturacion_id = facturacion.id_facturacion WHERE producto_compra_facturacion.liquidacion_id is null AND facturacion.user_id = :idUser AND producto_compra_facturacion.liquidacion_id IS NULL;", nativeQuery = true)
+    @Query(value = "SELECT producto_compra_facturacion.* FROM `facturacion` LEFT JOIN producto_compra_facturacion ON producto_compra_facturacion.facturacion_id = facturacion.id_facturacion WHERE producto_compra_facturacion.liquidacion_id is null AND facturacion.user_id = :idUser AND producto_compra_facturacion.facturacion_id IS NOT NULL", nativeQuery = true)
     List<ProductoCompraFacturacion> obtenerProductosFacturacion(@Param("idUser") Long idUser);
 
 
