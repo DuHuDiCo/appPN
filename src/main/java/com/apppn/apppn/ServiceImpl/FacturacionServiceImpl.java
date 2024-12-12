@@ -174,20 +174,16 @@ public class FacturacionServiceImpl implements FacturacionService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponse("No existe el usuario con ese email"));
         }
-        List<Facturacion> facturacions = facturacionRepository.findByUser(user);
-        if (CollectionUtils.isEmpty(facturacions)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ErrorResponse("No hay facturaciones para este usuario"));
-        }
-        List<Facturacion> productos = facturacions.stream().filter(
-                f -> f.getProductoCompraFacturacion().stream().allMatch(p -> Objects.isNull(p.getFacturacion())))
-                .collect(Collectors.toList());
+       
+        List<Inventory> inventories = inventoryRepository.listarInventarioConFacturacionByUser(user.getIdUser());
+        if(CollectionUtils.isEmpty(inventories)){
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(inventories);
 
-        if (CollectionUtils.isEmpty(productos)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("No hay productos facturados"));
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body(productos);
+        
+
+        return ResponseEntity.status(HttpStatus.OK).body(null);
     }
 
 }
