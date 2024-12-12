@@ -40,7 +40,7 @@ public class LiquidacionServiceImpl implements LiquidacionService {
     @Override
     public ResponseEntity<?> saveLiquidacion(LiquidacionDTO liquidacionDTO) {
         Liquidacion liquidacion = new Liquidacion();
-
+        liquidacion.setValorVenta(0.0);
         List<ProductoCompraFacturacion> productoCompraFacturacion = productocompraRepository
                 .findAllById(liquidacionDTO.getIdProductos());
         if (CollectionUtils.isEmpty(productoCompraFacturacion)) {
