@@ -88,6 +88,8 @@ public class FacturacionServiceImpl implements FacturacionService {
         }
         facturacion.setUser(user);
 
+
+
         for (FacturacionProductosDTO producto : facturacionDTO.getProductos()) {
             ProductoCompraInventory productoCompraInventory = inventory.getProductoCompras().stream()
                     .filter(p -> p.getProductoCompra().getIdProductoCompra().equals(producto.getIdProductoCompra())).findFirst()
@@ -99,6 +101,10 @@ public class FacturacionServiceImpl implements FacturacionService {
 
             ProductoCompraFacturacion productoCompraFacturacion = new ProductoCompraFacturacion();
             productoCompraFacturacion.setProductoCompraInventory(productoCompraInventory);
+            if(producto.getValorVenta() < (productoCompraInventory.getProductoCompra().getCosto() + productoCompraInventory.getProductoCompra().getFlete())){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ErrorResponse("El valor de venta no puede ser menor que el costo del producto"));
+            }
             productoCompraFacturacion.setValorVenta(producto.getValorVenta());
             productoCompraFacturacion.setTotalVenta((producto.getValorVenta() * producto.getCantidad()) - producto.getDescuentoPagoInicial());
             productoCompraFacturacion.setDescuentoPagoInicial(producto.getDescuentoPagoInicial());
