@@ -168,7 +168,7 @@ public class FacturacionServiceImpl implements FacturacionService {
             }
         }
 
-        List<Facturacion> facturaciones = facturacionRepository.findByUser(user);
+        List<Facturacion> facturaciones = facturacionRepository.findByUser(user.getIdUser());
         return ResponseEntity.status(HttpStatus.OK).body(facturaciones);
 
     }
