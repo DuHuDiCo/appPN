@@ -71,7 +71,8 @@ public class Functions {
             valorLiquidado = valorLiquidado + (((valorVenta*productoCompraFacturacionDB.getCantidad()) - valorTotalCosto)
                     * productoCompraFacturacionDB.getFacturacion().getUser().getPorcentajeLiquidacion()) / 100;
         }
-        return valorLiquidado;
+
+        return valorLiquidado>0?valorLiquidado:0;
     }
 
 }

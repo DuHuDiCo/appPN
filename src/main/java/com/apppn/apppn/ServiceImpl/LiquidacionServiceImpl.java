@@ -57,6 +57,9 @@ public class LiquidacionServiceImpl implements LiquidacionService {
 
 
         Double valorLiquidado = functions.obtenerValorLiquidado(productoCompraFacturacion);
+        if(valorLiquidado <= 0){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El valor de venta no puede ser menor que el costo del producto"));
+        }
 
         for (ProductoCompraFacturacion productoCompraFacturacionDB : productoCompraFacturacion) {
             liquidacion.setValorVenta(liquidacion.getValorVenta() + productoCompraFacturacionDB.getValorVenta());
