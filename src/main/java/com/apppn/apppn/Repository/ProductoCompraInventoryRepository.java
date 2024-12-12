@@ -17,4 +17,6 @@ public interface ProductoCompraInventoryRepository extends JpaRepository<Product
     List<ProductoCompraInventory> obtenerProductosInventarioSinFacturacion(@Param("idUser") Long idUser);
 
 
+
+    
 }

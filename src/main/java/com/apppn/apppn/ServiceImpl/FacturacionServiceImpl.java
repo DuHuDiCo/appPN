@@ -23,6 +23,7 @@ import com.apppn.apppn.Models.User;
 import com.apppn.apppn.Repository.ClientRepository;
 import com.apppn.apppn.Repository.FacturacionRepository;
 import com.apppn.apppn.Repository.InventoryRepository;
+import com.apppn.apppn.Repository.ProductoCompraFacturacionRepository;
 import com.apppn.apppn.Repository.ProductoCompraInventoryRepository;
 import com.apppn.apppn.Service.FacturacionService;
 import com.apppn.apppn.Service.UserService;
@@ -37,17 +38,22 @@ public class FacturacionServiceImpl implements FacturacionService {
     private final Functions functions;
     private final UserService userService;
     private final ProductoCompraInventoryRepository productoCompraInventoryRepository;
+    private final ProductoCompraFacturacionRepository productoCompraFacturacionRepository;
 
+
+    
 
     public FacturacionServiceImpl(FacturacionRepository facturacionRepository, InventoryRepository inventoryRepository,
             ClientRepository clientRepository, Functions functions, UserService userService,
-            ProductoCompraInventoryRepository productoCompraInventoryRepository) {
+            ProductoCompraInventoryRepository productoCompraInventoryRepository,
+            ProductoCompraFacturacionRepository productoCompraFacturacionRepository) {
         this.facturacionRepository = facturacionRepository;
         this.inventoryRepository = inventoryRepository;
         this.clientRepository = clientRepository;
         this.functions = functions;
         this.userService = userService;
         this.productoCompraInventoryRepository = productoCompraInventoryRepository;
+        this.productoCompraFacturacionRepository = productoCompraFacturacionRepository;
     }
 
     @Override
@@ -168,7 +174,7 @@ public class FacturacionServiceImpl implements FacturacionService {
             }
         }
 
-        List<Facturacion> facturaciones = facturacionRepository.obtejFacturacions(user.getIdUser());
+        List<ProductoCompraFacturacion> facturaciones = productoCompraFacturacionRepository.obtenerProductosFacturacion(user.getIdUser());
         return ResponseEntity.status(HttpStatus.OK).body(facturaciones);
 
     }
