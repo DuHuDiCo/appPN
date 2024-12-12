@@ -13,7 +13,7 @@ import com.apppn.apppn.Models.ProductoCompraInventory;
 public interface ProductoCompraInventoryRepository extends JpaRepository<ProductoCompraInventory, Long> {
 
 
-    @Query(value = "SELECT producto_compra_inventory.* FROM `producto_compra_inventory` LEFT JOIN producto_compra_facturacion ON producto_compra_facturacion.producto_compra_inventory_id = producto_compra_inventory.id_producto_compra_inventory WHERE producto_compra_facturacion.producto_compra_inventory_id is null AND producto_compra_inventory.user_id = :idUser;", nativeQuery = true)
+    @Query(value = "SELECT producto_compra_inventory.* FROM `producto_compra_inventory` LEFT JOIN producto_compra_facturacion ON producto_compra_facturacion.producto_compra_inventory_id = producto_compra_inventory.id_producto_compra_inventory WHERE producto_compra_facturacion.producto_compra_inventory_id is null AND producto_compra_inventory.user_id = :idUser", nativeQuery = true)
     List<ProductoCompraInventory> obtenerProductosInventarioSinFacturacion(@Param("idUser") Long idUser);
 
 
