@@ -117,6 +117,10 @@ public class FacturacionServiceImpl implements FacturacionService {
         }
 
         facturacion = facturacionRepository.save(facturacion);
+
+        inventory.setFacturacion(facturacion);
+        inventory = inventoryRepository.save(inventory);
+
         return ResponseEntity.status(HttpStatus.OK).body(facturacion);
 
     }
@@ -181,7 +185,7 @@ public class FacturacionServiceImpl implements FacturacionService {
 
         }
 
-        
+        // List<ProductoCompraInventory> productoCompraInventories = inventories.stream().filter(i-> i.getProductoCompras().stream().)
 
         return ResponseEntity.status(HttpStatus.OK).body(null);
     }
