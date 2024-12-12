@@ -44,6 +44,11 @@ public class ProductoCompraFacturacion {
     private Integer cantidad;
 
 
+
+    @Column(name = "TOTAL_VENTA")
+    private Double totalVenta;
+
+
     @Column(name = "DESCUENTO_PAGO_INICIAL")
     private Double descuentoPagoInicial;
 
@@ -123,6 +128,14 @@ public class ProductoCompraFacturacion {
 
     public void setProductoCompraInventory(ProductoCompraInventory productoCompraInventory) {
         this.productoCompraInventory = productoCompraInventory;
+    }
+
+    public Double getTotalVenta() {
+        return totalVenta;
+    }
+
+    public void setTotalVenta(Double totalVenta) {
+        this.totalVenta = totalVenta;
     }
 
   

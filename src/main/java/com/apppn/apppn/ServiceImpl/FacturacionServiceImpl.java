@@ -95,6 +95,7 @@ public class FacturacionServiceImpl implements FacturacionService {
             ProductoCompraFacturacion productoCompraFacturacion = new ProductoCompraFacturacion();
             productoCompraFacturacion.setProductoCompraInventory(productoCompraInventory);
             productoCompraFacturacion.setValorVenta(producto.getValorVenta());
+            productoCompraFacturacion.setTotalVenta((producto.getValorVenta() * producto.getCantidad()) - producto.getDescuentoPagoInicial());
             productoCompraFacturacion.setDescuentoPagoInicial(producto.getDescuentoPagoInicial());
 
             productoCompraFacturacion.setCantidad(producto.getCantidad());
@@ -123,7 +124,7 @@ public class FacturacionServiceImpl implements FacturacionService {
     @Override
     public ResponseEntity<?> getFacturaciones(Long idUser) {
         User user = null;
-        if (Objects.nonNull(idUser)) {
+        if (idUser > 0L) {
             ResponseEntity<?> response = userService.getUserById(idUser);
             if (!response.getStatusCode().equals(HttpStatus.OK)) {
                 return response;
@@ -135,7 +136,7 @@ public class FacturacionServiceImpl implements FacturacionService {
             }
         }
 
-        if (Objects.isNull(user)) {
+        if (idUser == 0L) {
             String username = functions.obtenerUsernameByToken();
             if (Objects.isNull(username)) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
@@ -158,14 +159,20 @@ public class FacturacionServiceImpl implements FacturacionService {
     }
 
     @Override
-    public ResponseEntity<?> obtenerProductosInventarioByUser(Long idUser) {
-        ResponseEntity<?> response = userService.getUserById(idUser);
+    public ResponseEntity<?> obtenerProductosInventarioByUser() {
+        String username = functions.obtenerUsernameByToken();
+        if (Objects.isNull(username)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ErrorResponse("No tienes permisos para acceder a esta ruta"));
+        }
+        ResponseEntity<?> response = userService.getUserByEmail(username);
         if (!response.getStatusCode().equals(HttpStatus.OK)) {
             return response;
         }
         User user = (User) response.getBody();
         if (Objects.isNull(user)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El usuario no existe"));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("No existe el usuario con ese email"));
         }
         List<Facturacion> facturacions = facturacionRepository.findByUser(user);
         if (CollectionUtils.isEmpty(facturacions)) {
