@@ -23,6 +23,7 @@ import com.apppn.apppn.Models.User;
 import com.apppn.apppn.Repository.ClientRepository;
 import com.apppn.apppn.Repository.FacturacionRepository;
 import com.apppn.apppn.Repository.InventoryRepository;
+import com.apppn.apppn.Repository.ProductoCompraInventoryRepository;
 import com.apppn.apppn.Service.FacturacionService;
 import com.apppn.apppn.Service.UserService;
 import com.apppn.apppn.Utils.Functions;
@@ -35,14 +36,18 @@ public class FacturacionServiceImpl implements FacturacionService {
     private final ClientRepository clientRepository;
     private final Functions functions;
     private final UserService userService;
+    private final ProductoCompraInventoryRepository productoCompraInventoryRepository;
+
 
     public FacturacionServiceImpl(FacturacionRepository facturacionRepository, InventoryRepository inventoryRepository,
-            ClientRepository clientRepository, Functions functions, UserService userService) {
+            ClientRepository clientRepository, Functions functions, UserService userService,
+            ProductoCompraInventoryRepository productoCompraInventoryRepository) {
         this.facturacionRepository = facturacionRepository;
         this.inventoryRepository = inventoryRepository;
         this.clientRepository = clientRepository;
         this.functions = functions;
         this.userService = userService;
+        this.productoCompraInventoryRepository = productoCompraInventoryRepository;
     }
 
     @Override
@@ -185,9 +190,9 @@ public class FacturacionServiceImpl implements FacturacionService {
 
         }
 
-        // List<ProductoCompraInventory> productoCompraInventories = inventories.stream().filter(i-> i.getProductoCompras().stream().)
+         List<ProductoCompraInventory> productoCompraInventories = productoCompraInventoryRepository.obtenerProductosInventarioSinFacturacion(user.getIdUser());
 
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body(productoCompraInventories);
     }
 
 }
