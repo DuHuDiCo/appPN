@@ -121,8 +121,9 @@ public class ProductServiceImpl implements ProductService {
                         .body(new ErrorResponse("Error al subir imagen"));
             }
             product.getImagenes().clear();
-            product = productRepository.save(product);
             product.agregarImagen(file);
+            product = productRepository.save(product);
+            
         }
         product = productRepository.save(product);
 
