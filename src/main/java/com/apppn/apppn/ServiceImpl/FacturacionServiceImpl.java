@@ -40,9 +40,6 @@ public class FacturacionServiceImpl implements FacturacionService {
     private final ProductoCompraInventoryRepository productoCompraInventoryRepository;
     private final ProductoCompraFacturacionRepository productoCompraFacturacionRepository;
 
-
-    
-
     public FacturacionServiceImpl(FacturacionRepository facturacionRepository, InventoryRepository inventoryRepository,
             ClientRepository clientRepository, Functions functions, UserService userService,
             ProductoCompraInventoryRepository productoCompraInventoryRepository,
@@ -94,11 +91,10 @@ public class FacturacionServiceImpl implements FacturacionService {
         }
         facturacion.setUser(user);
 
-
-
         for (FacturacionProductosDTO producto : facturacionDTO.getProductos()) {
             ProductoCompraInventory productoCompraInventory = inventory.getProductoCompras().stream()
-                    .filter(p -> p.getProductoCompra().getIdProductoCompra().equals(producto.getIdProductoCompra())).findFirst()
+                    .filter(p -> p.getProductoCompra().getIdProductoCompra().equals(producto.getIdProductoCompra()))
+                    .findFirst()
                     .orElse(null);
             if (Objects.isNull(productoCompraInventory)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -107,12 +103,14 @@ public class FacturacionServiceImpl implements FacturacionService {
 
             ProductoCompraFacturacion productoCompraFacturacion = new ProductoCompraFacturacion();
             productoCompraFacturacion.setProductoCompraInventory(productoCompraInventory);
-            if(producto.getValorVenta() < (productoCompraInventory.getProductoCompra().getCosto() + productoCompraInventory.getProductoCompra().getFlete())){
+            if (producto.getValorVenta() < (productoCompraInventory.getProductoCompra().getCosto()
+                    + productoCompraInventory.getProductoCompra().getFlete())) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ErrorResponse("El valor de venta no puede ser menor que el costo del producto"));
             }
             productoCompraFacturacion.setValorVenta(producto.getValorVenta());
-            productoCompraFacturacion.setTotalVenta((producto.getValorVenta() * producto.getCantidad()) - producto.getDescuentoPagoInicial());
+            productoCompraFacturacion.setTotalVenta(
+                    (producto.getValorVenta() * producto.getCantidad()) - producto.getDescuentoPagoInicial());
             productoCompraFacturacion.setDescuentoPagoInicial(producto.getDescuentoPagoInicial());
 
             productoCompraFacturacion.setCantidad(producto.getCantidad());
@@ -156,8 +154,9 @@ public class FacturacionServiceImpl implements FacturacionService {
                         .body(new ErrorResponse("No existe el usuario con ese email"));
             }
 
-            List<ProductoCompraInventory> productoCompraInventories = productoCompraInventoryRepository.obtenerProductosInventarioSinFacturacion(user.getIdUser());
-            return ResponseEntity.status(HttpStatus.OK).body(productoCompraInventories);
+            List<ProductoCompraFacturacion> facturaciones = productoCompraFacturacionRepository
+                    .obtenerProductosFacturacion(user.getIdUser());
+            return ResponseEntity.status(HttpStatus.OK).body(facturaciones);
         }
 
         if (idUser == 0L) {
@@ -175,12 +174,11 @@ public class FacturacionServiceImpl implements FacturacionService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ErrorResponse("No existe el usuario con ese email"));
             }
-
-            List<Facturacion> facturaciones = facturacionRepository.findByUser(user);
-            return ResponseEntity.status(HttpStatus.OK).body(facturaciones);
+            List<Facturacion> facturacions = facturacionRepository.findByUser(user);
+            return ResponseEntity.status(HttpStatus.OK).body(facturacions);
         }
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("No existe el usuario con ese ID"));
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(new ErrorResponse("No existe el usuario con ese email"));
 
     }
 
@@ -200,17 +198,14 @@ public class FacturacionServiceImpl implements FacturacionService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(new ErrorResponse("No existe el usuario con ese email"));
         }
-       
+
         List<Inventory> inventories = inventoryRepository.listarInventarioConFacturacionByUser(user.getIdUser());
-        if(CollectionUtils.isEmpty(inventories)){
+        if (CollectionUtils.isEmpty(inventories)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(inventories);
 
         }
 
-         List<ProductoCompraInventory> productoCompraInventories = productoCompraInventoryRepository.obtenerProductosInventarioSinFacturacion(user.getIdUser());
-
         return ResponseEntity.status(HttpStatus.OK).body(productoCompraInventories);
     }
 
-   
 }
