@@ -207,4 +207,10 @@ public class FacturacionServiceImpl implements FacturacionService {
         return ResponseEntity.status(HttpStatus.OK).body(productoCompraInventories);
     }
 
+    @Override
+    public ResponseEntity<?> obtenerFacturacionesByUser(Long idUser) {
+       List<Facturacion> facturacions = facturacionRepository.findByUser(idUser);
+       return ResponseEntity.status(HttpStatus.OK).body(facturacions);
+    }
+
 }
