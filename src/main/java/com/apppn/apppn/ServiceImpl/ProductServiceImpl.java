@@ -120,6 +120,7 @@ public class ProductServiceImpl implements ProductService {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(new ErrorResponse("Error al subir imagen"));
             }
+            product.getImagenes().clear();
             product = productRepository.save(product);
             product.agregarImagen(file);
         }
