@@ -204,6 +204,8 @@ public class FacturacionServiceImpl implements FacturacionService {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(inventories);
 
         }
+        List<ProductoCompraInventory> productoCompraInventories = productoCompraInventoryRepository 
+                .obtenerProductosInventarioSinFacturacion(user.getIdUser());
 
         return ResponseEntity.status(HttpStatus.OK).body(productoCompraInventories);
     }
