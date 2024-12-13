@@ -155,6 +155,9 @@ public class FacturacionServiceImpl implements FacturacionService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ErrorResponse("No existe el usuario con ese email"));
             }
+
+            List<ProductoCompraInventory> productoCompraInventories = productoCompraInventoryRepository.obtenerProductosInventarioSinFacturacion(user.getIdUser());
+            return ResponseEntity.status(HttpStatus.OK).body(productoCompraInventories);
         }
 
         if (idUser == 0L) {
@@ -172,10 +175,12 @@ public class FacturacionServiceImpl implements FacturacionService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ErrorResponse("No existe el usuario con ese email"));
             }
+
+            List<Facturacion> facturaciones = facturacionRepository.findByUser(user);
+            return ResponseEntity.status(HttpStatus.OK).body(facturaciones);
         }
 
-        List<ProductoCompraFacturacion> facturaciones = productoCompraFacturacionRepository.obtenerProductosFacturacion(user.getIdUser());
-        return ResponseEntity.status(HttpStatus.OK).body(facturaciones);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("No existe el usuario con ese ID"));
 
     }
 
@@ -207,10 +212,5 @@ public class FacturacionServiceImpl implements FacturacionService {
         return ResponseEntity.status(HttpStatus.OK).body(productoCompraInventories);
     }
 
-    @Override
-    public ResponseEntity<?> obtenerFacturacionesByUser(Long idUser) {
-       List<Facturacion> facturacions = facturacionRepository.findByUser(idUser);
-       return ResponseEntity.status(HttpStatus.OK).body(facturacions);
-    }
-
+   
 }

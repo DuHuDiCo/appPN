@@ -19,5 +19,5 @@ public interface FacturacionRepository extends JpaRepository<Facturacion, Long> 
     List<Facturacion> obtejFacturacions(@Param("idUser") Long idUser);
 
 
-    List<Facturacion> findByUser(Long idUser);
+    List<Facturacion> findByUser(User user);
 }
