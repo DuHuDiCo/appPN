@@ -36,6 +36,11 @@ public class ProductoCompraInventory {
     @JoinColumn(name = "INVENTORY_ID")
     @JsonIgnoreProperties("productoCompras")
     private Inventory inventory;
+    
+
+
+    @Column(name = "CANTIDAD_INVENTORIO")
+    private Integer cantidadInventario;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -87,6 +92,14 @@ public class ProductoCompraInventory {
 
     public void setProductoCompraFacturacions(List<ProductoCompraFacturacion> productoCompraFacturacions) {
         this.productoCompraFacturacions = productoCompraFacturacions;
+    }
+
+    public Integer getCantidadInventario() {
+        return cantidadInventario;
+    }
+
+    public void setCantidadInventario(Integer cantidadInventario) {
+        this.cantidadInventario = cantidadInventario;
     }
 
 

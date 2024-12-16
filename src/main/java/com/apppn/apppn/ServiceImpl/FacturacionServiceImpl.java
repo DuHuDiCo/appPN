@@ -97,6 +97,7 @@ public class FacturacionServiceImpl implements FacturacionService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ErrorResponse("No existe el Producto con ese id"));
             }
+            productoCompraInventory.setCantidadInventario(productoCompraInventory.getCantidadInventario() - producto.getCantidad());
 
             ProductoCompraFacturacion productoCompraFacturacion = new ProductoCompraFacturacion();
             productoCompraFacturacion.setProductoCompraInventory(productoCompraInventory);
