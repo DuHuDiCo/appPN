@@ -15,11 +15,11 @@ public interface InventoryRepository extends JpaRepository<Inventory, Long> {
 
 
 
-    @Query(value = "SELECT DISTINCT  inventory.* FROM inventory LEFT JOIN producto_compra_inventory ON producto_compra_inventory.inventory_id = inventory.id_inventory WHERE producto_compra_inventory.user_id = :idUser AND inventory.facturacion_id IS  NULL", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT inventory.* FROM inventory LEFT JOIN producto_compra_inventory ON producto_compra_inventory.inventory_id = inventory.id_inventory LEFT JOIN inventory_facturacion ON inventory_facturacion.inventori_id = inventory.id_inventory LEFT JOIN facturacion ON inventory_facturacion.facturacion_id = facturacion.id_facturacion WHERE producto_compra_inventory.user_id = :idUser AND facturacion.id_facturacion IS NULL", nativeQuery = true)
     List<Inventory> listarInventarioSinFacturacionByUser(@Param("idUser")Long idUser);
 
 
-    @Query(value = "SELECT DISTINCT  inventory.* FROM inventory LEFT JOIN producto_compra_inventory ON producto_compra_inventory.inventory_id = inventory.id_inventory WHERE producto_compra_inventory.user_id = :idUser AND inventory.facturacion_id IS NOT NULL", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT inventory.* FROM inventory LEFT JOIN producto_compra_inventory ON producto_compra_inventory.inventory_id = inventory.id_inventory LEFT JOIN inventory_facturacion ON inventory_facturacion.inventori_id = inventory.id_inventory LEFT JOIN facturacion ON inventory_facturacion.facturacion_id = facturacion.id_facturacion WHERE producto_compra_inventory.user_id = :idUser AND facturacion.id_facturacion IS NOT NULL", nativeQuery = true)
     List<Inventory> listarInventarioConFacturacionByUser(@Param("idUser")Long idUser);
 
 
