@@ -58,6 +58,7 @@ public class InventoryServiceImpl implements InventoryService {
         inventory.setTotalInventoryValue(inventoryDTO.getTotalInventoryValue());
         
         inventory.setQuantity(inventoryDTO.getQuantity());
+        inventory.setQuantitySinFacturacion(inventoryDTO.getQuantity());
 
 
 
@@ -65,6 +66,7 @@ public class InventoryServiceImpl implements InventoryService {
             ProductoCompraInventory productoCompraInventory = new ProductoCompraInventory();
             productoCompraInventory.setProductoCompra(producto);
             productoCompraInventory.setInventory(inventory);
+            productoCompraInventory.setCantidadInventario(producto.getCantidad());
             productoCompraInventory.setUser(producto.getUser());
             productoCompraInventory = productoCompraInventoryRepository.save(productoCompraInventory);
             inventory.agregarProductoCompra(productoCompraInventory);
