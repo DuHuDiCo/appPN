@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "PRODUCTO_COMPRA_INVENTORY")
+@JsonIgnoreProperties({"productoCompraFacturacions", "inventory"}) // Evita serializar relaciones para prevenir ciclos
 public class ProductoCompraInventory {
 
     @Id
