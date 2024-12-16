@@ -112,7 +112,7 @@ public class FacturacionServiceImpl implements FacturacionService {
             productoCompraFacturacion.setDescuentoPagoInicial(producto.getDescuentoPagoInicial());
 
             productoCompraFacturacion.setCantidad(producto.getCantidad());
-            inventory.setQuantitySinFacturacion(inventory.getQuantity() - producto.getCantidad());
+            inventory.setQuantitySinFacturacion(inventory.getQuantitySinFacturacion() - producto.getCantidad());
 
             facturacion.setTotalFacturacion(facturacion.getTotalFacturacion() + producto.getValorVenta());
 
