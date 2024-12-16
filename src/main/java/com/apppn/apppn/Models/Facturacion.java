@@ -48,7 +48,7 @@ public class Facturacion {
     private List<ProductoCompraFacturacion> productoCompraFacturacion = new ArrayList<>();
 
     @ManyToMany(mappedBy = "facturaciones")
-    @JsonIgnore
+    @JsonIgnoreProperties("facturaciones")
     private Set<Inventory> inventories = new HashSet<>();
 
     public Facturacion() {

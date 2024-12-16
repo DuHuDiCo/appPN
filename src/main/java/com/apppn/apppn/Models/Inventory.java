@@ -50,6 +50,7 @@ public class Inventory {
     
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "INVENTORY_FACTURACION", joinColumns = @JoinColumn(name = "INVENTORI_ID"), inverseJoinColumns = @JoinColumn(name = "FACTURACION_ID"))
+    @JsonIgnoreProperties("inventories")
     private Set<Facturacion> facturaciones = new HashSet<>();
 
     @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL, orphanRemoval = true)
