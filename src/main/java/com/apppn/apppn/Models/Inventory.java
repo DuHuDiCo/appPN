@@ -26,7 +26,6 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "INVENTORY")
-@JsonIgnoreProperties({"facturaciones", "productoCompras"}) // Evita serializar estas relaciones para evitar ciclos
 public class Inventory {
 
     @Id
@@ -51,7 +50,7 @@ public class Inventory {
     
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "INVENTORY_FACTURACION", joinColumns = @JoinColumn(name = "INVENTORI_ID"), inverseJoinColumns = @JoinColumn(name = "FACTURACION_ID"))
-    @JsonIgnoreProperties("inventories")
+    @JsonIgnoreProperties({"inventories", "productoCompraFacturacion"})
     private Set<Facturacion> facturaciones = new HashSet<>();
 
     @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL, orphanRemoval = true)
