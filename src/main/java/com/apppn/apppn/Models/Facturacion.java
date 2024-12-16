@@ -2,7 +2,9 @@ package com.apppn.apppn.Models;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -29,16 +32,12 @@ public class Facturacion {
     @Column(name = "ID_FACTURACION")
     private Long idFacturacion;
 
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "FECHA")
     private Date fecha;
 
-
     @Column(name = "TOTAL_FACTURACION")
     private Double totalFacturacion;
-
-
 
     @ManyToOne
     @JoinColumn(name = "USER_ID")
@@ -46,19 +45,16 @@ public class Facturacion {
 
     @OneToMany(mappedBy = "facturacion", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("facturacion")
-    private  List<ProductoCompraFacturacion> productoCompraFacturacion = new ArrayList<>();
+    private List<ProductoCompraFacturacion> productoCompraFacturacion = new ArrayList<>();
 
-
-
-    @OneToMany(mappedBy = "facturacion", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("facturacion")
-    private List<Inventory> inventories = new ArrayList<>();
+    @ManyToMany(mappedBy = "facturaciones")
+    @JsonIgnore
+    private Set<Inventory> inventories = new HashSet<>();
 
     public Facturacion() {
     }
 
-
-    public void agregarProductoCompraFacturacion(ProductoCompraFacturacion compraFacturacion){
+    public void agregarProductoCompraFacturacion(ProductoCompraFacturacion compraFacturacion) {
         productoCompraFacturacion.add(compraFacturacion);
         compraFacturacion.setFacturacion(this);
     }
@@ -95,18 +91,22 @@ public class Facturacion {
         this.productoCompraFacturacion = productoCompraFacturacion;
     }
 
-
     public User getUser() {
         return user;
     }
-
 
     public void setUser(User user) {
         this.user = user;
     }
 
+    public Set<Inventory> getInventories() {
+        return inventories;
+    }
 
+    public void setInventories(Set<Inventory> inventories) {
+        this.inventories = inventories;
+    }
 
-
+    
 
 }

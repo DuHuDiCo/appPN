@@ -61,10 +61,7 @@ public class FacturacionServiceImpl implements FacturacionService {
                     .body(new ErrorResponse("No existe la Inventario con ese id"));
         }
 
-        if (Objects.nonNull(inventory.getFacturacion())) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ErrorResponse("Ya existe una facturacion para este inventario"));
-        }
+        
 
         Facturacion facturacion = new Facturacion();
         facturacion.setTotalFacturacion(0.0);
@@ -133,7 +130,7 @@ public class FacturacionServiceImpl implements FacturacionService {
 
         facturacion = facturacionRepository.save(facturacion);
 
-        inventory.setFacturacion(facturacion);
+        inventory.agregarFacturacion(facturacion);
         inventory = inventoryRepository.save(inventory);
 
         return ResponseEntity.status(HttpStatus.OK).body(facturacion);

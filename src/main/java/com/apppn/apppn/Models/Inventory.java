@@ -9,6 +9,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,10 +48,9 @@ public class Inventory {
     private Integer quantitySinFacturacion;
     
     
-    @ManyToOne
-    @JoinColumn(name = "FACTURACION_ID")
-    @JsonIgnoreProperties({"inventories", "productoCompraFacturacion"})
-    private Facturacion facturacion;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "INVENTORY_FACTURACION", joinColumns = @JoinColumn(name = "INVENTORI_ID"), inverseJoinColumns = @JoinColumn(name = "FACTURACION_ID"))
+    private Set<Facturacion> facturaciones = new HashSet<>();
 
     @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("inventory")
@@ -62,6 +62,11 @@ public class Inventory {
     public void agregarProductoCompra(ProductoCompraInventory productoCompra) {
         this.productoCompras.add(productoCompra);
         productoCompra.setInventory(this);
+    }
+
+    public void agregarFacturacion(Facturacion facturacion) {
+        this.facturaciones.add(facturacion);
+        facturacion.getInventories().add(this);
     }
 
 
@@ -100,13 +105,7 @@ public class Inventory {
    
 
 
-    public Facturacion getFacturacion() {
-        return facturacion;
-    }
-
-    public void setFacturacion(Facturacion facturacion) {
-        this.facturacion = facturacion;
-    }
+   
 
     public List<ProductoCompraInventory> getProductoCompras() {
         return productoCompras;
@@ -122,6 +121,14 @@ public class Inventory {
 
     public void setQuantitySinFacturacion(Integer quantitySinFacturacion) {
         this.quantitySinFacturacion = quantitySinFacturacion;
+    }
+
+    public Set<Facturacion> getFacturaciones() {
+        return facturaciones;
+    }
+
+    public void setFacturaciones(Set<Facturacion> facturaciones) {
+        this.facturaciones = facturaciones;
     }
 
 }
