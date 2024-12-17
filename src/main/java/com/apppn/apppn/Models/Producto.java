@@ -1,6 +1,8 @@
 package com.apppn.apppn.Models;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,7 +16,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import net.minidev.json.annotate.JsonIgnore;
 
 @Entity
 @Table(name = "PRODUCTO")
@@ -40,6 +45,12 @@ public class Producto {
     @ManyToOne
     @JoinColumn(name = "CLASIFICACION_PRODUCTO_ID")
     private ClasificacionProducto clasificacionProducto;
+
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<ProductoCompra> productosCompras = new ArrayList<>();
+    
 
     public Producto() {
     }
@@ -89,6 +100,15 @@ public class Producto {
     public void setImagenes(Set<Archivos> imagenes) {
         this.imagenes = imagenes;
     }
+
+    public List<ProductoCompra> getProductosCompras() {
+        return productosCompras;
+    }
+
+    public void setProductosCompras(List<ProductoCompra> productosCompras) {
+        this.productosCompras = productosCompras;
+    }
+
 
 
     

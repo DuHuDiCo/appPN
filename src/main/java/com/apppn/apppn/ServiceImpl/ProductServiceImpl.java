@@ -14,6 +14,7 @@ import com.apppn.apppn.Exceptions.SuccessException;
 import com.apppn.apppn.Models.Archivos;
 import com.apppn.apppn.Models.ClasificacionProducto;
 import com.apppn.apppn.Models.Producto;
+import com.apppn.apppn.Models.ProductoCompra;
 import com.apppn.apppn.Repository.ProductoRepository;
 import com.apppn.apppn.Service.ArchivoService;
 import com.apppn.apppn.Service.ClasificacionProductoService;
@@ -135,6 +136,11 @@ public class ProductServiceImpl implements ProductService {
         Producto product = productRepository.findById(idProducto).orElse(null);
         if (Objects.isNull(product)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Producto no encontrado"));
+        }
+
+        ProductoCompra productoExist = product.getProductosCompras().stream().filter(pc->pc.getProducto().getIdProducto().equals(product.getIdProducto())).findFirst().orElse(null);
+        if (Objects.nonNull(productoExist)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El producto ya esta en la facturacion"));
         }
         productRepository.delete(product);
         return ResponseEntity.status(HttpStatus.OK).body(new SuccessException("Producto eliminado"));
