@@ -49,6 +49,7 @@ public class ProductoCompra {
 
     @ManyToOne
     @JoinColumn(name = "PRODUCTO_ID")
+    @JsonIgnoreProperties("productoCompras")
     private Producto producto;    
 
     @ManyToOne

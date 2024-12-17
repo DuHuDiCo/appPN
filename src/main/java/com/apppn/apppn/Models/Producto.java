@@ -19,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import net.minidev.json.annotate.JsonIgnore;
 
 @Entity
@@ -48,7 +50,7 @@ public class Producto {
 
 
     @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
+    @JsonIgnoreProperties("producto")
     private List<ProductoCompra> productosCompras = new ArrayList<>();
     
 
