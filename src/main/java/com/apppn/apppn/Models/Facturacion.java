@@ -39,6 +39,13 @@ public class Facturacion {
     @Column(name = "TOTAL_FACTURACION")
     private Double totalFacturacion;
 
+    @Column(name = "PERODICIDAD")
+    private Integer perodicidad;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "FECHA_CORTE")
+    private Date fechaCorte;
+
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
@@ -51,6 +58,11 @@ public class Facturacion {
     @JsonIgnoreProperties("facturaciones")
     private Set<Inventory> inventories = new HashSet<>();
 
+    @OneToMany(mappedBy = "facturacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("facturacion")
+    List<PlanPagos> planPagos = new ArrayList<>();
+
+    
     public Facturacion() {
     }
 
@@ -105,6 +117,30 @@ public class Facturacion {
 
     public void setInventories(Set<Inventory> inventories) {
         this.inventories = inventories;
+    }
+
+    public Integer getPerodicidad() {
+        return perodicidad;
+    }
+
+    public void setPerodicidad(Integer perodicidad) {
+        this.perodicidad = perodicidad;
+    }
+
+    public Date getFechaCorte() {
+        return fechaCorte;
+    }
+
+    public void setFechaCorte(Date fechaCorte) {
+        this.fechaCorte = fechaCorte;
+    }
+
+    public List<PlanPagos> getPlanPagos() {
+        return planPagos;
+    }
+
+    public void setPlanPagos(List<PlanPagos> planPagos) {
+        this.planPagos = planPagos;
     }
 
     

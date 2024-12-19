@@ -19,6 +19,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "ARCHIVOS", indexes = {
@@ -60,6 +61,10 @@ public class Archivos {
     @OneToMany(mappedBy = "archivos", cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Pago> pagos = new ArrayList<>();
+
+    @OneToMany(mappedBy = "archivos", cascade = javax.persistence.CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("archivos")
+    private List<PagoClientes> pagoClientes = new ArrayList<>();
 
 
     public Archivos() {
@@ -153,6 +158,16 @@ public class Archivos {
 
     public void setPagos(List<Pago> pagos) {
         this.pagos = pagos;
+    }
+
+
+    public List<PagoClientes> getPagoClientes() {
+        return pagoClientes;
+    }
+
+
+    public void setPagoClientes(List<PagoClientes> pagoClientes) {
+        this.pagoClientes = pagoClientes;
     }
 
 
