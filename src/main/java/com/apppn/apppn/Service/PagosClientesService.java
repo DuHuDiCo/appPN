@@ -13,4 +13,6 @@ public interface PagosClientesService {
 
     public ResponseEntity<?> listarPagosClientes();
 
+    public ResponseEntity<?> eliminarPagoClientes(Long idPagoCliente);
+
 }

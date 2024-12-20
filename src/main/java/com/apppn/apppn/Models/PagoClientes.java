@@ -45,6 +45,11 @@ public class PagoClientes {
     @JsonIgnoreProperties("pagoClientes")
     private Archivos archivos;
 
+    @ManyToOne
+    @JoinColumn(name = "FACTURACION_ID")
+    @JsonIgnoreProperties("pagoClientes")
+    private Facturacion facturacion;
+
     public PagoClientes() {
     }
 
@@ -94,6 +99,14 @@ public class PagoClientes {
 
     public void setArchivos(Archivos archivos) {
         this.archivos = archivos;
+    }
+
+    public Facturacion getFacturacion() {
+        return facturacion;
+    }
+
+    public void setFacturacion(Facturacion facturacion) {
+        this.facturacion = facturacion;
     }
 
     

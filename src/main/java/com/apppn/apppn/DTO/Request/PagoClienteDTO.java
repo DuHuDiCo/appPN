@@ -1,11 +1,18 @@
 package com.apppn.apppn.DTO.Request;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class PagoClienteDTO {
 
     private Double valor;
     private String numeroRecibo;
     private String comprobante;
     private String tipoPago;
+    private List<AplicarPagoDTO> aplicarPagoDTO = new ArrayList<>();
+
+
+
     public PagoClienteDTO() {
     }
     public Double getValor() {
@@ -32,7 +39,12 @@ public class PagoClienteDTO {
     public void setTipoPago(String tipoPago) {
         this.tipoPago = tipoPago;
     }
-
+    public List<AplicarPagoDTO> getAplicarPagoDTO() {
+        return aplicarPagoDTO;
+    }
+    public void setAplicarPagoDTO(List<AplicarPagoDTO> aplicarPagoDTO) {
+        this.aplicarPagoDTO = aplicarPagoDTO;
+    }
 
     
 
