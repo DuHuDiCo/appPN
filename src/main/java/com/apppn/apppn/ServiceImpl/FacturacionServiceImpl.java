@@ -244,7 +244,7 @@ public class FacturacionServiceImpl implements FacturacionService {
 
             List<Date> intervalos = functions.generarIntervalos(minFecha, maxFecha);
 
-            Double totalValorFecha = 0.0;
+            
             Map<String, Object> mapFecha = new HashMap<>();
 
             for (Date fecha : intervalos) {
