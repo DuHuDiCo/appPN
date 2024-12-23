@@ -265,6 +265,7 @@ public class FacturacionServiceImpl implements FacturacionService {
             map.add(mapFecha);
 
             FacturacionDTOResponse facturacionDTOResponse = modelMapper.map(facturacion, FacturacionDTOResponse.class);
+            facturacionDTOResponses.add(facturacionDTOResponse);
 
         }
         resumenCuentas.setFacturacionDTOResponses(facturacionDTOResponses);
