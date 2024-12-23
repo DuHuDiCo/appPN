@@ -3,6 +3,8 @@ package com.apppn.apppn.Utils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -104,4 +106,18 @@ public class Functions {
         }
     }
 
+
+    public  List<Date> generarIntervalos(Date minFecha, Date maxFecha) {
+        List<Date> intervalos = new ArrayList<>();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(minFecha);
+
+        while (cal.getTime().compareTo(maxFecha) <= 0) {
+            intervalos.add(cal.getTime());
+            cal.add(Calendar.DAY_OF_MONTH, 15);
+        }
+
+        intervalos.add(maxFecha); // Añadir la fecha máxima como límite final
+        return intervalos;
+    }
 }

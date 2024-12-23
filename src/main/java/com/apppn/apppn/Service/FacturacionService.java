@@ -14,5 +14,7 @@ public interface FacturacionService {
 
     public ResponseEntity<?> getFacturacion(Long idFacturacion);
 
+    public ResponseEntity<?> obtenerFacturacionByClient(Long idCliente);
+
     
 }

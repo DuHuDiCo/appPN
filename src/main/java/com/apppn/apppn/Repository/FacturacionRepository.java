@@ -19,5 +19,9 @@ public interface FacturacionRepository extends JpaRepository<Facturacion, Long> 
     List<Facturacion> obtejFacturacions(@Param("idUser") Long idUser);
 
 
+    @Query(value = "SELECT DISTINCT facturacion.* FROM `facturacion` LEFT JOIN producto_compra_facturacion ON producto_compra_facturacion.facturacion_id = facturacion.id_facturacion WHERE producto_compra_facturacion.client_id = :idCliente", nativeQuery = true)
+    List<Facturacion> obteneFacturacions(@Param("idCliente") Long idCliente);
+
+
     List<Facturacion> findByUser(User user);
 }

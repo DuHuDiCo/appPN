@@ -1,10 +1,14 @@
 package com.apppn.apppn.Service;
 
+import org.springframework.http.ResponseEntity;
+
 import com.apppn.apppn.DTO.Request.PagoClienteDTO;
 
 public interface AbonoService {
 
 
-    public void crearAbono(PagoClienteDTO pagoClientesDto);
+    public ResponseEntity<?> crearAbono(PagoClienteDTO pagoClientesDto);
+
+    
 
 }
