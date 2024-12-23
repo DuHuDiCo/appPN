@@ -120,21 +120,25 @@ public class PagosClientesServiceImpl implements PagosClientesService {
     }
 
     @Override
-    public ResponseEntity<?> consultarPagoClientes(Long idPagoCliente) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'consultarPagoClientes'");
+    public ResponseEntity<?> consultarPagoClientes(Long idCliente) {
+        List<PagoClientes> pagosClientes = pagosClientesRepository.findByClient(idCliente);
+        return ResponseEntity.status(HttpStatus.OK).body(pagosClientes); 
     }
 
     @Override
     public ResponseEntity<?> listarPagosClientes() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listarPagosClientes'");
+        List<PagoClientes> pagosClientes = pagosClientesRepository.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(pagosClientes);
     }
 
     @Override
     public ResponseEntity<?> eliminarPagoClientes(Long idPagoCliente) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eliminarPagoClientes'");
+        PagoClientes pagoClientes = pagosClientesRepository.findById(idPagoCliente).orElse(null);
+        if(Objects.isNull(pagoClientes)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("PagoClientes no encontrado"));
+        }
+        pagosClientesRepository.delete(pagoClientes);
+        return ResponseEntity.status(HttpStatus.OK).body(new ErrorResponse("PagoClientes eliminado"));
     }
 
 }

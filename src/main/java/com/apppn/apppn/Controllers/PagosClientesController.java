@@ -1,6 +1,9 @@
 package com.apppn.apppn.Controllers;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +40,39 @@ public class PagosClientesController {
     @PostMapping("/")
     public ResponseEntity<?> crearPagoClientes(@RequestBody PagoClienteDTO pagoClientesDto) {
         return pagosClientesService.crearPagoClientes(pagoClientesDto);
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = PagoClientes.class))),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @GetMapping("/{idPagoCliente}")
+    public ResponseEntity<?> consultarPagoClientes(@PathVariable Long idPagoCliente) {
+        return pagosClientesService.consultarPagoClientes(idPagoCliente);
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = PagoClientes.class))),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @DeleteMapping("/{idPagoCliente}")
+    public ResponseEntity<?> eliminarPagoClientes(@PathVariable Long idPagoCliente) {
+        return pagosClientesService.eliminarPagoClientes(idPagoCliente);
+    }
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = PagoClientes.class))),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @GetMapping("/")
+    public ResponseEntity<?> listarPagosClientes() {
+        return pagosClientesService.listarPagosClientes();
     }
 
 }
