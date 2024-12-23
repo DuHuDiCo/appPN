@@ -10,5 +10,6 @@ public interface PagosClientesRepository extends JpaRepository<PagoClientes, Lon
 
 
     
+    
 
 }

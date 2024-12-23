@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Service;
 
+import com.apppn.apppn.DTO.Request.AplicarPagoDTO;
+import com.apppn.apppn.Models.PlanPagos;
 import com.apppn.apppn.Models.ProductoCompraFacturacion;
 import com.apppn.apppn.Security.Security.JwtUtils;
 
@@ -73,6 +75,33 @@ public class Functions {
         }
 
         return valorLiquidado>0?valorLiquidado:0;
+    }
+
+
+    public void calculoPlanPagos(List<PlanPagos> planPagos, AplicarPagoDTO aplicarPagoDTO){
+        for(PlanPagos planPagosDB:planPagos){
+
+            Double saldoCuota = planPagosDB.getSaldo();
+            Double valorPago = aplicarPagoDTO.getValor();
+
+            if(valorPago == 0){
+                break;
+            }
+           
+            if(saldoCuota >= valorPago){
+                saldoCuota = saldoCuota-valorPago;
+                planPagosDB.setSaldo(saldoCuota);
+                valorPago = 0.0;
+                continue;
+            }
+
+            if(saldoCuota < valorPago){
+                valorPago = valorPago - saldoCuota;
+                planPagosDB.setSaldo(0.0);
+
+            }
+           
+        }
     }
 
 }

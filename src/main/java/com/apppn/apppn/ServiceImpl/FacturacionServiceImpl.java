@@ -208,4 +208,13 @@ public class FacturacionServiceImpl implements FacturacionService {
         return ResponseEntity.status(HttpStatus.OK).body(productoCompraInventories);
     }
 
+    @Override
+    public ResponseEntity<?> getFacturacion(Long idFacturacion) {
+        Facturacion facturacion = facturacionRepository.findById(idFacturacion).orElse(null);
+        if(Objects.isNull(facturacion)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Facturacion no encontrada"));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(facturacion);
+    }
+
 }

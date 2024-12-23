@@ -4,8 +4,7 @@ import java.util.Date;
 
 public class AplicarPagoDTO {
 
-    private Long idPlanPago;
-    private Long valor;
+    private Double valor;
     private Long idFacturacion;
     private Date fechaPago;
 
@@ -15,22 +14,14 @@ public class AplicarPagoDTO {
     }
 
 
-    public Long getIdPlanPago() {
-        return idPlanPago;
-    }
+   
 
-
-    public void setIdPlanPago(Long idPlanPago) {
-        this.idPlanPago = idPlanPago;
-    }
-
-
-    public Long getValor() {
+    public Double getValor() {
         return valor;
     }
 
 
-    public void setValor(Long valor) {
+    public void setValor(Double valor) {
         this.valor = valor;
     }
 
