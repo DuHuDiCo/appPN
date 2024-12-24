@@ -62,4 +62,14 @@ public class FacturacionController {
         return facturacionService.obtenerProductosInventarioByUser();
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Facturacion.class))),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @GetMapping("/obtenerFacturacionByClient")
+    public ResponseEntity<?> obtenerFacturacionByClient(@RequestParam("idClient") Long idClient) {
+        return facturacionService.obtenerFacturacionByClient(idClient);
+    }
+    
 }
