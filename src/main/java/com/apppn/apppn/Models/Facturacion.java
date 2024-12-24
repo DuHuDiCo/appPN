@@ -61,9 +61,7 @@ public class Facturacion {
     @JsonIgnoreProperties("facturaciones")
     private Set<Inventory> inventories = new HashSet<>();
 
-    @OneToMany(mappedBy = "facturacion", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("facturacion")
-    List<PlanPagos> planPagos = new ArrayList<>();
+   
 
     
     @OneToMany(mappedBy = "facturacion", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -74,11 +72,6 @@ public class Facturacion {
     public Facturacion() {
     }
 
-    public void agregarPlanPagos(PlanPagos planPagos) {
-        this.planPagos.add(planPagos);
-        planPagos.setFacturacion(this);
-        
-    }
 
     public void agregarPagoClientes(PagoClientes pagoClientes) {
         pagoClientes.setFacturacion(this);
@@ -153,14 +146,6 @@ public class Facturacion {
 
     public void setFechaCorte(Date fechaCorte) {
         this.fechaCorte = fechaCorte;
-    }
-
-    public List<PlanPagos> getPlanPagos() {
-        return planPagos;
-    }
-
-    public void setPlanPagos(List<PlanPagos> planPagos) {
-        this.planPagos = planPagos;
     }
 
     public List<PagoClientes> getPagoClientes() {

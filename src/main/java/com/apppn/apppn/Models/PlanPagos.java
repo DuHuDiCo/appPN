@@ -1,7 +1,10 @@
 package com.apppn.apppn.Models;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -25,21 +29,22 @@ public class PlanPagos {
     @Column(name = "ID_PLAN_PAGOS")
     private Long idPlanPagos;
 
-    @Column(name = "VALOR_CUOTA")
-    private Double valorCuota;
-
-    @Column(name = "SALDO")
-    private Double saldo;
-
-    @Column(name = "FECHA_PAGO")
-    @Temporal(TemporalType.DATE)
-    private Date fechaPago;
 
     @ManyToOne
     @JoinColumn(name = "FACTURACION_ID")
     @JsonIgnoreProperties("planPagos")
     private Facturacion facturacion;
-    
+
+    @ManyToOne
+    @JoinColumn(name = "CLIENT_ID")
+    @JsonIgnoreProperties("planPagos")
+    private Client client;
+
+
+    @OneToMany(mappedBy = "planPagos", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("planPagos")
+    private List<Cuotas> cuotas = new ArrayList<>();
+
 
     public PlanPagos() {
     }
@@ -52,29 +57,7 @@ public class PlanPagos {
         this.idPlanPagos = idPlanPagos;
     }
 
-    public Double getValorCuota() {
-        return valorCuota;
-    }
-
-    public void setValorCuota(Double valorCuota) {
-        this.valorCuota = valorCuota;
-    }
-
-    public Double getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(Double saldo) {
-        this.saldo = saldo;
-    }
-
-    public Date getFechaPago() {
-        return fechaPago;
-    }
-
-    public void setFechaPago(Date fechaPago) {
-        this.fechaPago = fechaPago;
-    }
+   
 
     public Facturacion getFacturacion() {
         return facturacion;
@@ -82,6 +65,22 @@ public class PlanPagos {
 
     public void setFacturacion(Facturacion facturacion) {
         this.facturacion = facturacion;
+    }
+
+    public List<Cuotas> getCuotas() {
+        return cuotas;
+    }
+
+    public void setCuotas(List<Cuotas> cuotas) {
+        this.cuotas = cuotas;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
+    public void setClient(Client client) {
+        this.client = client;
     }
 
 
