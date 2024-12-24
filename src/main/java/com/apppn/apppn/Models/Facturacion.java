@@ -39,7 +39,7 @@ public class Facturacion {
     @Column(name = "TOTAL_FACTURACION")
     private Double totalFacturacion;
 
-    @Column(name = "PERODICIDAD")
+    @Column(name = "PERIODICIDAD")
     private Integer perodicidad;
 
     @Temporal(TemporalType.TIMESTAMP)
