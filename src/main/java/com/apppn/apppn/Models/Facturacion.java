@@ -46,6 +46,9 @@ public class Facturacion {
     @Column(name = "FECHA_CORTE")
     private Date fechaCorte;
 
+    @Column(name = "CUOTAS")
+    private Integer cuotas;
+
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
@@ -69,6 +72,12 @@ public class Facturacion {
 
     
     public Facturacion() {
+    }
+
+    public void agregarPlanPagos(PlanPagos planPagos) {
+        this.planPagos.add(planPagos);
+        planPagos.setFacturacion(this);
+        
     }
 
     public void agregarPagoClientes(PagoClientes pagoClientes) {
@@ -160,6 +169,14 @@ public class Facturacion {
 
     public void setPagoClientes(List<PagoClientes> pagoClientes) {
         this.pagoClientes = pagoClientes;
+    }
+
+    public Integer getCuotas() {
+        return cuotas;
+    }
+
+    public void setCuotas(Integer cuotas) {
+        this.cuotas = cuotas;
     }
 
     

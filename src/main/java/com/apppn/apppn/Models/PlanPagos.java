@@ -39,6 +39,7 @@ public class PlanPagos {
     @JoinColumn(name = "FACTURACION_ID")
     @JsonIgnoreProperties("planPagos")
     private Facturacion facturacion;
+    
 
     public PlanPagos() {
     }

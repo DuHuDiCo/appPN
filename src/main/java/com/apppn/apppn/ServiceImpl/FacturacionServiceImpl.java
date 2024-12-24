@@ -48,6 +48,7 @@ public class FacturacionServiceImpl implements FacturacionService {
     private final ProductoCompraInventoryRepository productoCompraInventoryRepository;
     private final ProductoCompraFacturacionRepository productoCompraFacturacionRepository;
     private final ModelMapper modelMapper;
+    
 
     public FacturacionServiceImpl(FacturacionRepository facturacionRepository, InventoryRepository inventoryRepository,
             ClientRepository clientRepository, Functions functions, UserService userService,
@@ -136,6 +137,17 @@ public class FacturacionServiceImpl implements FacturacionService {
             productoCompraFacturacion.setClient(client);
             productoCompraFacturacion.setValorVenta(producto.getValorVenta());
             facturacion.agregarProductoCompraFacturacion(productoCompraFacturacion);
+        }
+
+        for (int i = 0; i < facturacionDTO.getCuotas(); i++) {
+            PlanPagos planPagos = new PlanPagos();
+            planPagos.setValorCuota(facturacionDTO.getValorCuota());
+            planPagos.setSaldo(facturacionDTO.getValorCuota());
+
+            List<Date> intervalos = functions.intervalosFechasByFechaInicial(facturacion.getFechaCorte(), facturacionDTO.getPerodicidad());
+
+            planPagos.setFechaPago(intervalos.get(i));
+            facturacion.agregarPlanPagos(planPagos);
         }
 
         facturacion = facturacionRepository.save(facturacion);

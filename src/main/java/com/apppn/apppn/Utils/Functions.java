@@ -120,4 +120,26 @@ public class Functions {
         intervalos.add(maxFecha); // Añadir la fecha máxima como límite final
         return intervalos;
     }
+
+    public List<Date> intervalosFechasByFechaInicial(Date fechaInicial, Integer periodo) {
+        List<Date> intervalos = new ArrayList<>();
+         
+
+         // Instancia Calendar
+         Calendar calendar = Calendar.getInstance();
+         calendar.setTime(fechaInicial);
+ 
+         
+ 
+         // Sumar de a 15 días hasta 3 sumas
+         for (int i = 1; i <= periodo; i++) {
+             calendar.add(Calendar.DAY_OF_MONTH, periodo);
+             Date newDate = calendar.getTime();
+             intervalos.add(newDate);
+         }
+         return intervalos;
+
+    }
+
+
 }
