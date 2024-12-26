@@ -26,6 +26,6 @@ public interface FacturacionRepository extends JpaRepository<Facturacion, Long> 
     List<Facturacion> findByUser(User user);
 
 
-    @Query(value = "SELECT facturacion.* FROM `client` LEFT JOIN producto_compra_facturacion ON producto_compra_facturacion.client_id = client.id_client LEFT JOIN facturacion ON producto_compra_facturacion.facturacion_id = facturacion.id_facturacion LEFT JOIN plan_pagos ON plan_pagos.facturacion_id = facturacion.id_facturacion WHERE plan_pagos.facturacion_id IS NULL AND client.id_client = :idCliente", nativeQuery = true)
+    @Query(value = "SELECT facturacion.* FROM `client` LEFT JOIN producto_compra_facturacion ON producto_compra_facturacion.client_id = client.id_client LEFT JOIN facturacion ON producto_compra_facturacion.facturacion_id = facturacion.id_facturacion LEFT JOIN plan_pagos ON plan_pagos.facturacion_id = facturacion.id_facturacion WHERE plan_pagos.facturacion_id IS NULL AND client.id_client = :idCliente AND producto_compra_facturacion.tipo_venta_id = 2", nativeQuery = true)
     List<Facturacion> obtenerFacturacionByClient(@Param("idCliente") Long idCliente);
 }
