@@ -5,6 +5,7 @@ import java.util.Date;
 public class AplicarPagoDTO {
 
     private Double valor;
+    private Long idCliente;
     private Long idFacturacion;
     private Date fechaPago;
 
@@ -43,6 +44,20 @@ public class AplicarPagoDTO {
 
     public void setFechaPago(Date fechaPago) {
         this.fechaPago = fechaPago;
+    }
+
+
+
+
+    public Long getIdCliente() {
+        return idCliente;
+    }
+
+
+
+
+    public void setIdCliente(Long idCliente) {
+        this.idCliente = idCliente;
     }
     
     

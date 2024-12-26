@@ -1,6 +1,7 @@
 package com.apppn.apppn.ServiceImpl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -12,14 +13,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import com.apppn.apppn.DTO.Request.ClientDTO;
+import com.apppn.apppn.DTO.Request.PlanPagosDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Exceptions.SuccessException;
 import com.apppn.apppn.Models.Client;
+import com.apppn.apppn.Models.Cuotas;
+import com.apppn.apppn.Models.Facturacion;
+import com.apppn.apppn.Models.PlanPagos;
 import com.apppn.apppn.Models.User;
 import com.apppn.apppn.Repository.ClientRepository;
+import com.apppn.apppn.Repository.FacturacionRepository;
 import com.apppn.apppn.Security.Security.JwtUtils;
 import com.apppn.apppn.Service.ClientService;
 import com.apppn.apppn.Service.UserService;
+import com.apppn.apppn.Utils.Functions;
 
 @Service
 public class ClientServiceImpl implements ClientService {
@@ -28,12 +35,20 @@ public class ClientServiceImpl implements ClientService {
     private final HttpServletRequest request;
     private final JwtUtils jwtUtils;
     private final UserService userService;
+    private final FacturacionRepository facturacionRepository;
+    private final Functions functions;
 
-    public ClientServiceImpl(ClientRepository clientRepository, HttpServletRequest request, JwtUtils jwtUtils, UserService userService) {
+    
+    
+
+    public ClientServiceImpl(ClientRepository clientRepository, HttpServletRequest request, JwtUtils jwtUtils,
+            UserService userService, FacturacionRepository facturacionRepository, Functions functions) {
         this.clientRepository = clientRepository;
         this.request = request;
         this.jwtUtils = jwtUtils;
         this.userService = userService;
+        this.facturacionRepository = facturacionRepository;
+        this.functions = functions;
     }
 
     @Override
@@ -139,6 +154,43 @@ public class ClientServiceImpl implements ClientService {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(client);
+    }
+
+    @Override
+    public ResponseEntity<?> crearPlanPago(Long idCliente, Long idFacturacion, PlanPagosDTO planPagosDTO) {
+        Client client = clientRepository.findById(idCliente).orElse(null);
+        if (Objects.isNull(client)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Cliente no encontrado"));
+        }
+
+        Facturacion facturacion = facturacionRepository.findById(idFacturacion).orElse(null);
+        if (Objects.isNull(facturacion)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Facturacion no encontrada"));
+        }
+
+        PlanPagos planPagos = new PlanPagos();
+        planPagos.setFacturacion(facturacion);
+        planPagos.setClient(client);
+        planPagos.setValor(client.getProductoCompraFacturacion().stream().map(pp -> pp.getValorVenta()).reduce(0.0, Double::sum));
+
+        for (int index = 0; index < planPagosDTO.getCuotas(); index++) {
+            Cuotas cuotas = new Cuotas();
+            cuotas.setValorCuota(planPagosDTO.getValorCuota());
+            cuotas.setSaldo(planPagosDTO.getValorCuota());
+            cuotas.setFechaPago(planPagosDTO.getFechaCorte());
+
+            List<Date> intervalos = functions.intervalosFechasByFechaInicial(planPagosDTO.getFechaCorte(), planPagosDTO.getPerodicidad());
+
+            cuotas.setFechaPago(intervalos.get(index));
+            planPagos.agrgarCuotas(cuotas);
+            
+        }
+
+        client.agregarPlanPagos(planPagos);
+        client = clientRepository.save(client);
+        return ResponseEntity.status(HttpStatus.OK).body(planPagos);
+
+        
     }
 
 }

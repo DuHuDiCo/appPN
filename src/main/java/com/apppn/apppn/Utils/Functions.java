@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
 import com.apppn.apppn.DTO.Request.AplicarPagoDTO;
+import com.apppn.apppn.Models.Cuotas;
 import com.apppn.apppn.Models.PlanPagos;
 import com.apppn.apppn.Models.ProductoCompraFacturacion;
 import com.apppn.apppn.Security.Security.JwtUtils;
@@ -80,10 +81,10 @@ public class Functions {
     }
 
 
-    public void calculoPlanPagos(List<PlanPagos> planPagos, AplicarPagoDTO aplicarPagoDTO){
-        for(PlanPagos planPagosDB:planPagos){
+    public void calculoPlanPagos(List<Cuotas> cuotas, AplicarPagoDTO aplicarPagoDTO){
+        for(Cuotas cuota:cuotas){
 
-            Double saldoCuota = planPagosDB.getSaldo();
+            Double saldoCuota = cuota.getSaldo();
             Double valorPago = aplicarPagoDTO.getValor();
 
             if(valorPago == 0){
@@ -92,14 +93,14 @@ public class Functions {
            
             if(saldoCuota >= valorPago){
                 saldoCuota = saldoCuota-valorPago;
-                planPagosDB.setSaldo(saldoCuota);
+                cuota.setSaldo(saldoCuota);
                 valorPago = 0.0;
                 continue;
             }
 
             if(saldoCuota < valorPago){
                 valorPago = valorPago - saldoCuota;
-                planPagosDB.setSaldo(0.0);
+                cuota.setSaldo(0.0);
 
             }
            

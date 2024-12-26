@@ -3,6 +3,7 @@ package com.apppn.apppn.Service;
 import org.springframework.http.ResponseEntity;
 
 import com.apppn.apppn.DTO.Request.ClientDTO;
+import com.apppn.apppn.DTO.Request.PlanPagosDTO;
 
 public interface ClientService {
 
@@ -17,6 +18,8 @@ public interface ClientService {
 
     public ResponseEntity<?> getClient(String dato);
 
+
+    public ResponseEntity<?> crearPlanPago(Long idCliente, Long idFacturacion,PlanPagosDTO planPagosDTO);
     
 
 }

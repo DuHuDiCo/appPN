@@ -21,6 +21,7 @@ import com.apppn.apppn.DTO.Response.FacturacionDTOResponse;
 import com.apppn.apppn.DTO.Response.ResumenCuentas;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Models.Client;
+import com.apppn.apppn.Models.Cuotas;
 import com.apppn.apppn.Models.Facturacion;
 import com.apppn.apppn.Models.Inventory;
 import com.apppn.apppn.Models.PlanPagos;
@@ -139,21 +140,12 @@ public class FacturacionServiceImpl implements FacturacionService {
             facturacion.agregarProductoCompraFacturacion(productoCompraFacturacion);
         }
 
-        for (int i = 0; i < facturacionDTO.getCuotas(); i++) {
-            PlanPagos planPagos = new PlanPagos();
-            planPagos.setValorCuota(facturacionDTO.getValorCuota());
-            planPagos.setSaldo(facturacionDTO.getValorCuota());
-
-            List<Date> intervalos = functions.intervalosFechasByFechaInicial(facturacion.getFechaCorte(), facturacionDTO.getPerodicidad());
-
-            planPagos.setFechaPago(intervalos.get(i));
-            facturacion.agregarPlanPagos(planPagos);
-        }
 
         facturacion = facturacionRepository.save(facturacion);
 
         inventory.agregarFacturacion(facturacion);
         inventory = inventoryRepository.save(inventory);
+
 
         return ResponseEntity.status(HttpStatus.OK).body(facturacion);
 
@@ -241,17 +233,23 @@ public class FacturacionServiceImpl implements FacturacionService {
 
     @Override
     public ResponseEntity<?> obtenerFacturacionByClient(Long idCliente) {
-        List<Facturacion> facturaciones = facturacionRepository.obteneFacturacions(idCliente);
+        Client client = clientRepository.findById(idCliente).orElse(null);
+        if (Objects.isNull(client)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Cliente no encontrado"));
+        }
 
         ResumenCuentas resumenCuentas = new ResumenCuentas();
 
         List<FacturacionDTOResponse> facturacionDTOResponses = new ArrayList<>();
         List<Map<String, Object>> map = new ArrayList<>();
 
-        for (Facturacion facturacion : facturaciones) {
-            Date minFecha = facturacion.getPlanPagos().stream().map(PlanPagos::getFechaPago).min(Date::compareTo)
+        for (PlanPagos pagos : client.getPlanPagos()) {
+
+
+
+            Date minFecha = pagos.getCuotas().stream().map(Cuotas::getFechaPago).min(Date::compareTo)
                     .orElse(null);
-            Date maxFecha = facturacion.getPlanPagos().stream().map(PlanPagos::getFechaPago).max(Date::compareTo)
+            Date maxFecha = pagos.getCuotas().stream().map(Cuotas::getFechaPago).max(Date::compareTo)
                     .orElse(null);
 
             List<Date> intervalos = functions.generarIntervalos(minFecha, maxFecha);
@@ -260,23 +258,23 @@ public class FacturacionServiceImpl implements FacturacionService {
             Map<String, Object> mapFecha = new HashMap<>();
 
             for (Date fecha : intervalos) {
-                List<PlanPagos> planPagos = facturacion.getPlanPagos().stream().filter(pp -> pp.getFechaPago().equals(fecha))
+                List<Cuotas> cuotas = pagos.getCuotas().stream().filter(pp -> pp.getFechaPago().equals(fecha))
                         .collect(Collectors.toList());
-                if (CollectionUtils.isEmpty(planPagos)) {
+                if (CollectionUtils.isEmpty(cuotas)) {
                     continue;
                 }
 
                 if (mapFecha.get("fecha").equals(fecha)) {
-                    mapFecha.put("valor", Double.valueOf(mapFecha.get("valor").toString()) + planPagos.stream().map(PlanPagos::getSaldo).reduce(0.0, Double::sum));
+                    mapFecha.put("valor", Double.valueOf(mapFecha.get("valor").toString()) + cuotas.stream().map(Cuotas::getSaldo).reduce(0.0, Double::sum));
                 }else{
                     mapFecha.put("fecha", fecha);
-                    mapFecha.put("valor", planPagos.stream().map(PlanPagos::getSaldo).reduce(0.0, Double::sum));
+                    mapFecha.put("valor", cuotas.stream().map(Cuotas::getSaldo).reduce(0.0, Double::sum));
                 }
 
             }
             map.add(mapFecha);
 
-            FacturacionDTOResponse facturacionDTOResponse = modelMapper.map(facturacion, FacturacionDTOResponse.class);
+            FacturacionDTOResponse facturacionDTOResponse = modelMapper.map(pagos.getFacturacion(), FacturacionDTOResponse.class);
             facturacionDTOResponses.add(facturacionDTOResponse);
 
         }

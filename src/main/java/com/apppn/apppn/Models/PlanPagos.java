@@ -30,6 +30,12 @@ public class PlanPagos {
     private Long idPlanPagos;
 
 
+    @Column(name = "VALOR")
+    private Double valor;
+
+    
+
+
     @ManyToOne
     @JoinColumn(name = "FACTURACION_ID")
     @JsonIgnoreProperties("planPagos")
@@ -47,6 +53,11 @@ public class PlanPagos {
 
 
     public PlanPagos() {
+    }
+
+    public void agrgarCuotas(Cuotas cuotas){
+        this.cuotas.add(cuotas);
+        cuotas.setPlanPagos(this);
     }
 
     public Long getIdPlanPagos() {
@@ -81,6 +92,14 @@ public class PlanPagos {
 
     public void setClient(Client client) {
         this.client = client;
+    }
+
+    public Double getValor() {
+        return valor;
+    }
+
+    public void setValor(Double valor) {
+        this.valor = valor;
     }
 
 

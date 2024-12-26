@@ -14,10 +14,12 @@ import com.apppn.apppn.DTO.Request.AplicarPagoDTO;
 import com.apppn.apppn.DTO.Request.PagoClienteDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Models.Archivos;
+import com.apppn.apppn.Models.Client;
 import com.apppn.apppn.Models.Facturacion;
 import com.apppn.apppn.Models.PagoClientes;
 import com.apppn.apppn.Models.PlanPagos;
 import com.apppn.apppn.Models.TipoPago;
+import com.apppn.apppn.Repository.ClientRepository;
 import com.apppn.apppn.Repository.FacturacionRepository;
 import com.apppn.apppn.Repository.PagosClientesRepository;
 import com.apppn.apppn.Repository.TipoPagoRepository;
@@ -37,17 +39,22 @@ public class PagosClientesServiceImpl implements PagosClientesService {
     private final ArchivoService archivoService;
     private final FacturacionService facturacionService;
     private final FacturacionRepository facturacionRepository;
+    private final ClientRepository clientRepository;
 
    
+   
+
     public PagosClientesServiceImpl(PagosClientesRepository pagosClientesRepository,
             TipoPagoRepository tipoPagoRepository, Functions functions, ArchivoService archivoService,
-            FacturacionService facturacionService, FacturacionRepository facturacionRepository) {
+            FacturacionService facturacionService, FacturacionRepository facturacionRepository,
+            ClientRepository clientRepository) {
         this.pagosClientesRepository = pagosClientesRepository;
         this.tipoPagoRepository = tipoPagoRepository;
         this.functions = functions;
         this.archivoService = archivoService;
         this.facturacionService = facturacionService;
         this.facturacionRepository = facturacionRepository;
+        this.clientRepository = clientRepository;
     }
 
     @Override
@@ -101,14 +108,22 @@ public class PagosClientesServiceImpl implements PagosClientesService {
                 }
 
 
-                List<PlanPagos> planPagos = facturacion.getPlanPagos().stream().filter(pp->pp.getSaldo()>0).collect(Collectors.toList());
 
-                if(CollectionUtils.isEmpty(planPagos)){
+                Client client = clientRepository.findById(aplicarPagoDTO.getIdCliente()).orElse(null);
+                if (Objects.isNull(client)) {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Cliente no encontrado"));
+                }
+
+
+
+                PlanPagos planPagos = client.getPlanPagos().stream().filter(pp->pp.getFacturacion().getIdFacturacion().equals(aplicarPagoDTO.getIdFacturacion())).findFirst().orElse(null);
+
+                if(Objects.isNull(planPagos)){
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Plan de pagos no encontrado"));
                 }
 
-                functions.calculoPlanPagos(planPagos, aplicarPagoDTO);
-                facturacion = facturacionRepository.save(facturacion);
+                functions.calculoPlanPagos(planPagos.getCuotas(), aplicarPagoDTO);
+                client = clientRepository.save(client);
 
 
             }

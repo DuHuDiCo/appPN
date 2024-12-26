@@ -52,8 +52,14 @@ public class Client {
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("client")
     List<PlanPagos> planPagos = new ArrayList<>();
+    
 
     public Client() {
+    }
+
+    public void agregarPlanPagos(PlanPagos planPagos){
+        this.planPagos.add(planPagos);
+        planPagos.setClient(this);
     }
 
     public Long getIdClient() {
@@ -118,6 +124,14 @@ public class Client {
 
     public void setProductoCompraFacturacion(List<ProductoCompraFacturacion> productoCompraFacturacion) {
         this.productoCompraFacturacion = productoCompraFacturacion;
+    }
+
+    public List<PlanPagos> getPlanPagos() {
+        return planPagos;
+    }
+
+    public void setPlanPagos(List<PlanPagos> planPagos) {
+        this.planPagos = planPagos;
     }
 
 }
