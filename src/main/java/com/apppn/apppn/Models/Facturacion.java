@@ -39,16 +39,8 @@ public class Facturacion {
     @Column(name = "TOTAL_FACTURACION")
     private Double totalFacturacion;
 
-    @Column(name = "PERIODICIDAD")
-    private Integer perodicidad;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "FECHA_CORTE")
-    private Date fechaCorte;
-
-    @Column(name = "CUOTAS")
-    private Integer cuotas;
-
+   
+   
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private User user;
@@ -132,21 +124,6 @@ public class Facturacion {
         this.inventories = inventories;
     }
 
-    public Integer getPerodicidad() {
-        return perodicidad;
-    }
-
-    public void setPerodicidad(Integer perodicidad) {
-        this.perodicidad = perodicidad;
-    }
-
-    public Date getFechaCorte() {
-        return fechaCorte;
-    }
-
-    public void setFechaCorte(Date fechaCorte) {
-        this.fechaCorte = fechaCorte;
-    }
 
     public List<PagoClientes> getPagoClientes() {
         return pagoClientes;
@@ -156,13 +133,6 @@ public class Facturacion {
         this.pagoClientes = pagoClientes;
     }
 
-    public Integer getCuotas() {
-        return cuotas;
-    }
-
-    public void setCuotas(Integer cuotas) {
-        this.cuotas = cuotas;
-    }
 
     
 
