@@ -55,6 +55,13 @@ public class ProductoCompraFacturacion {
     private Double descuentoPagoInicial;
 
 
+     
+    @ManyToOne
+    @JoinColumn(name = "TIPO_VENTA_ID")
+    @JsonIgnoreProperties("productoCompraFacturacion")
+    private TipoVenta tipoVenta;
+
+
     @ManyToOne
     @JoinColumn(name = "LIQUIDACION_ID")
     @JsonIgnoreProperties("productoCompraFacturacion")
@@ -138,6 +145,14 @@ public class ProductoCompraFacturacion {
 
     public void setTotalVenta(Double totalVenta) {
         this.totalVenta = totalVenta;
+    }
+
+    public TipoVenta getTipoVenta() {
+        return tipoVenta;
+    }
+
+    public void setTipoVenta(TipoVenta tipoVenta) {
+        this.tipoVenta = tipoVenta;
     }
 
   

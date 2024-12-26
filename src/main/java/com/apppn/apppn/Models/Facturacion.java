@@ -39,11 +39,7 @@ public class Facturacion {
     @Column(name = "TOTAL_FACTURACION")
     private Double totalFacturacion;
 
-   
-    @ManyToOne
-    @JoinColumn(name = "TIPO_VENTA_ID")
-    @JsonIgnoreProperties("facturaciones")
-    private TipoVenta tipoVenta;
+  
     
    
     @ManyToOne
@@ -139,14 +135,6 @@ public class Facturacion {
     }
 
 
-    public TipoVenta getTipoVenta() {
-        return tipoVenta;
-    }
-
-
-    public void setTipoVenta(TipoVenta tipoVenta) {
-        this.tipoVenta = tipoVenta;
-    }
 
 
     

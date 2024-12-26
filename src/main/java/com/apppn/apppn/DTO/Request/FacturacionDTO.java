@@ -10,6 +10,7 @@ public class FacturacionDTO {
     private Long idInventario;
 
     
+    
 
     private List<FacturacionProductosDTO> productos = new ArrayList<>();
 

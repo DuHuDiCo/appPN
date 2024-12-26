@@ -8,6 +8,7 @@ public class FacturacionProductosDTO {
     private Integer cantidad;
     private Double valorVenta;
     private Double descuentoPagoInicial;
+    private String tipoVenta;
     
 
 
@@ -44,6 +45,12 @@ public class FacturacionProductosDTO {
     }
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
+    }
+    public String getTipoVenta() {
+        return tipoVenta;
+    }
+    public void setTipoVenta(String tipoVenta) {
+        this.tipoVenta = tipoVenta;
     }
 
 

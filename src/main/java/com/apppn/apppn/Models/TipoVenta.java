@@ -30,7 +30,7 @@ public class TipoVenta {
 
     @OneToMany(mappedBy = "tipoVenta", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("tipoVenta")
-    private List<Facturacion> facturaciones = new ArrayList<>();
+    private List<ProductoCompraFacturacion> productoCompraFacturacions = new ArrayList<>();
 
 
     public TipoVenta() {
@@ -57,15 +57,17 @@ public class TipoVenta {
     }
 
 
-    public List<Facturacion> getFacturaciones() {
-        return facturaciones;
+    public List<ProductoCompraFacturacion> getProductoCompraFacturacions() {
+        return productoCompraFacturacions;
     }
 
 
-    public void setFacturaciones(List<Facturacion> facturaciones) {
-        this.facturaciones = facturaciones;
+    public void setProductoCompraFacturacions(List<ProductoCompraFacturacion> productoCompraFacturacions) {
+        this.productoCompraFacturacions = productoCompraFacturacions;
     }
 
+
+   
 
 
 }

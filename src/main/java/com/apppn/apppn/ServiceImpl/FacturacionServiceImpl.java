@@ -28,12 +28,14 @@ import com.apppn.apppn.Models.PlanPagos;
 import com.apppn.apppn.Models.ProductoCompra;
 import com.apppn.apppn.Models.ProductoCompraFacturacion;
 import com.apppn.apppn.Models.ProductoCompraInventory;
+import com.apppn.apppn.Models.TipoVenta;
 import com.apppn.apppn.Models.User;
 import com.apppn.apppn.Repository.ClientRepository;
 import com.apppn.apppn.Repository.FacturacionRepository;
 import com.apppn.apppn.Repository.InventoryRepository;
 import com.apppn.apppn.Repository.ProductoCompraFacturacionRepository;
 import com.apppn.apppn.Repository.ProductoCompraInventoryRepository;
+import com.apppn.apppn.Repository.TipoVentaRepository;
 import com.apppn.apppn.Service.FacturacionService;
 import com.apppn.apppn.Service.UserService;
 import com.apppn.apppn.Utils.Functions;
@@ -49,12 +51,16 @@ public class FacturacionServiceImpl implements FacturacionService {
     private final ProductoCompraInventoryRepository productoCompraInventoryRepository;
     private final ProductoCompraFacturacionRepository productoCompraFacturacionRepository;
     private final ModelMapper modelMapper;
+    private final TipoVentaRepository tipoVentaRepository;
     
+
+   
 
     public FacturacionServiceImpl(FacturacionRepository facturacionRepository, InventoryRepository inventoryRepository,
             ClientRepository clientRepository, Functions functions, UserService userService,
             ProductoCompraInventoryRepository productoCompraInventoryRepository,
-            ProductoCompraFacturacionRepository productoCompraFacturacionRepository, ModelMapper modelMapper) {
+            ProductoCompraFacturacionRepository productoCompraFacturacionRepository, ModelMapper modelMapper,
+            TipoVentaRepository tipoVentaRepository) {
         this.facturacionRepository = facturacionRepository;
         this.inventoryRepository = inventoryRepository;
         this.clientRepository = clientRepository;
@@ -63,6 +69,7 @@ public class FacturacionServiceImpl implements FacturacionService {
         this.productoCompraInventoryRepository = productoCompraInventoryRepository;
         this.productoCompraFacturacionRepository = productoCompraFacturacionRepository;
         this.modelMapper = modelMapper;
+        this.tipoVentaRepository = tipoVentaRepository;
     }
 
     @Override
@@ -134,6 +141,12 @@ public class FacturacionServiceImpl implements FacturacionService {
                         .body(new ErrorResponse("No existe el Cliente con ese id"));
 
             }
+
+            TipoVenta tipoVenta = tipoVentaRepository.findByTipoVenta(producto.getTipoVenta());
+            if(Objects.isNull(tipoVenta)){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Tipo de venta no encontrada"));
+            }
+            productoCompraFacturacion.setTipoVenta(tipoVenta);
 
             productoCompraFacturacion.setClient(client);
             productoCompraFacturacion.setValorVenta(producto.getValorVenta());
