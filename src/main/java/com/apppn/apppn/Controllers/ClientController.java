@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apppn.apppn.DTO.Request.ClientDTO;
+import com.apppn.apppn.DTO.Request.PlanPagosDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Exceptions.SuccessException;
 import com.apppn.apppn.Models.Client;
@@ -95,6 +96,18 @@ public class ClientController {
     @GetMapping("/facturaciones/{idClient}")
     public ResponseEntity<?> obtenerFacturacionesByClientSinPlanPago(@PathVariable("idClient") Long idClient) {
         return clientService.getFacturacionesByClientSinPlanPago(idClient);
+    }
+
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = PlanPagos.class))),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @PostMapping("/PlanPago")
+    public ResponseEntity<?> crearPlanPago(@RequestParam("idClient") Long idClient, @RequestParam("idFacturacion") Long idFacturacion,@RequestBody PlanPagosDTO planPagosDTO) {
+        return clientService.crearPlanPago(idClient, idFacturacion,planPagosDTO);
     }
 
 }
