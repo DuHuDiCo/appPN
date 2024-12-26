@@ -30,6 +30,7 @@ import com.apppn.apppn.Utils.Functions;
 
 @Service
 public class ClientServiceImpl implements ClientService {
+    
 
     private final ClientRepository clientRepository;
     private final HttpServletRequest request;
@@ -191,6 +192,12 @@ public class ClientServiceImpl implements ClientService {
         return ResponseEntity.status(HttpStatus.OK).body(planPagos);
 
         
+    }
+
+    @Override
+    public ResponseEntity<?> getFacturacionesByClientSinPlanPago(Long idCliente) {
+        List<Facturacion> facturaciones = facturacionRepository.obtenerFacturacionByClient(idCliente);
+        return ResponseEntity.status(HttpStatus.OK).body(facturaciones);
     }
 
 }

@@ -86,4 +86,15 @@ public class ClientController {
         return clientService.getClient(dato);
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Client.class))),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @GetMapping("/facturaciones/{idClient}")
+    public ResponseEntity<?> obtenerFacturacionesByClientSinPlanPago(@PathVariable("idClient") Long idClient) {
+        return clientService.getFacturacionesByClientSinPlanPago(idClient);
+    }
+
 }

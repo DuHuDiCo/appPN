@@ -22,4 +22,5 @@ public interface ClientService {
     public ResponseEntity<?> crearPlanPago(Long idCliente, Long idFacturacion,PlanPagosDTO planPagosDTO);
     
 
+    public ResponseEntity<?> getFacturacionesByClientSinPlanPago(Long idCliente);
 }
