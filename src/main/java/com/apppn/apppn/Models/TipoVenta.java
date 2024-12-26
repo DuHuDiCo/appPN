@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "TIPO_VENTA")
@@ -27,6 +28,9 @@ public class TipoVenta {
     @Column(name = "TIPO_VENTA", length = 100)
     private String tipoVenta;
 
+    @OneToMany(mappedBy = "tipoVenta", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("tipoVenta")
+    private List<Facturacion> facturaciones = new ArrayList<>();
 
 
     public TipoVenta() {
@@ -50,6 +54,16 @@ public class TipoVenta {
 
     public void setTipoVenta(String tipoVenta) {
         this.tipoVenta = tipoVenta;
+    }
+
+
+    public List<Facturacion> getFacturaciones() {
+        return facturaciones;
+    }
+
+
+    public void setFacturaciones(List<Facturacion> facturaciones) {
+        this.facturaciones = facturaciones;
     }
 
 
