@@ -16,6 +16,7 @@ import com.apppn.apppn.DTO.Request.PlanPagosDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Exceptions.SuccessException;
 import com.apppn.apppn.Models.Client;
+import com.apppn.apppn.Models.PlanPagos;
 import com.apppn.apppn.Service.ClientService;
 
 import io.swagger.v3.oas.annotations.media.Content;
