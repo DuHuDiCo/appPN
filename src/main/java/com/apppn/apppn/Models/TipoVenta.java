@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,7 +29,7 @@ public class TipoVenta {
     @Column(name = "TIPO_VENTA", length = 100)
     private String tipoVenta;
 
-    @OneToMany(mappedBy = "tipoVenta", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "tipoVenta", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"tipoVenta"})
     private List<ProductoCompraFacturacion> productoCompraFacturacions = new ArrayList<>();
 
