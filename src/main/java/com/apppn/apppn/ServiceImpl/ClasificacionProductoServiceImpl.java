@@ -41,6 +41,7 @@ public class ClasificacionProductoServiceImpl implements ClasificacionProductoSe
         clasificacionProducto = new ClasificacionProducto();
         clasificacionProducto.setClasificacionProducto(clasificacionProductoDTO.getClasificacionProducto());
         clasificacionProducto.setIsFleteObligatorio(clasificacionProductoDTO.getIsFleteObligatorio());
+        
         clasificacionProducto = clasificacionRepository.save(clasificacionProducto);
         return ResponseEntity.status(HttpStatus.OK).body(clasificacionProducto);
     }
