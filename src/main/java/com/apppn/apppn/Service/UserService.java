@@ -22,4 +22,6 @@ public interface UserService {
 
     public ResponseEntity<?> getUserById(Long id);
 
+    public ResponseEntity<?> getUsersVendedores();
+
 }

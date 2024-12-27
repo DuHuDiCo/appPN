@@ -248,4 +248,10 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.status(HttpStatus.OK).body(user);
     }
 
+    @Override
+    public ResponseEntity<?> getUsersVendedores() {
+        List<User> users = usuarioRepository.findVendedores(2L);
+        return ResponseEntity.status(HttpStatus.OK).body(users);
+    }
+
 }
