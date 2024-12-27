@@ -29,7 +29,7 @@ public class TipoVenta {
     private String tipoVenta;
 
     @OneToMany(mappedBy = "tipoVenta", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties("tipoVenta")
+    @JsonIgnoreProperties({"tipoVenta"})
     private List<ProductoCompraFacturacion> productoCompraFacturacions = new ArrayList<>();
 
 
