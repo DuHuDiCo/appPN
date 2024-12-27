@@ -146,7 +146,18 @@ public class CompraServiceImpl implements CompraService {
             compraProducto.setCantidad(productoDTO.getCantidad());
             compraProducto.setCosto(productoDTO.getCosto());
             compraProducto.setProducto(producto);
+            compraProducto.setFlete(0.0);
           
+            ResponseEntity<?> response = userService.getUserById(productoDTO.getIdUsuario());
+            if (!response.getStatusCode().equals(HttpStatus.OK)) {
+                return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+            }
+
+            User user = (User) response.getBody();
+            if (Objects.isNull(user)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("USUARIO NO ENCONTRADO"));
+            }
+            compraProducto.setUser(user);
 
             compraEdit.agregarProducto(compraProducto);
 

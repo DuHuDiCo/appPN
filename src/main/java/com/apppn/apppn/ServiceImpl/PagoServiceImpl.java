@@ -90,6 +90,7 @@ public class PagoServiceImpl implements PagoService {
 
         pago.setArchivos(archivos);
         compra.setPago(pago);
+        compra.setIsPago(true);
         try {
             pago.setFechaPago(functions.obtenerFechaYhora());
         } catch (ParseException e) {
