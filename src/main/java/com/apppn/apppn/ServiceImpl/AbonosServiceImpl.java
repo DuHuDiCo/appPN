@@ -40,16 +40,14 @@ public class AbonosServiceImpl implements AbonoService {
     @Override
     public ResponseEntity<?> crearAbono(PagoClienteDTO pagoClientesDto) {
         if (CollectionUtils.isEmpty(pagoClientesDto.getAplicarPagoDTO())) {
-            throw new IllegalArgumentException("Debe especificar al menos un pago");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("No hay pagos a aplicar"));
         }
 
         for (AplicarPagoDTO aplicarPagoDTO : pagoClientesDto.getAplicarPagoDTO()) {
             Facturacion facturacion = facturacionRepository.findById(aplicarPagoDTO.getIdFacturacion())
-                    .orElseThrow(() -> new IllegalArgumentException(
-                            "No existe la facturacion con id " + aplicarPagoDTO.getIdFacturacion()));
+                    .orElse(null);
             if (Objects.isNull(facturacion)) {
-                throw new IllegalArgumentException(
-                        "No existe la facturacion con id " + aplicarPagoDTO.getIdFacturacion());
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Facturacion no encontrada"));
             }
 
             Client client = clientRepository.findById(aplicarPagoDTO.getIdCliente()).orElse(null);
