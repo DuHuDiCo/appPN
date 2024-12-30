@@ -16,7 +16,7 @@ import javax.persistence.TemporalType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@Table(name = "PLAN_PAGOS")
+@Table(name = "CUOTAS")
 public class Cuotas {
 
     @Id
