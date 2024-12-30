@@ -63,10 +63,10 @@ public class PagosClientesServiceImpl implements PagosClientesService {
         pagosClientes.setValor(pagoClientesDto.getValor());
         pagosClientes.setNumeroRecibo(pagoClientesDto.getNumeroRecibo());
 
-        TipoPago tipoPago = tipoPagoRepository.findByNombreTipoPago(pagoClientesDto.getTipoPago());
+        TipoPago tipoPago = tipoPagoRepository.findByNombreTipoPago(pagoClientesDto.getTipoPago().toUpperCase());
         if (Objects.isNull(tipoPago)) {
             tipoPago = new TipoPago();
-            tipoPago.setNombreTipoPago(pagoClientesDto.getTipoPago());
+            tipoPago.setNombreTipoPago(pagoClientesDto.getTipoPago().toUpperCase());
             tipoPago = tipoPagoRepository.save(tipoPago);
         }
 
