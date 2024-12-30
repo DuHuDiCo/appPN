@@ -56,6 +56,9 @@ public class Facturacion {
 
    
 
+    @OneToMany(mappedBy = "facturacion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties("facturacion")
+    private List<PlanPagos> planPagos = new ArrayList<>();
     
     @OneToMany(mappedBy = "facturacion", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnoreProperties("facturacion")
@@ -132,6 +135,16 @@ public class Facturacion {
 
     public void setPagoClientes(List<PagoClientes> pagoClientes) {
         this.pagoClientes = pagoClientes;
+    }
+
+
+    public List<PlanPagos> getPlanPagos() {
+        return planPagos;
+    }
+
+
+    public void setPlanPagos(List<PlanPagos> planPagos) {
+        this.planPagos = planPagos;
     }
 
 
