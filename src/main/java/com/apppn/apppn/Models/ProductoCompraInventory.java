@@ -48,7 +48,7 @@ public class ProductoCompraInventory {
 
 
     @OneToMany(mappedBy = "productoCompraInventory", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties({"productoCompraInventory", "tipoVenta"})
+    @JsonIgnoreProperties({"productoCompraInventory", "tipoVenta", "productoCompraFacturacions"})
     private List<ProductoCompraFacturacion> productoCompraFacturacions = new ArrayList<>();
 
     public ProductoCompraInventory() {
