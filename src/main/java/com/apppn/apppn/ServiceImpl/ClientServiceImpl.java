@@ -1,9 +1,11 @@
 package com.apppn.apppn.ServiceImpl;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -178,9 +180,14 @@ public class ClientServiceImpl implements ClientService {
             Cuotas cuotas = new Cuotas();
             cuotas.setValorCuota(planPagosDTO.getValorCuota());
             cuotas.setSaldo(planPagosDTO.getValorCuota());
-            cuotas.setFechaPago(planPagosDTO.getFechaCorte());
+            try {
+                cuotas.setFechaPago(functions.stringToDate(planPagosDTO.getFechaCorte()));
+            } catch (ParseException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
 
-            List<Date> intervalos = functions.intervalosFechasByFechaInicial(planPagosDTO.getFechaCorte(), planPagosDTO.getPerodicidad());
+            List<Date> intervalos = functions.intervalosFechasByFechaInicial(cuotas.getFechaPago(), planPagosDTO.getPerodicidad());
 
             cuotas.setFechaPago(intervalos.get(index));
             planPagos.agrgarCuotas(cuotas);

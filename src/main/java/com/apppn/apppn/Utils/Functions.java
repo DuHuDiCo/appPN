@@ -143,4 +143,22 @@ public class Functions {
     }
 
 
+    public  Date stringToDate(String fecha) throws ParseException {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+        Date date = format.parse(fecha);
+
+        SimpleDateFormat formatSalida = new SimpleDateFormat("yyyy-MM-dd");
+        String fechafor = formatSalida.format(date);
+
+        Date fechaOk = formatSalida.parse(fechafor);
+
+        return fechaOk;
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+            return null;
+        }
+
+    }
 }

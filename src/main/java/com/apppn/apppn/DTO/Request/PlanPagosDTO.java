@@ -1,13 +1,13 @@
 
 package com.apppn.apppn.DTO.Request;
 
-import java.util.Date;
+
 
 public class PlanPagosDTO {
 
 
     private Integer perodicidad;
-    private Date fechaCorte;
+    private String fechaCorte;
     private Integer cuotas;
     private Double valorCuota;
     public PlanPagosDTO() {
@@ -18,10 +18,10 @@ public class PlanPagosDTO {
     public void setPerodicidad(Integer perodicidad) {
         this.perodicidad = perodicidad;
     }
-    public Date getFechaCorte() {
+    public String getFechaCorte() {
         return fechaCorte;
     }
-    public void setFechaCorte(Date fechaCorte) {
+    public void setFechaCorte(String fechaCorte) {
         this.fechaCorte = fechaCorte;
     }
     public Integer getCuotas() {
