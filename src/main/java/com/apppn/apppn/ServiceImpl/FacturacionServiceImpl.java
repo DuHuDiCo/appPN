@@ -277,7 +277,7 @@ public class FacturacionServiceImpl implements FacturacionService {
                     continue;
                 }
 
-                if (mapFecha.get("fecha").equals(fecha)) {
+                if (Objects.nonNull(mapFecha.get("fecha"))) {
                     mapFecha.put("valor", Double.valueOf(mapFecha.get("valor").toString()) + cuotas.stream().map(Cuotas::getSaldo).reduce(0.0, Double::sum));
                 }else{
                     mapFecha.put("fecha", fecha);
