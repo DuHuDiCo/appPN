@@ -35,6 +35,9 @@ public class PagoClientes {
     @Column(name = "NUMERO_RECIBO")
     private String numeroRecibo;
 
+    @Column(name = "IS_APLICADO")
+    private Boolean isAplicado;
+
     @ManyToOne
     @JoinColumn(name = "ID_TIPO_PAGO")
     @JsonIgnoreProperties("pagoClientes")
@@ -52,7 +55,6 @@ public class PagoClientes {
 
     public PagoClientes() {
     }
-
     public Long getIdPagoCliente() {
         return idPagoCliente;
     }
@@ -107,6 +109,12 @@ public class PagoClientes {
 
     public void setFacturacion(Facturacion facturacion) {
         this.facturacion = facturacion;
+    }
+    public Boolean getIsAplicado() {
+        return isAplicado;
+    }
+    public void setIsAplicado(Boolean isAplicado) {
+        this.isAplicado = isAplicado;
     }
 
     

@@ -75,4 +75,15 @@ public class PagosClientesController {
         return pagosClientesService.listarPagosClientes();
     }
 
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = PagoClientes.class))),
+            @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+            @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
+    })
+    @GetMapping("/sinAplicar")
+    public ResponseEntity<?> pagosSinAplicar() {
+        return pagosClientesService.pagosSinAplicar();
+    }
+
 }

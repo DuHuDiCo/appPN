@@ -127,7 +127,9 @@ public class PagosClientesServiceImpl implements PagosClientesService {
 
 
             }
+            pagosClientes.setIsAplicado(true);
         }
+        pagosClientes.setIsAplicado(false);
 
         pagosClientes = pagosClientesRepository.save(pagosClientes);
         return ResponseEntity.status(HttpStatus.OK).body(pagosClientes);
@@ -154,6 +156,12 @@ public class PagosClientesServiceImpl implements PagosClientesService {
         }
         pagosClientesRepository.delete(pagoClientes);
         return ResponseEntity.status(HttpStatus.OK).body(new ErrorResponse("PagoClientes eliminado"));
+    }
+
+    @Override
+    public ResponseEntity<?> pagosSinAplicar() {
+        List<PagoClientes> pagosClientes = pagosClientesRepository.findByIsAplicado(false);
+        return ResponseEntity.status(HttpStatus.OK).body(pagosClientes);
     }
 
 }
