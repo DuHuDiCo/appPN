@@ -60,9 +60,9 @@ public class PagosClientesController {
             @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    @GetMapping("/{idPagoCliente}")
-    public ResponseEntity<?> consultarPagoClientes(@PathVariable Long idPagoCliente) {
-        return pagosClientesService.consultarPagoClientes(idPagoCliente);
+    @GetMapping("/{idCliente}")
+    public ResponseEntity<?> consultarPagoClientes(@PathVariable("idCliente") Long idCliente) {
+        return pagosClientesService.consultarPagoClientes(idCliente);
     }
 
     @ApiResponses(value = {
