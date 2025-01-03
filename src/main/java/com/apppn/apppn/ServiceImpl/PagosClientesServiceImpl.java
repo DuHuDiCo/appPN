@@ -114,6 +114,7 @@ public class PagosClientesServiceImpl implements PagosClientesService {
                             .body(new ErrorResponse("Facturacion no encontrada"));
                 }
 
+                pagosClientes.setFacturacion(facturacion);
 
 
                 Client client = clientRepository.findById(aplicarPagoDTO.getIdCliente()).orElse(null);
