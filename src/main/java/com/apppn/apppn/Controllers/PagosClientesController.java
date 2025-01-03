@@ -49,19 +49,7 @@ public class PagosClientesController {
     })
     @PostMapping("/")
     public ResponseEntity<?> crearPagoClientes(@ModelAttribute PagoClienteDTO request,
-            @RequestPart("aplicarPagoDTO") List<String> aplicaListJson) {
-
-        ObjectMapper objectMapper = new ObjectMapper();
-        List<AplicarPagoDTO> aplicarPagoDTOList = new ArrayList<>();
-
-        for (String aplicarPagoJson : aplicaListJson) {
-            try {
-                AplicarPagoDTO aplicarPago = objectMapper.readValue(aplicarPagoJson, AplicarPagoDTO.class);
-                aplicarPagoDTOList.add(aplicarPago);
-            } catch (Exception e) {
-                return ResponseEntity.badRequest().body("Error al procesar aplicarPagoDTO: " + e.getMessage());
-            }
-        }
+            @RequestPart(value = "aplicarPagoDTO", required = false) List<AplicarPagoDTO> aplicarPagoDTOList) {
 
         // Asigna la lista deserializada al DTO principal
         request.setAplicarPagoDTO(aplicarPagoDTOList);
