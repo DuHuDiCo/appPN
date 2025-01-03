@@ -39,7 +39,7 @@ public class PagosClientesController {
             @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @PostMapping("/")
-    public ResponseEntity<?> crearPagoClientes(@RequestPart PagoClienteDTO pagoClientesDto) {
+    public ResponseEntity<?> crearPagoClientes(@RequestPart("pagoClientesDto") PagoClienteDTO pagoClientesDto) {
         return pagosClientesService.crearPagoClientes(pagoClientesDto);
     }
 
