@@ -174,9 +174,11 @@ public class ClientServiceImpl implements ClientService {
         PlanPagos planPagos = new PlanPagos();
         planPagos.setFacturacion(facturacion);
         planPagos.setClient(client);
-        planPagos.setValor(client.getProductoCompraFacturacion().stream().map(pp -> pp.getValorVenta()).reduce(0.0, Double::sum));
+        planPagos.setValor(0.0);
 
         for (int index = 0; index < planPagosDTO.getCuotas(); index++) {
+        
+            planPagos.setValor(planPagos.getValor() + planPagosDTO.getValorCuota());
             Cuotas cuotas = new Cuotas();
             cuotas.setValorCuota(planPagosDTO.getValorCuota());
             cuotas.setSaldo(planPagosDTO.getValorCuota());
