@@ -82,10 +82,11 @@ public class Functions {
 
 
     public void calculoPlanPagos(List<Cuotas> cuotas, AplicarPagoDTO aplicarPagoDTO){
+        Double valorPago = aplicarPagoDTO.getValor();
         for(Cuotas cuota:cuotas){
 
             Double saldoCuota = cuota.getSaldo();
-            Double valorPago = aplicarPagoDTO.getValor();
+            
 
             if(valorPago == 0){
                 break;
