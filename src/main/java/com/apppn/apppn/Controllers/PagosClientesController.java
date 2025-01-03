@@ -1,5 +1,6 @@
 package com.apppn.apppn.Controllers;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,7 +48,23 @@ public class PagosClientesController {
             @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @PostMapping("/")
-    public ResponseEntity<?> crearPagoClientes(@ModelAttribute PagoClienteDTO request) {
+    public ResponseEntity<?> crearPagoClientes(@ModelAttribute PagoClienteDTO request,
+            @RequestPart("aplicarPagoDTO") List<String> aplicaListJson) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<AplicarPagoDTO> aplicarPagoDTOList = new ArrayList<>();
+
+        for (String aplicarPagoJson : aplicaListJson) {
+            try {
+                AplicarPagoDTO aplicarPago = objectMapper.readValue(aplicarPagoJson, AplicarPagoDTO.class);
+                aplicarPagoDTOList.add(aplicarPago);
+            } catch (Exception e) {
+                return ResponseEntity.badRequest().body("Error al procesar aplicarPagoDTO: " + e.getMessage());
+            }
+        }
+
+        // Asigna la lista deserializada al DTO principal
+        request.setAplicarPagoDTO(aplicarPagoDTOList);
 
         return pagosClientesService.crearPagoClientes(request);
     }
