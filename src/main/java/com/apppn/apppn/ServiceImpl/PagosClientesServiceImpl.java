@@ -73,13 +73,30 @@ public class PagosClientesServiceImpl implements PagosClientesService {
         try {
             pagosClientes.setFechaPago(functions.obtenerFechaYhora());
 
-           
-
         } catch (ParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse("ERROR AL PARSEAR LA FECHA Y HORA"));
+        }
+
+        try {
+            MultipartFile file = saveFiles.convertirFile(pagoClientesDto.getComprobante());
+
+            ResponseEntity<?> response = archivoService.saveFile(file, "/data/uploads/");
+            if (!response.getStatusCode().equals(HttpStatus.OK)) {
+                return response;
+            }
+            Archivos archivos = (Archivos) response.getBody();
+            if (Objects.isNull(archivos)) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(new ErrorResponse("Error al guardar el archivo"));
+            }
+            pagosClientes.setArchivos(archivos);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ErrorResponse("ERROR AL GUARDAR EL ARCHIVO"));
         }
 
         if (!CollectionUtils.isEmpty(pagoClientesDto.getAplicarPagoDTO())) {
@@ -126,26 +143,6 @@ public class PagosClientesServiceImpl implements PagosClientesService {
             pagosClientes.setIsAplicado(true);
         } else {
             pagosClientes.setIsAplicado(false);
-        }
-
-
-        try {
-            MultipartFile file = saveFiles.convertirFile(pagoClientesDto.getComprobante());
-
-            ResponseEntity<?> response = archivoService.saveFile(file, "/data/uploads/");
-            if (!response.getStatusCode().equals(HttpStatus.OK)) {
-                return response;
-            }
-            Archivos archivos = (Archivos) response.getBody();
-            if (Objects.isNull(archivos)) {
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(new ErrorResponse("Error al guardar el archivo"));
-            }
-            pagosClientes.setArchivos(archivos);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ErrorResponse("ERROR AL GUARDAR EL ARCHIVO"));
         }
 
         pagosClientes = pagosClientesRepository.save(pagosClientes);
