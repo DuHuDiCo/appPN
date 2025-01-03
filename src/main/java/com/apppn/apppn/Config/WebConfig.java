@@ -6,12 +6,25 @@ import java.util.Arrays;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.apppn.apppn.Utils.StringToAplicarPagoDTOListConverter;
 
 @Configuration
-public class WebConfig {
+public class WebConfig implements WebMvcConfigurer {
+
+
+    private final StringToAplicarPagoDTOListConverter stringToAplicarPagoDTOListConverter;
+
+    public WebConfig(StringToAplicarPagoDTOListConverter stringToAplicarPagoDTOListConverter) {
+        this.stringToAplicarPagoDTOListConverter = stringToAplicarPagoDTOListConverter;
+    }
+
+
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
@@ -35,5 +48,12 @@ public class WebConfig {
 
         return source;
     }
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+       registry.addConverter(stringToAplicarPagoDTOListConverter);
+    }
+
+    
 
 }

@@ -48,12 +48,9 @@ public class PagosClientesController {
             @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @PostMapping("/")
-    public ResponseEntity<?> crearPagoClientes(@ModelAttribute PagoClienteDTO request,
-            @RequestPart(value = "aplicarPagoDTO", required = false) List<AplicarPagoDTO> aplicarPagoDTOList) {
+    public ResponseEntity<?> crearPagoClientes(@ModelAttribute PagoClienteDTO request) {
 
-        // Asigna la lista deserializada al DTO principal
-        request.setAplicarPagoDTO(aplicarPagoDTOList);
-
+   
         return pagosClientesService.crearPagoClientes(request);
     }
 
