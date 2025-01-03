@@ -72,7 +72,7 @@ public class PagosClientesController {
             @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @DeleteMapping("/{idPagoCliente}")
-    public ResponseEntity<?> eliminarPagoClientes(@PathVariable Long idPagoCliente) {
+    public ResponseEntity<?> eliminarPagoClientes(@PathVariable("idPagoCliente") Long idPagoCliente) {
         return pagosClientesService.eliminarPagoClientes(idPagoCliente);
     }
 

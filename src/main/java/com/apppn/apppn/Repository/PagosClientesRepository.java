@@ -14,7 +14,7 @@ public interface PagosClientesRepository extends JpaRepository<PagoClientes, Lon
 
 
 
-    @Query(value = "SELECT * FROM pago_clientes LEFT JOIN facturacion ON pago_clientes.facturacion_id = facturacion.id_facturacion LEFT JOIN producto_compra_facturacion ON producto_compra_facturacion.facturacion_id = facturacion.id_facturacion WHERE producto_compra_facturacion.client_id = :idCliente;", nativeQuery = true)
+    @Query(value = "SELECT * FROM pago_clientes LEFT JOIN facturacion ON pago_clientes.facturacion_id = facturacion.id_facturacion LEFT JOIN producto_compra_facturacion ON producto_compra_facturacion.facturacion_id = facturacion.id_facturacion WHERE producto_compra_facturacion.client_id = :idCliente", nativeQuery = true)
     List<PagoClientes> findByClient(@Param("idCliente") Long idCliente);
 
     
