@@ -7,7 +7,7 @@ public class AplicarPagoDTO {
     private Double valor;
     private Long idCliente;
     private Long idFacturacion;
-    private Date fechaPago;
+    private String fechaPago;
 
     
 
@@ -37,12 +37,12 @@ public class AplicarPagoDTO {
     }
 
 
-    public Date getFechaPago() {
+    public String getFechaPago() {
         return fechaPago;
     }
 
 
-    public void setFechaPago(Date fechaPago) {
+    public void setFechaPago(String fechaPago) {
         this.fechaPago = fechaPago;
     }
 
