@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,24 +47,8 @@ public class PagosClientesController {
             @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @PostMapping("/")
-    public ResponseEntity<?> crearPagoClientes(@RequestPart("pagoClientesDto") String pagoClientesDtoJson,
-            @RequestPart("pagoClientesDto.file") MultipartFile file) {
-        ObjectMapper mapper = new ObjectMapper();
-        PagoClienteDTO request = null;
-        try {
-            request = mapper.readValue(pagoClientesDtoJson,
-                    PagoClienteDTO.class);
+    public ResponseEntity<?> crearPagoClientes(@ModelAttribute PagoClienteDTO request) {
 
-            // Asignar el archivo al objeto request
-            request.setComprobante(file);
-        } catch (JsonProcessingException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new ErrorResponse(e.getMessage()));
-        }
-        if (Objects.isNull(request)) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("ERROR DE PARSEO EN DOCUMENTACION GENERAL REQUEST");
-        }
         return pagosClientesService.crearPagoClientes(request);
     }
 
