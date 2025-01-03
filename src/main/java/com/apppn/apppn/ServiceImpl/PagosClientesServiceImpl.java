@@ -158,7 +158,7 @@ public class PagosClientesServiceImpl implements PagosClientesService {
 
     @Override
     public ResponseEntity<?> listarPagosClientes() {
-        List<PagoClientes> pagosClientes = pagosClientesRepository.findAll();
+        List<PagoClientes> pagosClientes = pagosClientesRepository.findByIsAplicado(true);
         return ResponseEntity.status(HttpStatus.OK).body(pagosClientes);
     }
 
