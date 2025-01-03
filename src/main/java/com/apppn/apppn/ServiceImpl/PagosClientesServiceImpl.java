@@ -133,7 +133,7 @@ public class PagosClientesServiceImpl implements PagosClientesService {
 
                 if (planPagos.getValor() < aplicarPagoDTO.getValor()) {
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(new ErrorResponse("Valor de pago no puede ser menor que el valor del plan de pagos"));
+                            .body(new ErrorResponse("Valor de pago no puede ser MAYOR al total del valor del plan de pagos"));
                 }
 
                 functions.calculoPlanPagos(planPagos.getCuotas(), aplicarPagoDTO);
