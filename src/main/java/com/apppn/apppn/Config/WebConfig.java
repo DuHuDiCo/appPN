@@ -18,11 +18,6 @@ import com.apppn.apppn.Utils.StringToAplicarPagoDTOListConverter;
 public class WebConfig implements WebMvcConfigurer {
 
 
-    private final StringToAplicarPagoDTOListConverter stringToAplicarPagoDTOListConverter;
-
-    public WebConfig(StringToAplicarPagoDTOListConverter stringToAplicarPagoDTOListConverter) {
-        this.stringToAplicarPagoDTOListConverter = stringToAplicarPagoDTOListConverter;
-    }
 
 
 
@@ -49,11 +44,7 @@ public class WebConfig implements WebMvcConfigurer {
         return source;
     }
 
-    @Override
-    public void addFormatters(FormatterRegistry registry) {
-       registry.addConverter(stringToAplicarPagoDTOListConverter);
-    }
-
+  
     
 
 }

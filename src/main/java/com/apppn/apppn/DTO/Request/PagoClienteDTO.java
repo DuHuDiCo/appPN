@@ -9,7 +9,7 @@ public class PagoClienteDTO {
 
     private Double valor;
     private String numeroRecibo;
-    private MultipartFile comprobante;
+    private String comprobante;
     private String tipoPago;
     private List<AplicarPagoDTO> aplicarPagoDTO = new ArrayList<>();
 
@@ -48,11 +48,11 @@ public class PagoClienteDTO {
         this.aplicarPagoDTO = aplicarPagoDTO;
     }
 
-    public MultipartFile getComprobante() {
+    public String getComprobante() {
         return comprobante;
     }
 
-    public void setComprobante(MultipartFile comprobante) {
+    public void setComprobante(String comprobante) {
         this.comprobante = comprobante;
     }
 

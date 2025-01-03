@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.apppn.apppn.Models.Archivos;
+import com.apppn.apppn.ServiceImpl.CustomMultipartFile;
 
 @Service
 public class SaveFiles {
@@ -58,6 +59,24 @@ public class SaveFiles {
         Files.write(path, bytes);
         return name;
 
+    }
+
+    public MultipartFile convertirFile(String base64) {
+
+        final String[] base64Array = base64.split(",");
+
+        String dataUir, data;
+
+        if (base64Array.length > 1) {
+            dataUir = base64Array[0];
+            data = base64Array[1];
+        } else {
+            dataUir = "data:image/png;base64";
+            data = base64Array[0];
+        }
+
+        MultipartFile multipartFile = new CustomMultipartFile(data, dataUir);
+        return multipartFile;
     }
 
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.apppn.apppn.DTO.Request.AplicarPagoDTO;
 import com.apppn.apppn.DTO.Request.PagoClienteDTO;
@@ -40,14 +41,17 @@ public class PagosClientesServiceImpl implements PagosClientesService {
     private final FacturacionService facturacionService;
     private final FacturacionRepository facturacionRepository;
     private final ClientRepository clientRepository;
+    private final SaveFiles  saveFiles;
 
    
    
+
+    
 
     public PagosClientesServiceImpl(PagosClientesRepository pagosClientesRepository,
             TipoPagoRepository tipoPagoRepository, Functions functions, ArchivoService archivoService,
             FacturacionService facturacionService, FacturacionRepository facturacionRepository,
-            ClientRepository clientRepository) {
+            ClientRepository clientRepository, SaveFiles saveFiles) {
         this.pagosClientesRepository = pagosClientesRepository;
         this.tipoPagoRepository = tipoPagoRepository;
         this.functions = functions;
@@ -55,6 +59,7 @@ public class PagosClientesServiceImpl implements PagosClientesService {
         this.facturacionService = facturacionService;
         this.facturacionRepository = facturacionRepository;
         this.clientRepository = clientRepository;
+        this.saveFiles = saveFiles;
     }
 
     @Override
@@ -74,7 +79,9 @@ public class PagosClientesServiceImpl implements PagosClientesService {
         try {
             pagosClientes.setFechaPago(functions.obtenerFechaYhora());
 
-            ResponseEntity<?> response = archivoService.saveFile(pagoClientesDto.getComprobante(), "/data/uploads/");
+            MultipartFile file = saveFiles.convertirFile(pagoClientesDto.getComprobante());
+
+            ResponseEntity<?> response = archivoService.saveFile(file, "/data/uploads/");
             if (!response.getStatusCode().equals(HttpStatus.OK)) {
                 return response;
             }
