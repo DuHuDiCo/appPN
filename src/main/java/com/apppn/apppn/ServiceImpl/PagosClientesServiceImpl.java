@@ -171,7 +171,7 @@ public class PagosClientesServiceImpl implements PagosClientesService {
             }
 
             PlanPagos planPagos = client.getPlanPagos().stream()
-                    .filter(pp -> pp.getFacturacion().getIdFacturacion().equals(aplicarPagoDTO.getIdFacturacion()))
+                    .filter(pp -> pp.getFacturacion().getIdFacturacion().equals(facturacion.getIdFacturacion()))
                     .findFirst().orElse(null);
 
             if (Objects.isNull(planPagos)) {
