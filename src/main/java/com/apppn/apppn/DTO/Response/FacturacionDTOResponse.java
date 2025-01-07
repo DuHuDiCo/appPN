@@ -11,7 +11,7 @@ public class FacturacionDTOResponse {
     private Long idFacturacion;
     private Date fecha;
     private Double totalFacturacion;
-    private Integer perodicidad;
+   
     private Date fechaCorte;
     List<PlanPagos> planPagos = new ArrayList<>();
 
@@ -42,14 +42,7 @@ public class FacturacionDTOResponse {
         this.totalFacturacion = totalFacturacion;
     }
 
-    public Integer getPerodicidad() {
-        return perodicidad;
-    }
-
-    public void setPerodicidad(Integer perodicidad) {
-        this.perodicidad = perodicidad;
-    }
-
+  
     public Date getFechaCorte() {
         return fechaCorte;
     }

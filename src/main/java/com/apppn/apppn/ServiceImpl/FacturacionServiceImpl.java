@@ -18,7 +18,8 @@ import org.springframework.util.CollectionUtils;
 import com.apppn.apppn.DTO.Request.FacturacionDTO;
 import com.apppn.apppn.DTO.Request.FacturacionProductosDTO;
 import com.apppn.apppn.DTO.Response.FacturacionDTOResponse;
-import com.apppn.apppn.DTO.Response.ResumenCuentas;
+import com.apppn.apppn.DTO.Response.ResumenCuentasDTO;
+import com.apppn.apppn.DTO.Response.ResumenCuentasDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Models.Client;
 import com.apppn.apppn.Models.Cuotas;
@@ -251,10 +252,10 @@ public class FacturacionServiceImpl implements FacturacionService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Cliente no encontrado"));
         }
 
-        ResumenCuentas resumenCuentas = new ResumenCuentas();
+        ResumenCuentasDTO resumenCuentas = new ResumenCuentasDTO();
 
-        List<FacturacionDTOResponse> facturacionDTOResponses = new ArrayList<>();
-        List<Map<String, Object>> map = new ArrayList<>();
+       
+      
 
         for (PlanPagos pagos : client.getPlanPagos()) {
 
@@ -268,7 +269,7 @@ public class FacturacionServiceImpl implements FacturacionService {
             List<Date> intervalos = functions.generarIntervalos(minFecha, maxFecha);
 
             
-            Map<String, Object> mapFecha = new HashMap<>();
+            Map<String, Map<String, Object>> mapFecha = new HashMap<>();
 
             for (Date fecha : intervalos) {
                 List<Cuotas> cuotas = pagos.getCuotas().stream().filter(pp -> pp.getFechaPago().equals(fecha))
@@ -277,22 +278,45 @@ public class FacturacionServiceImpl implements FacturacionService {
                     continue;
                 }
 
-                if (Objects.nonNull(mapFecha.get("fecha")) && mapFecha.get("fecha").equals(fecha)) {
-                    mapFecha.put("valor", Double.valueOf(mapFecha.get("valor").toString()) + cuotas.stream().map(Cuotas::getSaldo).reduce(0.0, Double::sum));
-                }else{
-                    mapFecha.put("fecha", fecha);
-                    mapFecha.put("valor", cuotas.stream().map(Cuotas::getSaldo).reduce(0.0, Double::sum));
+                Map<String, Object> mapData = new HashMap<>();
+
+                mapData.put("VALOR", cuotas.stream().map(Cuotas::getSaldo).reduce(0.0, Double::sum));
+                mapData.put("FECHA", fecha);
+
+                List<Facturacion> facturacion = cuotas.stream().map(Cuotas::getPlanPagos).map(PlanPagos::getFacturacion).collect(Collectors.toList());
+
+                if (!CollectionUtils.isEmpty(facturacion)) {
+                    continue;
                 }
 
+                List<FacturacionDTOResponse> factResponseList = new ArrayList<>();
+
+                for (Facturacion fact : facturacion) {
+                    FacturacionDTOResponse factResponse = new FacturacionDTOResponse();
+                    factResponse.setIdFacturacion(fact.getIdFacturacion());
+                    factResponse.setFecha(fact.getFecha());
+                    factResponse.setTotalFacturacion(fact.getTotalFacturacion());
+                    
+                    factResponse.setFechaCorte(fact.getFecha());
+                    factResponse.setPlanPagos(fact.getPlanPagos());
+                    factResponseList.add(factResponse);
+                    
+                }
+
+                mapData.put("FACTURACIONES", factResponseList);
+
+
+                mapFecha.put("DATA", mapData);
+
+                
+
+
             }
-            map.add(mapFecha);
+        
 
-            FacturacionDTOResponse facturacionDTOResponse = modelMapper.map(pagos.getFacturacion(), FacturacionDTOResponse.class);
-            facturacionDTOResponses.add(facturacionDTOResponse);
-
+            resumenCuentas.setMap(mapFecha);
         }
-        resumenCuentas.setFacturacionDTOResponses(facturacionDTOResponses);
-        resumenCuentas.setMap(map);
+       
         return ResponseEntity.status(HttpStatus.OK).body(resumenCuentas);
 
     }
