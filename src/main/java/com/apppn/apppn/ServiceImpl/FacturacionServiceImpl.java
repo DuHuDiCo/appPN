@@ -255,6 +255,7 @@ public class FacturacionServiceImpl implements FacturacionService {
         ResumenCuentasDTO resumenCuentas = new ResumenCuentasDTO();
 
        
+        List<FacturacionDTOResponse> facturacionDTO = new ArrayList<>();
       
 
         for (PlanPagos pagos : client.getPlanPagos()) {
@@ -269,7 +270,7 @@ public class FacturacionServiceImpl implements FacturacionService {
             List<Date> intervalos = functions.generarIntervalos(minFecha, maxFecha);
 
             
-            Map<String, Map<String, Object>> mapFecha = new HashMap<>();
+            
 
             for (Date fecha : intervalos) {
                 List<Cuotas> cuotas = pagos.getCuotas().stream().filter(pp -> pp.getFechaPago().equals(fecha))
@@ -278,43 +279,23 @@ public class FacturacionServiceImpl implements FacturacionService {
                     continue;
                 }
 
-                Map<String, Object> mapData = new HashMap<>();
+                FacturacionDTOResponse facturacionRes = new FacturacionDTOResponse();
 
-                mapData.put("VALOR", cuotas.stream().map(Cuotas::getSaldo).reduce(0.0, Double::sum));
-                mapData.put("FECHA", fecha);
+                facturacionRes.setValor(cuotas.stream().map(Cuotas::getSaldo).reduce(0.0, Double::sum));
+                facturacionRes.setFecha(fecha);
+              
 
                 List<Facturacion> facturacion = cuotas.stream().map(Cuotas::getPlanPagos).map(PlanPagos::getFacturacion).collect(Collectors.toList());
 
-                if (!CollectionUtils.isEmpty(facturacion)) {
-                    continue;
-                }
-
-                List<FacturacionDTOResponse> factResponseList = new ArrayList<>();
-
-                for (Facturacion fact : facturacion) {
-                    FacturacionDTOResponse factResponse = new FacturacionDTOResponse();
-                    factResponse.setIdFacturacion(fact.getIdFacturacion());
-                    factResponse.setFecha(fact.getFecha());
-                    factResponse.setTotalFacturacion(fact.getTotalFacturacion());
-                    
-                    factResponse.setFechaCorte(fact.getFecha());
-                    factResponse.setPlanPagos(fact.getPlanPagos());
-                    factResponseList.add(factResponse);
-                    
-                }
-
-                mapData.put("FACTURACIONES", factResponseList);
-
-
-                mapFecha.put("DATA", mapData);
-
+                facturacionRes.setFacturacion(facturacion);
                 
+                facturacionDTO.add(facturacionRes);
 
 
             }
         
 
-            resumenCuentas.setMap(mapFecha);
+            resumenCuentas.setFacturacionDTO(facturacionDTO);
         }
        
         return ResponseEntity.status(HttpStatus.OK).body(resumenCuentas);

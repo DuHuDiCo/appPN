@@ -1,27 +1,26 @@
 package com.apppn.apppn.DTO.Response;
 
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ResumenCuentasDTO {
 
 
 
-    Map<String, Map<String, Object>> map = new HashMap<>();
-    public ResumenCuentasDTO() {}
+    List<FacturacionDTOResponse> facturacionDTO = new ArrayList<>();
 
-   
-
-    public Map<String, Map<String, Object>> getMap() {
-        return map;
+    public ResumenCuentasDTO() {
     }
 
-    public void setMap(Map<String, Map<String, Object>> map) {
-        this.map = map;
+    public List<FacturacionDTOResponse> getFacturacionDTO() {
+        return facturacionDTO;
     }
+
+    public void setFacturacionDTO(List<FacturacionDTOResponse> facturacionDTO) {
+        this.facturacionDTO = facturacionDTO;
+    }
+
+    
 
   
 

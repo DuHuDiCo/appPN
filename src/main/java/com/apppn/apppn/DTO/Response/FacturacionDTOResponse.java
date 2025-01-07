@@ -4,59 +4,35 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.apppn.apppn.Models.Facturacion;
 import com.apppn.apppn.Models.PlanPagos;
 
 public class FacturacionDTOResponse {
 
-    private Long idFacturacion;
+    private Double valor;
     private Date fecha;
-    private Double totalFacturacion;
-   
-    private Date fechaCorte;
-    List<PlanPagos> planPagos = new ArrayList<>();
-
+    List<Facturacion> facturacion = new ArrayList<>();
     public FacturacionDTOResponse() {
     }
-
-    public Long getIdFacturacion() {
-        return idFacturacion;
+    public Double getValor() {
+        return valor;
     }
-
-    public void setIdFacturacion(Long idFacturacion) {
-        this.idFacturacion = idFacturacion;
+    public void setValor(Double valor) {
+        this.valor = valor;
     }
-
     public Date getFecha() {
         return fecha;
     }
-
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-
-    public Double getTotalFacturacion() {
-        return totalFacturacion;
+    public List<Facturacion> getFacturacion() {
+        return facturacion;
+    }
+    public void setFacturacion(List<Facturacion> facturacion) {
+        this.facturacion = facturacion;
     }
 
-    public void setTotalFacturacion(Double totalFacturacion) {
-        this.totalFacturacion = totalFacturacion;
-    }
-
-  
-    public Date getFechaCorte() {
-        return fechaCorte;
-    }
-
-    public void setFechaCorte(Date fechaCorte) {
-        this.fechaCorte = fechaCorte;
-    }
-
-    public List<PlanPagos> getPlanPagos() {
-        return planPagos;
-    }
-
-    public void setPlanPagos(List<PlanPagos> planPagos) {
-        this.planPagos = planPagos;
-    }
+    
 
 }
