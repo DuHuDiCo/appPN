@@ -11,8 +11,11 @@ import org.springframework.util.CollectionUtils;
 
 import com.apppn.apppn.DTO.Request.AplicarPagoDTO;
 import com.apppn.apppn.DTO.Request.PagoClienteDTO;
+import com.apppn.apppn.DTO.Response.AbonoDTO;
+import com.apppn.apppn.DTO.Response.CuotasRequest;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Models.Client;
+import com.apppn.apppn.Models.Cuotas;
 import com.apppn.apppn.Models.Facturacion;
 import com.apppn.apppn.Models.PlanPagos;
 import com.apppn.apppn.Repository.ClientRepository;
@@ -38,25 +41,25 @@ public class AbonosServiceImpl implements AbonoService {
     }
 
     @Override
-    public ResponseEntity<?> crearAbono(PagoClienteDTO pagoClientesDto) {
-        if (CollectionUtils.isEmpty(pagoClientesDto.getAplicarPagoDTO())) {
+    public ResponseEntity<?> crearAbono(AbonoDTO abonoDTO) {
+        if (CollectionUtils.isEmpty(abonoDTO.getCuotas())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("No hay pagos a aplicar"));
         }
+        Client client = clientRepository.findById(abonoDTO.getIdCliente()).orElse(null);
+        if (Objects.isNull(client)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Cliente no encontrado"));
+        }
 
-        for (AplicarPagoDTO aplicarPagoDTO : pagoClientesDto.getAplicarPagoDTO()) {
-            Facturacion facturacion = facturacionRepository.findById(aplicarPagoDTO.getIdFacturacion())
+        for (CuotasRequest cuotasDto : abonoDTO.getCuotas()) {
+            Facturacion facturacion = facturacionRepository.findById(cuotasDto.getIdFacturacion())
                     .orElse(null);
             if (Objects.isNull(facturacion)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Facturacion no encontrada"));
-            }
-
-            Client client = clientRepository.findById(aplicarPagoDTO.getIdCliente()).orElse(null);
-            if (Objects.isNull(client)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Cliente no encontrado"));
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ErrorResponse("Facturacion no encontrada"));
             }
 
             PlanPagos planPagos = client.getPlanPagos().stream()
-                    .filter(pp -> pp.getFacturacion().getIdFacturacion().equals(aplicarPagoDTO.getIdFacturacion()))
+                    .filter(pp -> pp.getFacturacion().getIdFacturacion().equals(facturacion.getIdFacturacion()))
                     .findFirst().orElse(null);
 
             if (Objects.isNull(planPagos)) {
@@ -64,7 +67,19 @@ public class AbonosServiceImpl implements AbonoService {
                         .body(new ErrorResponse("Plan de pagos no encontrado"));
             }
 
-            functions.calculoPlanPagos(planPagos.getCuotas(), aplicarPagoDTO);
+            Cuotas cuotas = planPagos.getCuotas().stream().filter(c -> c.getIdCuota().equals(cuotasDto.getIdCuota()))
+                    .findFirst().orElse(null);
+
+            if (Objects.isNull(cuotas)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Cuota no encontrada"));
+            }
+
+            if(cuotasDto.getValor() > cuotas.getSaldo()){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Valor de abono no puede ser mayor al saldo en la cuota con ID:".concat(cuotas.getIdCuota().toString())));
+
+            }
+            cuotas.setSaldo(cuotas.getSaldo() - cuotasDto.getValor());
+
             client = clientRepository.save(client);
         }
 

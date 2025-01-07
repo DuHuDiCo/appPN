@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.apppn.apppn.DTO.Request.PagoClienteDTO;
+import com.apppn.apppn.DTO.Response.AbonoDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Exceptions.SuccessException;
 import com.apppn.apppn.Service.AbonoService;
@@ -34,7 +35,7 @@ public class AbonoController {
             @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
     @PostMapping("/crear")
-    public ResponseEntity<?> crearAbono(@RequestBody PagoClienteDTO pagoClientesDto) {
+    public ResponseEntity<?> crearAbono(@RequestBody AbonoDTO pagoClientesDto) {
         return abonoService.crearAbono(pagoClientesDto);
     }
 
