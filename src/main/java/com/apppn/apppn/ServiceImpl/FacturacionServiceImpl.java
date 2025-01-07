@@ -293,6 +293,7 @@ public class FacturacionServiceImpl implements FacturacionService {
                 
                 cuentaDTO.setFacturacion(facturacionResponse);
 
+                cuentaDTOs.add(cuentaDTO);
 
             }
         
