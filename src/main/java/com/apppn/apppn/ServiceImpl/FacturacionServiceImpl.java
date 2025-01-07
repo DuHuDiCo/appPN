@@ -55,9 +55,6 @@ public class FacturacionServiceImpl implements FacturacionService {
     private final ProductoCompraFacturacionRepository productoCompraFacturacionRepository;
     private final ModelMapper modelMapper;
     private final TipoVentaRepository tipoVentaRepository;
-    
-
-   
 
     public FacturacionServiceImpl(FacturacionRepository facturacionRepository, InventoryRepository inventoryRepository,
             ClientRepository clientRepository, Functions functions, UserService userService,
@@ -146,8 +143,9 @@ public class FacturacionServiceImpl implements FacturacionService {
             }
 
             TipoVenta tipoVenta = tipoVentaRepository.findByTipoVenta(producto.getTipoVenta());
-            if(Objects.isNull(tipoVenta)){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Tipo de venta no encontrada"));
+            if (Objects.isNull(tipoVenta)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ErrorResponse("Tipo de venta no encontrada"));
             }
             productoCompraFacturacion.setTipoVenta(tipoVenta);
 
@@ -156,12 +154,10 @@ public class FacturacionServiceImpl implements FacturacionService {
             facturacion.agregarProductoCompraFacturacion(productoCompraFacturacion);
         }
 
-
         facturacion = facturacionRepository.save(facturacion);
 
         inventory.agregarFacturacion(facturacion);
         inventory = inventoryRepository.save(inventory);
-
 
         return ResponseEntity.status(HttpStatus.OK).body(facturacion);
 
@@ -256,13 +252,9 @@ public class FacturacionServiceImpl implements FacturacionService {
 
         ResumenCuentasDTO resumenCuentas = new ResumenCuentasDTO();
 
-       
         List<CuentaDTO> cuentaDTOs = new ArrayList<>();
-      
 
         for (PlanPagos pagos : client.getPlanPagos()) {
-
-
 
             Date minFecha = pagos.getCuotas().stream().map(Cuotas::getFechaPago).min(Date::compareTo)
                     .orElse(null);
@@ -270,9 +262,6 @@ public class FacturacionServiceImpl implements FacturacionService {
                     .orElse(null);
 
             List<Date> intervalos = functions.generarIntervalos(minFecha, maxFecha);
-
-            
-            
 
             for (Date fecha : intervalos) {
                 List<Cuotas> cuotas = pagos.getCuotas().stream().filter(pp -> pp.getFechaPago().equals(fecha))
@@ -285,22 +274,27 @@ public class FacturacionServiceImpl implements FacturacionService {
 
                 cuentaDTO.setValor(cuotas.stream().map(Cuotas::getSaldo).reduce(0.0, Double::sum));
                 cuentaDTO.setFecha(fecha);
-              
 
-                List<Facturacion> facturacion = cuotas.stream().map(Cuotas::getPlanPagos).map(PlanPagos::getFacturacion).collect(Collectors.toList());
+                List<Facturacion> facturaciones = cuotas.stream().map(Cuotas::getPlanPagos)
+                        .map(PlanPagos::getFacturacion).collect(Collectors.toList());
 
-                List<FacturacionResponse> facturacionResponse = facturacion.stream().map(f -> modelMapper.map(f, FacturacionResponse.class)).collect(Collectors.toList());
-                
-                cuentaDTO.setFacturacion(facturacionResponse);
+                for (Facturacion facturacion : facturaciones) {
+                    FacturacionResponse facturacionResponse = new FacturacionResponse();
+                    facturacionResponse.setIdFacturacion(facturacion.getIdFacturacion());
+                    facturacionResponse.setFecha(facturacion.getFecha());
+                    facturacionResponse.setCuotas(cuotas);
+
+                    cuentaDTO.agregarFacturacion(facturacionResponse);
+
+                }
 
                 cuentaDTOs.add(cuentaDTO);
 
             }
-        
 
             resumenCuentas.setCuentaDTOs(cuentaDTOs);
         }
-       
+
         return ResponseEntity.status(HttpStatus.OK).body(resumenCuentas);
 
     }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.apppn.apppn.Models.Cuotas;
 import com.apppn.apppn.Models.PlanPagos;
 
 public class FacturacionResponse {
@@ -11,7 +12,7 @@ public class FacturacionResponse {
     private Long idFacturacion;
     private Date fecha;
 
-    private List<PlanPagos> planPagos = new ArrayList<>();
+    private List<Cuotas> cuotas = new ArrayList<>();
 
     public FacturacionResponse() {
     }
@@ -32,13 +33,15 @@ public class FacturacionResponse {
         this.fecha = fecha;
     }
 
-    public List<PlanPagos> getPlanPagos() {
-        return planPagos;
+    public List<Cuotas> getCuotas() {
+        return cuotas;
     }
 
-    public void setPlanPagos(List<PlanPagos> planPagos) {
-        this.planPagos = planPagos;
+    public void setCuotas(List<Cuotas> cuotas) {
+        this.cuotas = cuotas;
     }
+
+    
 
 
     
