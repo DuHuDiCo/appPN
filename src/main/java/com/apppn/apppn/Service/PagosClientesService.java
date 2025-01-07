@@ -17,4 +17,6 @@ public interface PagosClientesService {
 
     public ResponseEntity<?> pagosSinAplicar();
 
+    public ResponseEntity<?> aplicarPagoAutomatico(Long idPagoCliente, PagoClienteDTO pagoClientesDto);
+
 }

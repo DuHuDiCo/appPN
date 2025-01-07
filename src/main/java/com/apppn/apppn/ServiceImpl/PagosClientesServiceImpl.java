@@ -99,48 +99,10 @@ public class PagosClientesServiceImpl implements PagosClientesService {
                     .body(new ErrorResponse("ERROR AL GUARDAR EL ARCHIVO"));
         }
 
+        pagosClientes = pagosClientesRepository.save(pagosClientes);
+
         if (!CollectionUtils.isEmpty(pagoClientesDto.getAplicarPagoDTO())) {
-            for (AplicarPagoDTO aplicarPagoDTO : pagoClientesDto.getAplicarPagoDTO()) {
-                ResponseEntity<?> response = facturacionService.getFacturacion(aplicarPagoDTO.getIdFacturacion());
-
-                if (!response.getStatusCode().equals(HttpStatus.OK)) {
-                    return response;
-                }
-
-                Facturacion facturacion = (Facturacion) response.getBody();
-
-                if (Objects.isNull(facturacion)) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(new ErrorResponse("Facturacion no encontrada"));
-                }
-
-                pagosClientes.setFacturacion(facturacion);
-
-                Client client = clientRepository.findById(aplicarPagoDTO.getIdCliente()).orElse(null);
-                if (Objects.isNull(client)) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(new ErrorResponse("Cliente no encontrado"));
-                }
-
-                PlanPagos planPagos = client.getPlanPagos().stream()
-                        .filter(pp -> pp.getFacturacion().getIdFacturacion().equals(aplicarPagoDTO.getIdFacturacion()))
-                        .findFirst().orElse(null);
-
-                if (Objects.isNull(planPagos)) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(new ErrorResponse("Plan de pagos no encontrado"));
-                }
-
-                if (planPagos.getValor() < aplicarPagoDTO.getValor()) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(new ErrorResponse("Valor de pago no puede ser MAYOR al total del valor del plan de pagos"));
-                }
-
-                functions.calculoPlanPagos(planPagos.getCuotas(), aplicarPagoDTO);
-                client = clientRepository.save(client);
-
-            }
-            pagosClientes.setIsAplicado(true);
+            return aplicarPagoAutomatico(pagosClientes.getIdPagoCliente(), pagoClientesDto);
         } else {
             pagosClientes.setIsAplicado(false);
         }
@@ -175,6 +137,61 @@ public class PagosClientesServiceImpl implements PagosClientesService {
     @Override
     public ResponseEntity<?> pagosSinAplicar() {
         List<PagoClientes> pagosClientes = pagosClientesRepository.findByIsAplicado(false);
+        return ResponseEntity.status(HttpStatus.OK).body(pagosClientes);
+    }
+
+    @Override
+    public ResponseEntity<?> aplicarPagoAutomatico(Long idPagoCliente, PagoClienteDTO pagoClientesDto) {
+
+        PagoClientes pagosClientes = pagosClientesRepository.findById(idPagoCliente).orElse(null);
+        if (Objects.isNull(pagosClientes)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("PagoClientes no encontrado"));
+        }
+
+        for (AplicarPagoDTO aplicarPagoDTO : pagoClientesDto.getAplicarPagoDTO()) {
+            ResponseEntity<?> response = facturacionService.obtenerFacturacionToAplicar();
+
+            if (!response.getStatusCode().equals(HttpStatus.OK)) {
+                return response;
+            }
+
+            Facturacion facturacion = (Facturacion) response.getBody();
+
+            if (Objects.isNull(facturacion)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ErrorResponse("Facturacion no encontrada"));
+            }
+
+            pagosClientes.setFacturacion(facturacion);
+
+            Client client = clientRepository.findById(aplicarPagoDTO.getIdCliente()).orElse(null);
+            if (Objects.isNull(client)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ErrorResponse("Cliente no encontrado"));
+            }
+
+            PlanPagos planPagos = client.getPlanPagos().stream()
+                    .filter(pp -> pp.getFacturacion().getIdFacturacion().equals(aplicarPagoDTO.getIdFacturacion()))
+                    .findFirst().orElse(null);
+
+            if (Objects.isNull(planPagos)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ErrorResponse("Plan de pagos no encontrado"));
+            }
+
+            if (planPagos.getValor() < aplicarPagoDTO.getValor()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ErrorResponse(
+                                "Valor de pago no puede ser MAYOR al total del valor del plan de pagos"));
+            }
+
+            functions.calculoPlanPagos(planPagos.getCuotas(), aplicarPagoDTO);
+            client = clientRepository.save(client);
+
+        }
+        pagosClientes.setIsAplicado(true);
+
+        pagosClientes = pagosClientesRepository.save(pagosClientes);
         return ResponseEntity.status(HttpStatus.OK).body(pagosClientes);
     }
 

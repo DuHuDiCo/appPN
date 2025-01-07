@@ -299,4 +299,19 @@ public class FacturacionServiceImpl implements FacturacionService {
 
     }
 
+    @Override
+    public ResponseEntity<?> obtenerFacturacionToAplicar() {
+        Facturacion facturacion = facturacionRepository.obtenerFacturacionByCuotaVencida();
+        if(Objects.nonNull(facturacion)){
+            return ResponseEntity.status(HttpStatus.OK).body(facturacion);
+        }
+
+        facturacion = facturacionRepository.obtenerFacturacionByCuotaProx();
+        if (Objects.isNull(facturacion)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("No hay facturacion"));
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(facturacion);
+    }
+
 }
