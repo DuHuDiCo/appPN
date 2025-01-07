@@ -35,7 +35,7 @@ public class Cuotas {
     private Date fechaPago;
 
     @ManyToOne
-    @JoinColumn(name = "PLAN_PAGOS")
+    @JoinColumn(name = "PLAN_PAGOS_ID")
     @JsonIgnoreProperties("cuotas")
     private PlanPagos planPagos;
 

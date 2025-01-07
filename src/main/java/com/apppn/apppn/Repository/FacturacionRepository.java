@@ -30,10 +30,10 @@ public interface FacturacionRepository extends JpaRepository<Facturacion, Long> 
     List<Facturacion> obtenerFacturacionByClient(@Param("idCliente") Long idCliente);
 
 
-    @Query(value = "SELECT DISTINCT facturacion.* FROM `cuotas` LEFT JOIN facturacion ON cuotas.facturacion_id = facturacion.id_facturacion WHERE cuotas.fecha_pago <= now() AND cuotas.saldo > 0 LIMIT 1;", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT facturacion.* FROM `cuotas` LEFT JOIN facturacion ON cuotas.facturacion_id = facturacion.plan_pagos_id WHERE cuotas.fecha_pago <= now() AND cuotas.saldo > 0 LIMIT 1;", nativeQuery = true)
     Facturacion obtenerFacturacionByCuotaVencida();
 
 
-    @Query(value = "SELECT DISTINCT facturacion.* FROM `cuotas` LEFT JOIN facturacion ON cuotas.facturacion_id = facturacion.id_facturacion WHERE cuotas.fecha_pago > now() AND cuotas.saldo > 0 LIMIT 1;", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT facturacion.* FROM `cuotas` LEFT JOIN facturacion ON cuotas.facturacion_id = facturacion.plan_pagos_id WHERE cuotas.fecha_pago > now() AND cuotas.saldo > 0 LIMIT 1;", nativeQuery = true)
     Facturacion obtenerFacturacionByCuotaProx();
 }
