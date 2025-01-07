@@ -7,12 +7,12 @@ import java.util.List;
 import com.apppn.apppn.Models.Facturacion;
 import com.apppn.apppn.Models.PlanPagos;
 
-public class FacturacionDTOResponse {
+public class CuentaDTO {
 
     private Double valor;
     private Date fecha;
-    List<Facturacion> facturacion = new ArrayList<>();
-    public FacturacionDTOResponse() {
+    List<FacturacionResponse> facturacion = new ArrayList<>();
+    public CuentaDTO() {
     }
     public Double getValor() {
         return valor;
@@ -26,13 +26,13 @@ public class FacturacionDTOResponse {
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-    public List<Facturacion> getFacturacion() {
+    public List<FacturacionResponse> getFacturacion() {
         return facturacion;
     }
-    public void setFacturacion(List<Facturacion> facturacion) {
+    public void setFacturacion(List<FacturacionResponse> facturacion) {
         this.facturacion = facturacion;
     }
-
+    
     
 
 }

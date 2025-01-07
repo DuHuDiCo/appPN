@@ -7,18 +7,20 @@ public class ResumenCuentasDTO {
 
 
 
-    List<FacturacionDTOResponse> facturacionDTO = new ArrayList<>();
+    List<CuentaDTO> cuentaDTOs = new ArrayList<>();
 
     public ResumenCuentasDTO() {
     }
 
-    public List<FacturacionDTOResponse> getFacturacionDTO() {
-        return facturacionDTO;
+    public List<CuentaDTO> getCuentaDTOs() {
+        return cuentaDTOs;
     }
 
-    public void setFacturacionDTO(List<FacturacionDTOResponse> facturacionDTO) {
-        this.facturacionDTO = facturacionDTO;
+    public void setCuentaDTOs(List<CuentaDTO> cuentaDTOs) {
+        this.cuentaDTOs = cuentaDTOs;
     }
+
+
 
     
 

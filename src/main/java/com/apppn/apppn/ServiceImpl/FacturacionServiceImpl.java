@@ -17,9 +17,11 @@ import org.springframework.util.CollectionUtils;
 
 import com.apppn.apppn.DTO.Request.FacturacionDTO;
 import com.apppn.apppn.DTO.Request.FacturacionProductosDTO;
-import com.apppn.apppn.DTO.Response.FacturacionDTOResponse;
+import com.apppn.apppn.DTO.Response.CuentaDTO;
+
+import com.apppn.apppn.DTO.Response.FacturacionResponse;
 import com.apppn.apppn.DTO.Response.ResumenCuentasDTO;
-import com.apppn.apppn.DTO.Response.ResumenCuentasDTO;
+
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Models.Client;
 import com.apppn.apppn.Models.Cuotas;
@@ -255,7 +257,7 @@ public class FacturacionServiceImpl implements FacturacionService {
         ResumenCuentasDTO resumenCuentas = new ResumenCuentasDTO();
 
        
-        List<FacturacionDTOResponse> facturacionDTO = new ArrayList<>();
+        List<CuentaDTO> cuentaDTOs = new ArrayList<>();
       
 
         for (PlanPagos pagos : client.getPlanPagos()) {
@@ -279,23 +281,23 @@ public class FacturacionServiceImpl implements FacturacionService {
                     continue;
                 }
 
-                FacturacionDTOResponse facturacionRes = new FacturacionDTOResponse();
+                CuentaDTO cuentaDTO = new CuentaDTO();
 
-                facturacionRes.setValor(cuotas.stream().map(Cuotas::getSaldo).reduce(0.0, Double::sum));
-                facturacionRes.setFecha(fecha);
+                cuentaDTO.setValor(cuotas.stream().map(Cuotas::getSaldo).reduce(0.0, Double::sum));
+                cuentaDTO.setFecha(fecha);
               
 
                 List<Facturacion> facturacion = cuotas.stream().map(Cuotas::getPlanPagos).map(PlanPagos::getFacturacion).collect(Collectors.toList());
 
-                facturacionRes.setFacturacion(facturacion);
+                List<FacturacionResponse> facturacionResponse = facturacion.stream().map(f -> modelMapper.map(f, FacturacionResponse.class)).collect(Collectors.toList());
                 
-                facturacionDTO.add(facturacionRes);
+                cuentaDTO.setFacturacion(facturacionResponse);
 
 
             }
         
 
-            resumenCuentas.setFacturacionDTO(facturacionDTO);
+            resumenCuentas.setCuentaDTOs(cuentaDTOs);
         }
        
         return ResponseEntity.status(HttpStatus.OK).body(resumenCuentas);
