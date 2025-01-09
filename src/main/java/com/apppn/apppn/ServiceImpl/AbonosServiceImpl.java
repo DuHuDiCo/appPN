@@ -17,6 +17,7 @@ import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Models.Client;
 import com.apppn.apppn.Models.Cuotas;
 import com.apppn.apppn.Models.Facturacion;
+import com.apppn.apppn.Models.PagoClientes;
 import com.apppn.apppn.Models.PlanPagos;
 import com.apppn.apppn.Repository.ClientRepository;
 import com.apppn.apppn.Repository.FacturacionRepository;
@@ -57,9 +58,16 @@ public class AbonosServiceImpl implements AbonoService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ErrorResponse("Facturacion no encontrada"));
             }
+            PagoClientes pagoClientes = facturacion.getPagoClientes().stream()
+                    .filter(pc -> pc.getIdPagoCliente().equals(cuotasDto.getIdPagoCliente())).findFirst().orElse(null);
+
+            if (Objects.isNull(pagoClientes)) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ErrorResponse("PagoClientes no encontrado"));
+            }
 
             PlanPagos planPagos = client.getPlanPagos().stream()
-                    .filter(pp -> pp.getFacturacion().getIdFacturacion().equals(facturacion.getIdFacturacion()))
+                    .filter(pp -> pp.getFacturacion().getIdFacturacion().equals(cuotasDto.getIdFacturacion()))
                     .findFirst().orElse(null);
 
             if (Objects.isNull(planPagos)) {
@@ -74,11 +82,16 @@ public class AbonosServiceImpl implements AbonoService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Cuota no encontrada"));
             }
 
-            if(cuotasDto.getValor() > cuotas.getSaldo()){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Valor de abono no puede ser mayor al saldo en la cuota con ID:".concat(cuotas.getIdCuota().toString())));
+            if (cuotasDto.getValor() > cuotas.getSaldo()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                        .body(new ErrorResponse("Valor de abono no puede ser mayor al saldo en la cuota con ID:"
+                                .concat(cuotas.getIdCuota().toString())));
 
             }
             cuotas.setSaldo(cuotas.getSaldo() - cuotasDto.getValor());
+
+            pagoClientes.setIsAplicado(true);
+            facturacion = facturacionRepository.save(facturacion);
 
             client = clientRepository.save(client);
         }

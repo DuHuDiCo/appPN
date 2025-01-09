@@ -163,6 +163,7 @@ public class PagosClientesServiceImpl implements PagosClientesService {
             }
 
             pagosClientes.setFacturacion(facturacion);
+            pagosClientes.setIsAplicado(true);
 
             Client client = clientRepository.findById(aplicarPagoDTO.getIdCliente()).orElse(null);
             if (Objects.isNull(client)) {

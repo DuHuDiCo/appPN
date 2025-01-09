@@ -4,6 +4,7 @@ public class CuotasRequest {
 
     private Long idCuota;
     private Double valor;
+    private Long idPagoCliente;
     private Long idFacturacion;
     public Long getIdFacturacion() {
         return idFacturacion;
@@ -25,6 +26,14 @@ public class CuotasRequest {
     public void setValor(Double valor) {
         this.valor = valor;
     }
+    public Long getIdPagoCliente() {
+        return idPagoCliente;
+    }
+    public void setIdPagoCliente(Long idPagoCliente) {
+        this.idPagoCliente = idPagoCliente;
+    }
+    
+    
 
     
 
