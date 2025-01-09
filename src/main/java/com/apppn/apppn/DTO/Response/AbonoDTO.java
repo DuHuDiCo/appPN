@@ -6,7 +6,8 @@ import java.util.List;
 public class AbonoDTO {
 
     private Long idCliente;
-   
+    private Long idPagoCliente;
+    
     private List<CuotasRequest> cuotas = new ArrayList<>();
 
     public AbonoDTO() {
@@ -28,6 +29,14 @@ public class AbonoDTO {
 
     public void setCuotas(List<CuotasRequest> cuotas) {
         this.cuotas = cuotas;
+    }
+
+    public Long getIdPagoCliente() {
+        return idPagoCliente;
+    }
+
+    public void setIdPagoCliente(Long idPagoCliente) {
+        this.idPagoCliente = idPagoCliente;
     }
 
 }

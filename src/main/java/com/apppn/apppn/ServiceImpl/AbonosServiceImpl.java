@@ -21,6 +21,7 @@ import com.apppn.apppn.Models.PagoClientes;
 import com.apppn.apppn.Models.PlanPagos;
 import com.apppn.apppn.Repository.ClientRepository;
 import com.apppn.apppn.Repository.FacturacionRepository;
+import com.apppn.apppn.Repository.PagosClientesRepository;
 import com.apppn.apppn.Repository.PlanPagosRepository;
 import com.apppn.apppn.Service.AbonoService;
 import com.apppn.apppn.Utils.Functions;
@@ -32,13 +33,15 @@ public class AbonosServiceImpl implements AbonoService {
     private final FacturacionRepository facturacionRepository;
     private final Functions functions;
     private final ClientRepository clientRepository;
+    private final PagosClientesRepository pagoClientesRepository;
 
     public AbonosServiceImpl(PlanPagosRepository planPagosRepository, FacturacionRepository facturacionRepository,
-            Functions functions, ClientRepository clientRepository) {
+            Functions functions, ClientRepository clientRepository, PagosClientesRepository pagoClientesRepository) {
         this.planPagosRepository = planPagosRepository;
         this.facturacionRepository = facturacionRepository;
         this.functions = functions;
         this.clientRepository = clientRepository;
+        this.pagoClientesRepository = pagoClientesRepository;
     }
 
     @Override
@@ -51,19 +54,18 @@ public class AbonosServiceImpl implements AbonoService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Cliente no encontrado"));
         }
 
+        PagoClientes pagoClientes = pagoClientesRepository.findById(abonoDTO.getIdPagoCliente()).orElse(null);
+        if (Objects.isNull(pagoClientes)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("PagoClientes no encontrado"));
+        }
+
         for (CuotasRequest cuotasDto : abonoDTO.getCuotas()) {
             Facturacion facturacion = facturacionRepository.findById(cuotasDto.getIdFacturacion())
                     .orElse(null);
             if (Objects.isNull(facturacion)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new ErrorResponse("Facturacion no encontrada"));
-            }
-            PagoClientes pagoClientes = facturacion.getPagoClientes().stream()
-                    .filter(pc -> pc.getIdPagoCliente().equals(cuotasDto.getIdPagoCliente())).findFirst().orElse(null);
-
-            if (Objects.isNull(pagoClientes)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(new ErrorResponse("PagoClientes no encontrado"));
             }
 
             PlanPagos planPagos = client.getPlanPagos().stream()
