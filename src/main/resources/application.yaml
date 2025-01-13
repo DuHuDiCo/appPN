@@ -25,7 +25,7 @@ spring:
         vault:
             application-name: credentials
             authentication: TOKEN
-            token: hvs.Z5A50pbI8HS5pEQ8MgUzKw7E
+            token: hvs.JHpSMMfy4psWxZSjfI17RopI
             scheme: http
             port: 8200
             host: localhost
