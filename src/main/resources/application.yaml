@@ -30,7 +30,7 @@ spring:
             port: 8200
             host: 157.173.210.108
     config:
-        import: vault://kv/credentials
+        import: vault://kv/credentials2
     application:
         name: app_pn
     datasource:
