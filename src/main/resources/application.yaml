@@ -23,12 +23,12 @@ spring:
             max-request-size: 5MB
     cloud:
         vault:
-            application-name: credentials
+            application-name: credentials2
             authentication: TOKEN
-            token: hvs.Gzp8ASTuwMjz0cexkFbajX11
+            token: hvs.iPajv9JrDAqGfjubKUhLWWRp
             scheme: http
             port: 8200
-            host: localhost
+            host: 157.173.210.108
     config:
         import: vault://kv/credentials
     application:
