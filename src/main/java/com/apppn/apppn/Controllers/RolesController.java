@@ -41,7 +41,7 @@ public class RolesController {
             @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    @GetMapping("/")
+    @GetMapping("/permission/")
     public ResponseEntity<?> getPermissions() {
         return roleService.getPermissions();
     }
@@ -52,7 +52,7 @@ public class RolesController {
             @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
             @ApiResponse(responseCode = "409", description = "CONFLICT", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
     })
-    @GetMapping("/{id}")
+    @GetMapping("/permission/{id}")
     public ResponseEntity<?> getPermissionById(@PathVariable("id") Long id) {
         return roleService.getPermissionById(id);
     }
