@@ -1,6 +1,7 @@
 package com.apppn.apppn.ServiceImpl;
 
 
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.http.HttpStatus;
@@ -59,6 +60,18 @@ public class RoleServiceImpl implements RoleService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Permission not found"));
         }
         return ResponseEntity.status(HttpStatus.OK).body(permission);
+    }
+
+    @Override
+    public ResponseEntity<?> getPermissions() {
+        List<Permission> permissions = permissionRepository.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(permissions);
+    }
+
+    @Override
+    public ResponseEntity<?> getRoles() {
+        List<Role> roles = roleRepository.findAll();
+        return ResponseEntity.status(HttpStatus.OK).body(roles);
     }
 
 }

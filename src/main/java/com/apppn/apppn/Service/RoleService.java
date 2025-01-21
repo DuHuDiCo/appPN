@@ -12,4 +12,8 @@ public interface RoleService {
 
     public ResponseEntity<?> getPermissionById(Long idPermission);
 
+    public ResponseEntity<?> getPermissions();
+
+    public ResponseEntity<?> getRoles();
+
 }
