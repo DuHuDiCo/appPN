@@ -109,7 +109,7 @@ public class UserServiceImpl implements UserService {
                                             .body(new ErrorResponse("Permission not found"));
                                 }
 
-                                permissionfound.agregarUserRoles(userRoles);
+                                userRoles.agregarPermission(permissionfound);
                             }
 
                         }
@@ -208,7 +208,7 @@ public class UserServiceImpl implements UserService {
                                             .body(new ErrorResponse("Permission not found"));
                                 }
 
-                                permissionfound.agregarUserRoles(userRoles);
+                                userRoles.agregarPermission(permissionfound);
                             }
 
                         }

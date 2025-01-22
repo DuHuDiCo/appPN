@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -27,7 +28,8 @@ public class Permission {
     private String permission;
 
 
-    @OneToMany(mappedBy = "permission", cascade = CascadeType.ALL, orphanRemoval = true)
+   
+    @ManyToMany(mappedBy = "facturaciones")
     @JsonIgnore
     private List<UserRoles> userRoles = new ArrayList<>();
 
@@ -36,10 +38,7 @@ public class Permission {
     }
 
 
-    public void agregarUserRoles(UserRoles userRoles) {
-        this.userRoles.add(userRoles);
-        userRoles.setPermission(this);
-    }
+    
     
 
     public Long getIdPermission() {
