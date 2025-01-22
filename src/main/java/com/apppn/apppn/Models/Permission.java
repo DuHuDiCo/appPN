@@ -29,7 +29,7 @@ public class Permission {
 
 
    
-    @ManyToMany(mappedBy = "facturaciones")
+    @ManyToMany(mappedBy = "permission")
     @JsonIgnore
     private List<UserRoles> userRoles = new ArrayList<>();
 
