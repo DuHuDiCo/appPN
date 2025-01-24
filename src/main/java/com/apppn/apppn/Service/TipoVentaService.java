@@ -6,10 +6,11 @@ import org.springframework.http.ResponseEntity;
 
 public interface TipoVentaService {
 
-
-    public ResponseEntity<?> crearTipoVenta(Map<String, String> tipoVenta);  
+    public ResponseEntity<?> crearTipoVenta(Map<String, String> tipoVenta);
 
     public ResponseEntity<?> obtenerTipoVentas();
 
     public ResponseEntity<?> eliminarTipoVenta(Long idTipoVenta);
+
+    public ResponseEntity<?> obtenerTipoVenta(String dato);
 }

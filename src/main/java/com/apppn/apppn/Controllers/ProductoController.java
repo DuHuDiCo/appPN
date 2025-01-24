@@ -71,7 +71,7 @@ public class ProductoController {
         @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Producto.class))),
         @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),})
     @GetMapping("/byName")
-    public ResponseEntity<?> getProductByName(@RequestParam("nombre") String nombre) {
+    public ResponseEntity<?> getProductByName(@RequestParam("producto") String nombre) {
         return productoService.getProduct(nombre);
     }
 

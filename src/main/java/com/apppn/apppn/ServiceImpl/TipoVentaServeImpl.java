@@ -24,8 +24,8 @@ public class TipoVentaServeImpl implements TipoVentaService {
 
     @Override
     public ResponseEntity<?> crearTipoVenta(Map<String, String> tVenta) {
-        TipoVenta tipoVenta  = tipoVentaRepository.findByTipoVenta(tVenta.get(tVenta.keySet().iterator().next()));
-        if(Objects.nonNull(tipoVenta)){
+        TipoVenta tipoVenta = tipoVentaRepository.findByTipoVenta(tVenta.get(tVenta.keySet().iterator().next()));
+        if (Objects.nonNull(tipoVenta)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El tipo de venta ya existe"));
         }
 
@@ -44,11 +44,21 @@ public class TipoVentaServeImpl implements TipoVentaService {
     @Override
     public ResponseEntity<?> eliminarTipoVenta(Long idTipoVenta) {
         TipoVenta tipoVenta = tipoVentaRepository.findById(idTipoVenta).orElse(null);
-        if(Objects.isNull(tipoVenta)){
+        if (Objects.isNull(tipoVenta)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El tipo de venta no existe"));
         }
         tipoVentaRepository.delete(tipoVenta);
         return ResponseEntity.status(HttpStatus.OK).body(new ErrorResponse("El tipo de venta ha sido eliminado"));
+    }
+
+    @Override
+    public ResponseEntity<?> obtenerTipoVenta(String tipoVenta) {
+        String[] datos = tipoVenta.split(" ");
+        List<TipoVenta> tipoVentas = tipoVentaRepository.findByNombreTipoVenta(datos[0]);
+        if (tipoVentas.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El tipo de venta no existe"));
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(tipoVentas);
     }
 
 }
