@@ -1,5 +1,7 @@
 package com.apppn.apppn.Service;
 
+import java.util.Date;
+
 import org.springframework.http.ResponseEntity;
 
 import com.apppn.apppn.DTO.Request.CompraDTO;
@@ -24,6 +26,6 @@ public interface CompraService {
 
     public ResponseEntity<Object> obtenerCompraByPago(Long idPago);
 
-    public ResponseEntity<?> obtenerCompraByFecha(String dato);
+    public ResponseEntity<?> obtenerCompraByFecha(Date dato);
 
 }

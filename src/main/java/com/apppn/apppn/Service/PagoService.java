@@ -14,6 +14,6 @@ public interface PagoService {
 
     public ResponseEntity<?> eliminarPago(Long idPago, Long idInventario);
 
-    public ResponseEntity<?> obtenerPago(Date fecha);
+    public ResponseEntity<?> obtenerPago(Date fechaPago);
 
 }

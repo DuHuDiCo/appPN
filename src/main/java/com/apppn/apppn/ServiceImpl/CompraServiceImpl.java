@@ -2,6 +2,7 @@ package com.apppn.apppn.ServiceImpl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -226,9 +227,8 @@ public class CompraServiceImpl implements CompraService {
     }
 
     @Override
-    public ResponseEntity<?> obtenerCompraByFecha(String dato) {
-        String[] datos = dato.split(" ");
-        List<Compra> compras = compraRepository.findByFecha(datos[1]);
+    public ResponseEntity<?> obtenerCompraByFecha(Date dato) {
+        List<Compra> compras = compraRepository.findByfecha(dato);
         if (CollectionUtils.isEmpty(compras)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Compra no encontrada");
         }
