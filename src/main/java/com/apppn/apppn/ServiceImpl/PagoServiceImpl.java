@@ -186,7 +186,7 @@ public class PagoServiceImpl implements PagoService {
 
     @Override
     public ResponseEntity<?> obtenerPago(Date fecha) {
-        List<Pago> pagos = pagoRepository.findByFecha(fecha);
+        List<Pago> pagos = pagoRepository.findByfechaPago(fecha);
         if (Objects.isNull(pagos)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Pago no encontrado");
         }

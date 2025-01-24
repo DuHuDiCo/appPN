@@ -53,9 +53,8 @@ public class TipoVentaServeImpl implements TipoVentaService {
 
     @Override
     public ResponseEntity<?> obtenerTipoVenta(String tipoVenta) {
-        String[] datos = tipoVenta.split(" ");
-        List<TipoVenta> tipoVentas = tipoVentaRepository.findByNombreTipoVenta(datos[0]);
-        if (tipoVentas.isEmpty()) {
+        TipoVenta tipoVentas = tipoVentaRepository.findByTipoVenta(tipoVenta);
+        if (tipoVentas == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El tipo de venta no existe"));
         }
         return ResponseEntity.status(HttpStatus.OK).body(tipoVentas);
