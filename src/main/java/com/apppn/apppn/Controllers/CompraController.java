@@ -1,5 +1,7 @@
 package com.apppn.apppn.Controllers;
 
+import java.util.Date;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -82,7 +84,7 @@ public class CompraController {
         @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
         @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),})
     @GetMapping("/byFecha")
-    public ResponseEntity<?> obtenerCompraByFecha(@RequestParam("fecha") String fecha) {
+    public ResponseEntity<?> obtenerCompraByFecha(@RequestParam("fecha") Date fecha) {
         return compraService.obtenerCompraByFecha(fecha);
     }
 
