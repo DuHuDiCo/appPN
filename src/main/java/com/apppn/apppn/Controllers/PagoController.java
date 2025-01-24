@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.apppn.apppn.DTO.Request.PagoDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
 import com.apppn.apppn.Models.Compra;
+import com.apppn.apppn.Models.Pago;
 import com.apppn.apppn.Service.PagoService;
 
 import io.swagger.v3.oas.annotations.media.Content;
@@ -57,7 +58,7 @@ public class PagoController {
     }
 
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Object.class))),
+        @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Pago.class))),
         @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),})
     @GetMapping("/byFecha")
     public ResponseEntity<?> obtenerPago(@RequestParam("fecha") Date fecha) {
