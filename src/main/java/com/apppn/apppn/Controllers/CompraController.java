@@ -81,8 +81,7 @@ public class CompraController {
 
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Compra.class))),
-        @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-        @ApiResponse(responseCode = "404", description = "NOT_FOUND", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),})
+        @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),})
     @GetMapping("/byFecha")
     public ResponseEntity<?> obtenerCompraByFecha(@RequestParam("fecha") Date fecha) {
         return compraService.obtenerCompraByFecha(fecha);
