@@ -2,6 +2,7 @@ package com.apppn.apppn.Controllers;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,7 +62,7 @@ public class PagoController {
         @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Pago.class))),
         @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),})
     @GetMapping("/byFecha")
-    public ResponseEntity<?> obtenerPago(@RequestParam("fecha") Date fecha) {
+    public ResponseEntity<?> obtenerPago(@RequestParam("fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha) {
         return pagoService.obtenerPago(fecha);
     }
 
