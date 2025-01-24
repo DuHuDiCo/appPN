@@ -2,6 +2,7 @@ package com.apppn.apppn.Controllers;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,7 +84,7 @@ public class CompraController {
         @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Compra.class))),
         @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),})
     @GetMapping("/byFecha")
-    public ResponseEntity<?> obtenerCompraByFecha(@RequestParam("fecha") Date fecha) {
+    public ResponseEntity<?> obtenerCompraByFecha(@RequestParam("fecha") @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha) {
         return compraService.obtenerCompraByFecha(fecha);
     }
 
