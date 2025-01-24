@@ -11,5 +11,5 @@ import com.apppn.apppn.Models.Pago;
 @Repository
 public interface PagoRepository extends JpaRepository<Pago, Long> {
 
-    List<Pago> findByfechaPago(Date fechaPago);
+    List<Pago> findByfechaPagoBetween(Date fechaPagoInicio, Date fechaPagoFinal);
 }

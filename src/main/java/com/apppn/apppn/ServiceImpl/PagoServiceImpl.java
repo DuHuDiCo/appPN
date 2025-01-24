@@ -1,6 +1,10 @@
 package com.apppn.apppn.ServiceImpl;
 
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -185,8 +189,17 @@ public class PagoServiceImpl implements PagoService {
     }
 
     @Override
-    public ResponseEntity<?> obtenerPago(Date fecha) {
-        List<Pago> pagos = pagoRepository.findByfechaPago(fecha);
+    public ResponseEntity<?> obtenerPago(Date fechaPago) {
+
+        LocalDate fecha = fechaPago.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDateTime fechaHora = LocalDateTime.of(fecha, LocalTime.MIN);
+        LocalDateTime fechaHoraFinal = LocalDateTime.of(fecha, LocalTime.MAX);
+
+        Date fechaPagoInicio = Date.from(fechaHora.atZone(ZoneId.systemDefault()).toInstant());
+        Date fechaPagoFinal = Date.from(fechaHoraFinal.atZone(ZoneId.systemDefault()).toInstant());
+
+        List<Pago> pagos = pagoRepository.findByfechaPagoBetween(fechaPagoInicio, fechaPagoFinal);
+
         if (Objects.isNull(pagos)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Pago no encontrado");
         }
