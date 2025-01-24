@@ -8,11 +8,9 @@ import com.apppn.apppn.Models.Compra;
 
 public interface CompraService {
 
-
     public ResponseEntity<Object> crearCompra(CompraDTO compraDTO);
 
     public ResponseEntity<Object> obtenerCompras();
-
 
     public ResponseEntity<Object> editarCompra(Long idCompra, CompraDTO compraDTO);
 
@@ -22,8 +20,10 @@ public interface CompraService {
 
     public ResponseEntity<Object> guardarCompraBD(Compra compra);
 
-    public ResponseEntity<Object> agregarValorFlete(Long idCompra,FleteDTO fleteDTO);
+    public ResponseEntity<Object> agregarValorFlete(Long idCompra, FleteDTO fleteDTO);
 
     public ResponseEntity<Object> obtenerCompraByPago(Long idPago);
+
+    public ResponseEntity<?> obtenerCompraByFecha(String dato);
 
 }

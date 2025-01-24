@@ -2,6 +2,7 @@ package com.apppn.apppn.ServiceImpl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -43,14 +44,8 @@ public class PagoServiceImpl implements PagoService {
     private final HttpServletRequest request;
     private final JwtUtils jwtUtils;
     private final UserService userService;
-    private final CompraRepository compraRepository;    
+    private final CompraRepository compraRepository;
     private final InventoryRepository inventoryRepository;
-
-
-    
-
-
-  
 
     public PagoServiceImpl(PagoRepository pagoRepository, ArchivoService archivosService, CompraService compraService,
             InventoryService inventoryService, Functions functions, HttpServletRequest request, JwtUtils jwtUtils,
@@ -98,8 +93,6 @@ public class PagoServiceImpl implements PagoService {
             e.printStackTrace();
         }
 
-
-
         String token = request.getAttribute("token").toString();
 
         String username = jwtUtils.extractUsername(token);
@@ -112,13 +105,11 @@ public class PagoServiceImpl implements PagoService {
             return responseUser;
         }
 
-
         User user = (User) responseUser.getBody();
         if (Objects.isNull(user)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El usuario no existe"));
         }
         pago.setUser(user);
-
 
         ResponseEntity<?> compraResponse = compraService.guardarCompraBD(compra);
         if (!compraResponse.getStatusCode().equals(HttpStatus.OK)) {
@@ -135,9 +126,6 @@ public class PagoServiceImpl implements PagoService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(new ErrorResponse("ERROR AL PARSEAR LA FECHA Y HORA"));
         }
-        
-        
-
 
         for (ProductoCompra pro : compra.getProductoCompras()) {
             inventoryDTO.setQuantity(inventoryDTO.getQuantity() + pro.getCantidad());
@@ -145,10 +133,7 @@ public class PagoServiceImpl implements PagoService {
             inventoryDTO.setTotalInventoryValue(inventoryDTO.getTotalInventoryValue() + valorPro);
         }
 
-      
-
         inventoryDTO.setProductos(compra.getProductoCompras());
-
 
         ResponseEntity<?> inventoryResponse = inventoryService.saveInventory(inventoryDTO);
         if (!inventoryResponse.getStatusCode().equals(HttpStatus.OK)) {
@@ -156,12 +141,9 @@ public class PagoServiceImpl implements PagoService {
         }
 
         Inventory inventory = (Inventory) inventoryResponse.getBody();
-        if(Objects.isNull(inventory)){
+        if (Objects.isNull(inventory)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El inventario no existe"));
         }
-        
-      
-
 
         return ResponseEntity.status(HttpStatus.OK).body(pago);
     }
@@ -176,14 +158,14 @@ public class PagoServiceImpl implements PagoService {
     }
 
     @Override
-    public ResponseEntity<?> eliminarPago( Long idPago, Long idInventario) {
+    public ResponseEntity<?> eliminarPago(Long idPago, Long idInventario) {
         Pago pago = pagoRepository.findById(idPago).orElse(null);
         if (Objects.isNull(pago)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Pago no encontrado"));
         }
 
         Compra compra = compraRepository.findByPago(pago);
-        if(Objects.isNull(compra)){
+        if (Objects.isNull(compra)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("No existe compra con ese pago"));
         }
         compra.setPago(null);
@@ -195,12 +177,19 @@ public class PagoServiceImpl implements PagoService {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El inventario no existe"));
             }
             inventoryRepository.delete(inventory);
-            
+
         }
 
-        
         return ResponseEntity.status(HttpStatus.OK).body(new SuccessException("El pago ha sido eliminado"));
 
     }
 
+    @Override
+    public ResponseEntity<?> obtenerPago(Date fecha) {
+        List<Pago> pagos = pagoRepository.findByFecha(fecha);
+        if (Objects.isNull(pagos)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Pago no encontrado");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(pagos);
+    }
 }

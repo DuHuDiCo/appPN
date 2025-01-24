@@ -124,7 +124,7 @@ public class ProductServiceImpl implements ProductService {
             product.getImagenes().clear();
             product.agregarImagen(file);
             product = productRepository.save(product);
-            
+
         }
         product = productRepository.save(product);
 
@@ -138,12 +138,22 @@ public class ProductServiceImpl implements ProductService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Producto no encontrado"));
         }
 
-        ProductoCompra productoExist = product.getProductosCompras().stream().filter(pc->pc.getProducto().getIdProducto().equals(product.getIdProducto())).findFirst().orElse(null);
+        ProductoCompra productoExist = product.getProductosCompras().stream().filter(pc -> pc.getProducto().getIdProducto().equals(product.getIdProducto())).findFirst().orElse(null);
         if (Objects.nonNull(productoExist)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("El producto ya esta en la facturacion"));
         }
         productRepository.delete(product);
         return ResponseEntity.status(HttpStatus.OK).body(new SuccessException("Producto eliminado"));
+    }
+
+    @Override
+    public ResponseEntity<?> getProduct(String dato) {
+        String[] datos = dato.split(" ");
+        List<Producto> productos = productRepository.findByName(datos[0]);
+        if (CollectionUtils.isEmpty(productos)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Producto no encontrado");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(productos);
     }
 
 }

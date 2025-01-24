@@ -1,5 +1,7 @@
 package com.apppn.apppn.Controllers;
 
+import java.util.Date;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,7 +26,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RequestMapping("/api/v1/pago")
 public class PagoController {
 
-
     private final PagoService pagoService;
 
     public PagoController(PagoService pagoService) {
@@ -32,35 +33,35 @@ public class PagoController {
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Compra.class))),
-            @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            
-    })
+        @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Compra.class))),
+        @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),})
     @PostMapping("/{idCompra}")
     public ResponseEntity<?> crearPago(@PathVariable("idCompra") Long idCompra, @ModelAttribute PagoDTO pago) {
         return pagoService.crearPago(idCompra, pago);
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Object.class))),
-            @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            
-    })
+        @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Object.class))),
+        @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),})
     @GetMapping()
     public ResponseEntity<?> obtenerPagos() {
         return pagoService.obtenerPagos();
     }
 
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Object.class))),
-            @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),
-            
-    })
+        @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Object.class))),
+        @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),})
     @DeleteMapping("/{idPago}")
-    public ResponseEntity<?> eliminarPagao( @PathVariable("idPago") Long idPago, @RequestParam("idInventario") Long idInventario) {
-        return pagoService.eliminarPago( idPago, idInventario);
+    public ResponseEntity<?> eliminarPagao(@PathVariable("idPago") Long idPago, @RequestParam("idInventario") Long idInventario) {
+        return pagoService.eliminarPago(idPago, idInventario);
     }
-    
 
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = Object.class))),
+        @ApiResponse(responseCode = "400", description = "BAD_REQUEST", content = @Content(schema = @Schema(implementation = ErrorResponse.class))),})
+    @GetMapping("/byFecha")
+    public ResponseEntity<?> obtenerPago(@RequestParam("fecha") Date fecha) {
+        return pagoService.obtenerPago(fecha);
+    }
 
 }

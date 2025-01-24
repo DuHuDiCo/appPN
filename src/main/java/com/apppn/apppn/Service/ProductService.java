@@ -6,9 +6,7 @@ import com.apppn.apppn.DTO.Request.ProductDTO;
 
 public interface ProductService {
 
-
     public ResponseEntity<?> createProduct(ProductDTO productDTO);
-
 
     public ResponseEntity<?> getProducts();
 
@@ -16,6 +14,6 @@ public interface ProductService {
 
     public ResponseEntity<?> deleteProduct(Long idProducto);
 
-    
+    public ResponseEntity<?> getProduct(String dato);
 
 }
