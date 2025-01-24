@@ -14,5 +14,5 @@ public interface CompraRepository extends JpaRepository<Compra, Long> {
 
     Compra findByPago(Pago pago);
 
-    List<Compra> findByfecha(Date fecha);
+    List<Compra> findByfechaBetween(Date fechaInicio, Date fechaFinal);
 }

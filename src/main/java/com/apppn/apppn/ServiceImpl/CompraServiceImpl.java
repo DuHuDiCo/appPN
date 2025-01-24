@@ -1,6 +1,10 @@
 package com.apppn.apppn.ServiceImpl;
 
 import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -228,7 +232,15 @@ public class CompraServiceImpl implements CompraService {
 
     @Override
     public ResponseEntity<?> obtenerCompraByFecha(Date dato) {
-        List<Compra> compras = compraRepository.findByfecha(dato);
+        LocalDate fecha = dato.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDateTime fechaHora = LocalDateTime.of(fecha, LocalTime.MIN);
+        LocalDateTime fechaHoraFinal = LocalDateTime.of(fecha, LocalTime.MAX);
+
+        Date fechaInicio = Date.from(fechaHora.atZone(ZoneId.systemDefault()).toInstant());
+        Date fechaFinal = Date.from(fechaHoraFinal.atZone(ZoneId.systemDefault()).toInstant());
+
+        List<Compra> compras = compraRepository.findByfechaBetween(fechaInicio, fechaFinal);
+
         if (CollectionUtils.isEmpty(compras)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Compra no encontrada");
         }
