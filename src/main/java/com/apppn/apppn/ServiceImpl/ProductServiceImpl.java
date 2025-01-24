@@ -6,7 +6,6 @@ import java.util.Objects;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import com.apppn.apppn.DTO.Request.ProductDTO;
 import com.apppn.apppn.Exceptions.ErrorResponse;
@@ -148,9 +147,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<?> getProduct(String dato) {
-        String[] datos = dato.split(" ");
-        List<Producto> productos = productRepository.findByName(datos[0]);
-        if (CollectionUtils.isEmpty(productos)) {
+        Producto productos = productRepository.findByProducto(dato);
+        if (Objects.isNull(productos)) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Producto no encontrado");
         }
         return ResponseEntity.status(HttpStatus.OK).body(productos);
