@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Function;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -32,7 +31,6 @@ import com.apppn.apppn.Utils.Functions;
 
 @Service
 public class ClientServiceImpl implements ClientService {
-    
 
     private final ClientRepository clientRepository;
     private final HttpServletRequest request;
@@ -40,9 +38,6 @@ public class ClientServiceImpl implements ClientService {
     private final UserService userService;
     private final FacturacionRepository facturacionRepository;
     private final Functions functions;
-
-    
-    
 
     public ClientServiceImpl(ClientRepository clientRepository, HttpServletRequest request, JwtUtils jwtUtils,
             UserService userService, FacturacionRepository facturacionRepository, Functions functions) {
@@ -80,7 +75,6 @@ public class ClientServiceImpl implements ClientService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User not found");
         }
 
-
         newClient = new Client();
         newClient.setName(clientDTO.getName());
         newClient.setLastname(clientDTO.getLastname());
@@ -90,7 +84,7 @@ public class ClientServiceImpl implements ClientService {
         newClient.setUser(user);
 
         newClient = clientRepository.save(newClient);
-        
+
         return ResponseEntity.status(HttpStatus.OK).body(newClient);
     }
 
@@ -177,7 +171,7 @@ public class ClientServiceImpl implements ClientService {
         planPagos.setValor(0.0);
 
         for (int index = 0; index < planPagosDTO.getCuotas(); index++) {
-        
+
             planPagos.setValor(planPagos.getValor() + planPagosDTO.getValorCuota());
             Cuotas cuotas = new Cuotas();
             cuotas.setValorCuota(planPagosDTO.getValorCuota());
@@ -193,14 +187,13 @@ public class ClientServiceImpl implements ClientService {
 
             cuotas.setFechaPago(intervalos.get(index));
             planPagos.agrgarCuotas(cuotas);
-            
+
         }
 
         client.agregarPlanPagos(planPagos);
         client = clientRepository.save(client);
         return ResponseEntity.status(HttpStatus.OK).body(planPagos);
 
-        
     }
 
     @Override
