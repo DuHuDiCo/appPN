@@ -276,17 +276,9 @@ public class UserServiceImpl implements UserService {
 
         usuarioRepository.save(userEdit);
 
-        User usuario = usuarioRepository.findById(userEdit.getIdUser()).orElse(null);
-        if(Objects.isNull(usuario)){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+        
 
-        usuario.getUserRoles().forEach(ur -> {
-            System.out.println(ur.getRole().getRole());
-        });
-
-
-        return ResponseEntity.status(HttpStatus.OK).body(usuario);
+        return getUserById(userEdit.getIdUser());
 
     }
 
