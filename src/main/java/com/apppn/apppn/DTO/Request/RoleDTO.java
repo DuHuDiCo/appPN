@@ -15,7 +15,7 @@ public class RoleDTO {
     
     
 
-    public Object getRole() {
+    public Long getRole() {
         return role;
     }
 

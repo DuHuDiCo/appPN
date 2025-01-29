@@ -75,10 +75,7 @@ public class UserServiceImpl implements UserService {
                 UserRoles userRoles = new UserRoles();
                 userRoles.setUser(newUser);
 
-                if (roleDTO.getRole() instanceof String) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(new ErrorResponse("Rol is a instace of Long, must be Long"));
-                }
+              
 
                 if (roleDTO.getRole() instanceof Long) {
                     ResponseEntity<?> role = roleService.getRoleById(((Long) roleDTO.getRole()));
@@ -211,10 +208,7 @@ public class UserServiceImpl implements UserService {
                 userRoles = new UserRoles();
                 userRoles.setUser(userEdit);
 
-                if (roleDTO.getRole() instanceof String) {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                            .body(new ErrorResponse("Rol is a instace of Long, must be Long"));
-                }
+               
 
                 if (roleDTO.getRole() instanceof Long) {
                     ResponseEntity<?> role = roleService.getRoleById(((Long) roleDTO.getRole()));
