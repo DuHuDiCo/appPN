@@ -164,6 +164,8 @@ public class UserServiceImpl implements UserService {
 
         if (!CollectionUtils.isEmpty(user.getRoles())) {
 
+            System.out.println(user.getRoles().size());
+
             for (RoleDTO roleDTO : user.getRoles()) {
 
                 UserRoles userRoles = userEdit.getUserRoles().stream()
