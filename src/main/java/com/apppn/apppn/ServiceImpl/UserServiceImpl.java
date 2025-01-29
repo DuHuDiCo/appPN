@@ -270,6 +270,9 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
 
+        usuario.getUserRoles().forEach(ur -> {
+            System.out.println(ur.getRole().getRole());
+        });
 
 
         return ResponseEntity.status(HttpStatus.OK).body(usuario);
