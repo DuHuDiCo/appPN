@@ -7,7 +7,7 @@ public class RoleDTO {
 
     private Long role;
     private List<Long> permissions;
-
+    private String rolename;
 
     public RoleDTO() {
     }
@@ -39,6 +39,20 @@ public class RoleDTO {
 
     public void setPermissions(List<Long> permissions) {
         this.permissions = permissions;
+    }
+
+
+
+
+    public String getRolename() {
+        return rolename;
+    }
+
+
+
+
+    public void setRolename(String rolename) {
+        this.rolename = rolename;
     }
 
     

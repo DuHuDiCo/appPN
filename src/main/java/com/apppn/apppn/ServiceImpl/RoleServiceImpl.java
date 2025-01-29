@@ -33,13 +33,13 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public ResponseEntity<?> saveRole(RoleDTO roleDTO) {
-        Role role = roleRepository.findByRole((String)roleDTO.getRole());
+        Role role = roleRepository.findByRole((String)roleDTO.getRolename());
         if (Objects.nonNull(role)) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(new ErrorResponse("Role already exists"));
         }
 
         role = new Role();
-        role.setRole((String)roleDTO.getRole());
+        role.setRole((String)roleDTO.getRolename());
         roleRepository.save(role);
         return ResponseEntity.status(HttpStatus.CREATED).body(role);
     }
