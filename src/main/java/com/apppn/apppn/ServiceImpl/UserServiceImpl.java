@@ -225,7 +225,7 @@ public class UserServiceImpl implements UserService {
                     }
 
                     userRoles = new UserRoles();
-                    userRoles.setUser(userEdit);
+                    
                     userRoles.setRole(roleFound);
 
                     if (!CollectionUtils.isEmpty(roleDTO.getPermissions())) {
@@ -262,8 +262,16 @@ public class UserServiceImpl implements UserService {
 
         }
 
-        userEdit = usuarioRepository.save(userEdit);
-        return ResponseEntity.status(HttpStatus.OK).body(userEdit);
+        usuarioRepository.save(userEdit);
+
+        User usuario = usuarioRepository.findById(userEdit.getIdUser()).orElse(null);
+        if(Objects.isNull(usuario)){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+
+
+        return ResponseEntity.status(HttpStatus.OK).body(usuario);
 
     }
 
