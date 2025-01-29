@@ -34,8 +34,6 @@ public class UserServiceImpl implements UserService {
     private final Functions functions;
     private final UserRolesRepository userRolesRepository;
 
-   
-
     public UserServiceImpl(UserRepository usuarioRepository, RoleService roleService,
             BCryptPasswordEncoder bCryptPasswordEncoder, Functions functions, UserRolesRepository userRolesRepository) {
         this.usuarioRepository = usuarioRepository;
@@ -56,14 +54,15 @@ public class UserServiceImpl implements UserService {
             newUser.setLastname(userDTO.getLastname());
             newUser.setEnabled(true);
             newUser.setPorcentajeLiquidacion(userDTO.getPorcentajeLiquidacion());
-            if(Objects.nonNull(userDTO.getPassword())){
+            if (Objects.nonNull(userDTO.getPassword())) {
                 newUser.setPassword(bCryptPasswordEncoder.encode(userDTO.getPassword()));
             }
             try {
                 newUser.setDateCreated(functions.obtenerFechaYhora());
-                
+
             } catch (ParseException e) {
-               return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorResponse("Error al obtener la fecha y hora"));
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(new ErrorResponse("Error al obtener la fecha y hora"));
             }
 
             // if(CollectionUtils.isEmpty(userDTO.getRoles()) ){
@@ -160,21 +159,54 @@ public class UserServiceImpl implements UserService {
         userEdit.setEmail(user.getEmail());
         userEdit.setLastname(user.getLastname());
         userEdit.setName(user.getName());
-        
+
         userEdit.setEnabled(user.getEnabled());
 
-        userEdit.getUserRoles().removeAll(new ArrayList<>(userEdit.getUserRoles()));
-        userEdit.getUserRoles().clear();
-        usuarioRepository.save(userEdit);
-
-        
-
         if (!CollectionUtils.isEmpty(user.getRoles())) {
-            
 
             for (RoleDTO roleDTO : user.getRoles()) {
 
-                UserRoles userRoles = new UserRoles();
+                UserRoles userRoles = userEdit.getUserRoles().stream()
+                        .filter(ur -> ur.getRole().getIdRole().equals(roleDTO.getRole())).findFirst().orElse(null);
+
+                if (Objects.nonNull(userRoles)) {
+                    if (!CollectionUtils.isEmpty(roleDTO.getPermissions())) {
+                        for (Object permission : roleDTO.getPermissions()) {
+
+                            if (permission instanceof String) {
+                                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                        .body(new ErrorResponse("Rol is a instace of Long, must be Long"));
+                            }
+
+                            if (permission instanceof Long) {
+
+                                Permission permissionfound = userRoles.getPermission().stream()
+                                        .filter(p -> p.getIdPermission().equals((Long) permission)).findFirst()
+                                        .orElse(null);
+                                if (Objects.nonNull(permissionfound)) {
+                                    continue;
+                                }
+
+                                ResponseEntity<?> permissionResponse = roleService.getPermissionById((Long) permission);
+                                if (permissionResponse.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+                                    return permissionResponse;
+                                }
+
+                                permissionfound = (Permission) permissionResponse.getBody();
+                                if (Objects.isNull(permissionfound)) {
+                                    return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                            .body(new ErrorResponse("Permission not found"));
+                                }
+
+                                userRoles.agregarPermission(permissionfound);
+                            }
+
+                        }
+                        continue;
+                    }
+                }
+
+                userRoles = new UserRoles();
                 userRoles.setUser(userEdit);
 
                 if (roleDTO.getRole() instanceof String) {
@@ -226,8 +258,6 @@ public class UserServiceImpl implements UserService {
                 userEdit.agregarRole(userRoles);
 
             }
-
-
 
         }
 
