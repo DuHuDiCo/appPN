@@ -252,11 +252,12 @@ public class UserServiceImpl implements UserService {
                             }
 
                         }
+                        userEdit.agregarRole(userRoles);
                     }
 
                 }
 
-                userEdit.agregarRole(userRoles);
+                
 
             }
 
