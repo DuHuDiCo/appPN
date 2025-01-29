@@ -168,6 +168,9 @@ public class UserServiceImpl implements UserService {
                 UserRoles userRoles = userEdit.getUserRoles().stream()
                         .filter(ur -> ur.getRole().getIdRole().equals(roleDTO.getRole())).findFirst().orElse(null);
 
+                System.out.println(Objects.isNull(userRoles));        
+
+
                 if (Objects.nonNull(userRoles)) {
                     if (!CollectionUtils.isEmpty(roleDTO.getPermissions())) {
                         for (Object permission : roleDTO.getPermissions()) {
@@ -201,8 +204,9 @@ public class UserServiceImpl implements UserService {
                             }
 
                         }
-                        continue;
+                        
                     }
+                    continue;
                 }
 
                 userRoles = new UserRoles();
