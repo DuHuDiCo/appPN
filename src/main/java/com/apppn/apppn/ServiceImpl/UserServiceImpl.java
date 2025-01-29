@@ -175,6 +175,7 @@ public class UserServiceImpl implements UserService {
 
                 if (Objects.nonNull(userRoles)) {
                     if (!CollectionUtils.isEmpty(roleDTO.getPermissions())) {
+                        Set<Permission> permisos = userRoles.getPermission();
                         for (Object permission : roleDTO.getPermissions()) {
 
                             if (permission instanceof String) {
@@ -182,8 +183,7 @@ public class UserServiceImpl implements UserService {
                                         .body(new ErrorResponse("Rol is a instace of Long, must be Long"));
                             }
 
-                            Set<Permission> permisos = new HashSet<>();
-
+                            
                             if (permission instanceof Long) {
 
                                 Permission permissionfound = userRoles.getPermission().stream()
@@ -205,13 +205,15 @@ public class UserServiceImpl implements UserService {
                                 }
 
                                 permisos.add(permissionfound);
+                                
                             }
-                            userRoles.setPermission(permisos);
+                            
 
                         }
-                        
+                        userRoles.setPermission(permisos);
+                        continue;
                     }
-                    continue;
+                    
                 }
 
                
