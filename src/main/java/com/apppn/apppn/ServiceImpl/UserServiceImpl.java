@@ -159,10 +159,15 @@ public class UserServiceImpl implements UserService {
         userEdit.setEnabled(user.getEnabled());
 
 
-        if (!CollectionUtils.isEmpty(user.getRoles())) {
-            userEdit.getUserRoles().clear();
-            usuarioRepository.save(userEdit);
+        userEdit.getUserRoles().forEach(rol->{
+            rol.getPermission().clear();
+        });
+        userEdit.getUserRoles().clear();
+        usuarioRepository.save(userEdit);
 
+
+        if (!CollectionUtils.isEmpty(user.getRoles())) {
+            
 
             for (RoleDTO roleDTO : user.getRoles()) {
 
