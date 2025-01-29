@@ -164,7 +164,7 @@ public class UserServiceImpl implements UserService {
         userEdit.setEnabled(user.getEnabled());
 
         userEdit.getUserRoles().removeAll(new ArrayList<>(userEdit.getUserRoles()));
-        userEdit.setUserRoles(new ArrayList<>());
+        userEdit.getUserRoles().clear();
         usuarioRepository.save(userEdit);
 
         
