@@ -49,7 +49,7 @@ public class UserRoles {
 
     public void agregarPermission(Permission permission) {
         this.permission.add(permission);
-        permission.getUserRoles().add(this);
+        
     }
 
 
