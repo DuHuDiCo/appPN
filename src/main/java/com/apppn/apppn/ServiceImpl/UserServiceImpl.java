@@ -155,9 +155,7 @@ public class UserServiceImpl implements UserService {
         userEdit.setEmail(user.getEmail());
         userEdit.setLastname(user.getLastname());
         userEdit.setName(user.getName());
-        if(Objects.nonNull(user.getPassword())){
-            userEdit.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        }
+        
         userEdit.setEnabled(user.getEnabled());
 
 
