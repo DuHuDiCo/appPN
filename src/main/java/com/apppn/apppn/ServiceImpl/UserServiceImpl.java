@@ -20,6 +20,7 @@ import com.apppn.apppn.Models.User;
 import com.apppn.apppn.Models.UserRoles;
 
 import com.apppn.apppn.Repository.UserRepository;
+import com.apppn.apppn.Repository.UserRolesRepository;
 import com.apppn.apppn.Service.RoleService;
 import com.apppn.apppn.Service.UserService;
 import com.apppn.apppn.Utils.Functions;
@@ -31,13 +32,17 @@ public class UserServiceImpl implements UserService {
     private final RoleService roleService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final Functions functions;
+    private final UserRolesRepository userRolesRepository;
+
+   
 
     public UserServiceImpl(UserRepository usuarioRepository, RoleService roleService,
-            BCryptPasswordEncoder bCryptPasswordEncoder, Functions functions) {
+            BCryptPasswordEncoder bCryptPasswordEncoder, Functions functions, UserRolesRepository userRolesRepository) {
         this.usuarioRepository = usuarioRepository;
         this.roleService = roleService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.functions = functions;
+        this.userRolesRepository = userRolesRepository;
     }
 
     @SuppressWarnings("null")
@@ -158,16 +163,9 @@ public class UserServiceImpl implements UserService {
         
         userEdit.setEnabled(user.getEnabled());
 
+        userEdit.getUserRoles().removeAll(new ArrayList<>(userEdit.getUserRoles()));
 
-        userEdit.getUserRoles().forEach(rol->{
-            rol.getPermission().clear();
-            rol.setRole(null);
-            
-        });
         
-        
-        usuarioRepository.save(userEdit);
-
 
         if (!CollectionUtils.isEmpty(user.getRoles())) {
             
