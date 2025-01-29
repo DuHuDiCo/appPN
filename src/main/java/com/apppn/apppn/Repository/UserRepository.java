@@ -1,6 +1,7 @@
 package com.apppn.apppn.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,4 +23,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query(value = "SELECT user.* FROM `user` LEFT JOIN user_roles ON user_roles.user_id = user.id_user LEFT JOIN role ON user_roles.role_id = role.id_role WHERE role.id_role = :idRole", nativeQuery = true)
     List<User> findVendedores(@Param("idRole") Long idRole);
 
+
+
+    @Query(value = "SELECT DISTINCT `user`.* FROM `user` LEFT JOIN user_roles ON user_roles.user_id = user.id_user LEFT JOIN role ON user_roles.role_id = role.id_role LEFT JOIN user_roles_permission ON user_roles_permission.user_rol_id = user_roles.id_user_role WHERE user.id_user = :id;", nativeQuery = true)
+    Optional<User> findById(@Param("id") Long id);
 }
