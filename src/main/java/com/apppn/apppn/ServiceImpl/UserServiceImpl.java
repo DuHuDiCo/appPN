@@ -161,8 +161,11 @@ public class UserServiceImpl implements UserService {
 
         userEdit.getUserRoles().forEach(rol->{
             rol.getPermission().clear();
+            rol.setRole(null);
+            
         });
-        userEdit.getUserRoles().clear();
+        
+        
         usuarioRepository.save(userEdit);
 
 
