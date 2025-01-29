@@ -209,8 +209,7 @@ public class UserServiceImpl implements UserService {
                     continue;
                 }
 
-                userRoles = new UserRoles();
-                userRoles.setUser(userEdit);
+               
 
                
 
@@ -225,7 +224,9 @@ public class UserServiceImpl implements UserService {
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorResponse("Role not found"));
                     }
 
-                    roleFound.agregarUserRoles(userRoles);
+                    userRoles = new UserRoles();
+                    userRoles.setUser(userEdit);
+                    userRoles.setRole(roleFound);
 
                     if (!CollectionUtils.isEmpty(roleDTO.getPermissions())) {
                         for (Object permission : roleDTO.getPermissions()) {
