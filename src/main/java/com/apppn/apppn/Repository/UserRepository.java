@@ -25,6 +25,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 
 
-    @Query(value = "SELECT DISTINCT `user`.* FROM `user` LEFT JOIN user_roles ON user_roles.user_id = user.id_user LEFT JOIN role ON user_roles.role_id = role.id_role LEFT JOIN user_roles_permission ON user_roles_permission.user_rol_id = user_roles.id_user_role WHERE user.id_user = :id;", nativeQuery = true)
+    @Query(value = "SELECT DISTINCT `user`.* FROM `user` LEFT JOIN user_roles ON user_roles.user_id = user.id_user LEFT JOIN role ON user_roles.role_id = role.id_role LEFT JOIN user_roles_permission ON user_roles_permission.user_rol_id = user_roles.id_user_role WHERE user.id_user = :id", nativeQuery = true)
     Optional<User> findById(@Param("id") Long id);
 }
