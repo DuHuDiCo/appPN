@@ -2,8 +2,10 @@ package com.apppn.apppn.ServiceImpl;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -180,6 +182,8 @@ public class UserServiceImpl implements UserService {
                                         .body(new ErrorResponse("Rol is a instace of Long, must be Long"));
                             }
 
+                            Set<Permission> permisos = new HashSet<>();
+
                             if (permission instanceof Long) {
 
                                 Permission permissionfound = userRoles.getPermission().stream()
@@ -200,8 +204,9 @@ public class UserServiceImpl implements UserService {
                                             .body(new ErrorResponse("Permission not found"));
                                 }
 
-                                userRoles.agregarPermission(permissionfound);
+                                permisos.add(permissionfound);
                             }
+                            userRoles.setPermission(permisos);
 
                         }
                         
@@ -229,6 +234,9 @@ public class UserServiceImpl implements UserService {
                     userRoles.setRole(roleFound);
 
                     if (!CollectionUtils.isEmpty(roleDTO.getPermissions())) {
+
+
+                        Set<Permission> permisos = new HashSet<>();
                         for (Object permission : roleDTO.getPermissions()) {
 
                             if (permission instanceof String) {
@@ -248,10 +256,11 @@ public class UserServiceImpl implements UserService {
                                             .body(new ErrorResponse("Permission not found"));
                                 }
 
-                                userRoles.agregarPermission(permissionfound);
+                                permisos.add(permissionfound);
                             }
 
                         }
+                        userRoles.setPermission(permisos);
                         userEdit.agregarRole(userRoles);
                     }
 
