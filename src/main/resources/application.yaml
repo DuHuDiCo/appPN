@@ -88,4 +88,4 @@ management:
             exposure:
                 include: '*'
 
-url-back: http://1921.618.1.241:9090
+url-back: http://192.168.1.241:9090
