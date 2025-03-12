@@ -32,6 +32,10 @@ public class Client {
     @Column(name = "LASTNAME", length = 100)
     private String lastname;
 
+
+    @Column(name = "ALIAS", length = 100)
+    private String alias;
+
     @Column(name = "EMAIL", length = 100)
     private String email;
 
@@ -132,6 +136,14 @@ public class Client {
 
     public void setPlanPagos(List<PlanPagos> planPagos) {
         this.planPagos = planPagos;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
 }
